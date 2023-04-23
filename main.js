@@ -1,4 +1,5 @@
 import App from './App'
+import './static/base.scss'
 
 // #ifndef VUE3
 import Vue from 'vue'
