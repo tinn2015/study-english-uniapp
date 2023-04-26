@@ -1188,8 +1188,8 @@ function populateParameters(fromRes, toRes) {
     appVersion: "1.0.0",
     appVersionCode: "100",
     appLanguage: getAppLanguage(hostLanguage),
-    uniCompileVersion: "3.7.9",
-    uniRuntimeVersion: "3.7.9",
+    uniCompileVersion: "3.7.10",
+    uniRuntimeVersion: "3.7.10",
     uniPlatform: "mp-weixin",
     deviceBrand,
     deviceModel: model,
@@ -3394,6 +3394,9 @@ function traverse(value, seen) {
   }
   return value;
 }
+function defineComponent(options) {
+  return isFunction(options) ? { setup: options, name: options.name } : options;
+}
 const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 function onActivated(hook, target) {
   registerKeepAliveHook(hook, "a", target);
@@ -3463,43 +3466,43 @@ function injectHook(type, hook, target = currentInstance, prepend = false) {
     warn(`${apiName} is called when there is no active component instance to be associated with. Lifecycle injection APIs can only be used during execution of setup().`);
   }
 }
-const createHook = (lifecycle) => (hook, target = currentInstance) => (
+const createHook$1 = (lifecycle) => (hook, target = currentInstance) => (
   // post-create lifecycle registrations are noops during SSR (except for serverPrefetch)
   (!isInSSRComponentSetup || lifecycle === "sp") && injectHook(lifecycle, (...args) => hook(...args), target)
 );
-const onBeforeMount = createHook(
+const onBeforeMount = createHook$1(
   "bm"
   /* LifecycleHooks.BEFORE_MOUNT */
 );
-const onMounted = createHook(
+const onMounted = createHook$1(
   "m"
   /* LifecycleHooks.MOUNTED */
 );
-const onBeforeUpdate = createHook(
+const onBeforeUpdate = createHook$1(
   "bu"
   /* LifecycleHooks.BEFORE_UPDATE */
 );
-const onUpdated = createHook(
+const onUpdated = createHook$1(
   "u"
   /* LifecycleHooks.UPDATED */
 );
-const onBeforeUnmount = createHook(
+const onBeforeUnmount = createHook$1(
   "bum"
   /* LifecycleHooks.BEFORE_UNMOUNT */
 );
-const onUnmounted = createHook(
+const onUnmounted = createHook$1(
   "um"
   /* LifecycleHooks.UNMOUNTED */
 );
-const onServerPrefetch = createHook(
+const onServerPrefetch = createHook$1(
   "sp"
   /* LifecycleHooks.SERVER_PREFETCH */
 );
-const onRenderTriggered = createHook(
+const onRenderTriggered = createHook$1(
   "rtg"
   /* LifecycleHooks.RENDER_TRIGGERED */
 );
-const onRenderTracked = createHook(
+const onRenderTracked = createHook$1(
   "rtc"
   /* LifecycleHooks.RENDER_TRACKED */
 );
@@ -4738,6 +4741,7 @@ function createComponentInstance(vnode, parent, suspense) {
   return instance;
 }
 let currentInstance = null;
+const getCurrentInstance = () => currentInstance || currentRenderingInstance;
 const setCurrentInstance = (instance) => {
   currentInstance = instance;
   instance.scope.on();
@@ -6545,5 +6549,15 @@ const createSubpackageApp = initCreateSubpackageApp();
   wx.createPluginApp = global.createPluginApp = createPluginApp;
   wx.createSubpackageApp = global.createSubpackageApp = createSubpackageApp;
 }
+const createHook = (lifecycle) => (hook, target = getCurrentInstance()) => {
+  !isInSSRComponentSetup && injectHook(lifecycle, hook, target);
+};
+const onInit = /* @__PURE__ */ createHook(ON_INIT);
+const onReady = /* @__PURE__ */ createHook(ON_READY);
 exports._export_sfc = _export_sfc;
 exports.createSSRApp = createSSRApp;
+exports.defineComponent = defineComponent;
+exports.index = index;
+exports.onInit = onInit;
+exports.onReady = onReady;
+exports.reactive = reactive;

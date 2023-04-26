@@ -23,8 +23,36 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.home {
+  height: 100vh;
+}
 .status_bar {
-  height: 90px;
+  height: 298rpx;
   width: 100%;
-  background: #f8f8f8;
+  color: red;
+  background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+}
+.status_bar .label {
+  position: relative;
+  left: 20rpx;
+  font-size: 48rpx;
+  font-family: Roboto-Bold, Roboto;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.content {
+  position: relative;
+  width: 100vw;
+  height: calc(100% - 298rpx);
+}
+.content .panel {
+  position: absolute;
+  width: 686rpx;
+  height: 204rpx;
+  background: #FFFFFF;
+  box-shadow: 0rpx 4rpx 16rpx 0rpx rgba(0, 0, 0, 0.05);
+  border-radius: 24rpx;
+  top: -102rpx;
+  left: 50%;
+  transform: translateX(-50%);
 }
