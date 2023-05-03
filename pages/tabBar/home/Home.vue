@@ -7,7 +7,7 @@
 		<view class="content flex fd-c">
 			<view class="panel flex jc-sb ai-c">
 				<view class="flex-1 flex fd-c ai-c">
-					<view class="panel-title">
+					<view class="panel-title" @click="routerToRecord">
 						<text>累计学习</text>
 						<uni-icons type="forward" size="14"></uni-icons>
 					</view>
@@ -15,7 +15,7 @@
 				</view>
 				<view class="line"></view>
 				<view class="flex-1 flex fd-c ai-c">
-					<view class="panel-title">
+					<view class="panel-title" @click="routerToToday">
 						<text>今日学习</text>
 						<uni-icons type="forward" size="14"></uni-icons>
 					</view>
@@ -40,7 +40,7 @@
 			<view class="part-2">
 				<view class="header flex jc-sb ai-c">
 					<view class="title">轻松学</view>
-					<view class="more flex jc-c ai-c">更多 <uni-icons type="forward" size="12"></uni-icons></view>
+					<view class="more flex jc-c ai-c" @click="routerToMore">更多 <uni-icons type="forward" size="12"></uni-icons></view>
 				</view>
 				<view class="courses flex">
 					<view v-for="item in courses" class="course-item">
@@ -108,6 +108,23 @@
 		},
 		onInit () {
 			console.log('init')
+		},
+		methods: {
+			routerToMore () {
+				uni.navigateTo({
+					url: '/pages/CourseMore/CourseMore'
+				})
+			},
+			routerToRecord () {
+				uni.navigateTo({
+					url: '/pages/StudyRecord/StudyRecord'
+				})
+			},
+			routerToToday () {
+				uni.navigateTo({
+					url: '/pages/StudyToday/StudyToday'
+				})
+			}
 		}
 	})
 </script>

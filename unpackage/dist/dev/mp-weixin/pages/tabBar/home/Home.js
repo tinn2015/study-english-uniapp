@@ -43,6 +43,23 @@ const _sfc_main = common_vendor.defineComponent({
   },
   onInit() {
     console.log("init");
+  },
+  methods: {
+    routerToMore() {
+      common_vendor.index.navigateTo({
+        url: "/pages/CourseMore/CourseMore"
+      });
+    },
+    routerToRecord() {
+      common_vendor.index.navigateTo({
+        url: "/pages/StudyRecord/StudyRecord"
+      });
+    },
+    routerToToday() {
+      common_vendor.index.navigateTo({
+        url: "/pages/StudyToday/StudyToday"
+      });
+    }
   }
 });
 if (!Array) {
@@ -60,28 +77,31 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       type: "forward",
       size: "14"
     }),
-    c: common_vendor.p({
+    c: common_vendor.o((...args) => _ctx.routerToRecord && _ctx.routerToRecord(...args)),
+    d: common_vendor.p({
       type: "forward",
       size: "14"
     }),
-    d: _ctx.autoplay,
-    e: _ctx.interval,
-    f: _ctx.duration,
-    g: common_vendor.p({
+    e: common_vendor.o((...args) => _ctx.routerToToday && _ctx.routerToToday(...args)),
+    f: _ctx.autoplay,
+    g: _ctx.interval,
+    h: _ctx.duration,
+    i: common_vendor.p({
       type: "forward",
       size: "12"
     }),
-    h: common_vendor.f(_ctx.courses, (item, k0, i0) => {
+    j: common_vendor.o((...args) => _ctx.routerToMore && _ctx.routerToMore(...args)),
+    k: common_vendor.f(_ctx.courses, (item, k0, i0) => {
       return {
         a: common_vendor.t(item.title),
         b: common_vendor.t(item.tip),
         c: common_vendor.t(item.viewNum)
       };
     }),
-    i: common_vendor.p({
+    l: common_vendor.p({
       type: "plusempty"
     })
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/tinn/workspace/xiaoyue-parttimejob/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/workspace/codes/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
 wx.createPage(MiniProgramPage);

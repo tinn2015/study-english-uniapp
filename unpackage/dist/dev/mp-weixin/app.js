@@ -5,6 +5,10 @@ if (!Math) {
   "./pages/tabBar/home/Home.js";
   "./pages/tabBar/find/Find.js";
   "./pages/tabBar/my/My.js";
+  "./pages/Course/Course.js";
+  "./pages/CourseMore/CourseMore.js";
+  "./pages/StudyRecord/StudyRecord.js";
+  "./pages/StudyToday/StudyToday.js";
 }
 const _sfc_main = {
   onLaunch: function() {
@@ -17,7 +21,7 @@ const _sfc_main = {
     console.log("App Hide");
   }
 };
-const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/tinn/workspace/xiaoyue-parttimejob/study-english-uniapp/App.vue"]]);
+const App = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["__file", "D:/workspace/codes/study-english-uniapp/App.vue"]]);
 function createApp() {
   const app = common_vendor.createSSRApp(App);
   return {

@@ -53,6 +53,51 @@
   background: red;
   border-radius: 0 32rpx 0 0;
   background: #ffffff;
+  overflow-y: auto;
+}
+.find-content .right .filter-box.data-v-cde622b1 {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+  font-weight: 500;
+  color: #202127;
+  height: 108rpx;
+}
+.find-content .right .course-item.data-v-cde622b1 {
+  padding: 0 32rpx;
+  margin-top: 40rpx;
+}
+.find-content .right .course-box.data-v-cde622b1 {
+  overflow-y: auto;
+  height: calc(100% - 108rpx);
+}
+.find-content .right .right-content.data-v-cde622b1 {
+  margin-left: 32rpx;
+}
+.find-content .right .right-content .title.data-v-cde622b1 {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+  font-weight: 500;
+  color: #202127;
+}
+.find-content .right .right-content .sub-title.data-v-cde622b1 {
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+  font-weight: 500;
+  color: #BDBDBD;
+  margin-top: 8rpx;
+}
+.find-content .right .right-content .info.data-v-cde622b1 {
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #BDBDBD;
+  margin-top: 32rpx;
+}
+.find-content .right .poster.data-v-cde622b1 {
+  width: 112rpx;
+  height: 148rpx;
+  background: #D8D8D8;
+  border-radius: 12rpx;
 }
 .find-content .nav-item.data-v-cde622b1 {
   font-size: 28rpx;

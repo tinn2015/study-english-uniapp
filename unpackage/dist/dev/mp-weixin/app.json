@@ -2,7 +2,11 @@
   "pages": [
     "pages/tabBar/home/Home",
     "pages/tabBar/find/Find",
-    "pages/tabBar/my/My"
+    "pages/tabBar/my/My",
+    "pages/Course/Course",
+    "pages/CourseMore/CourseMore",
+    "pages/StudyRecord/StudyRecord",
+    "pages/StudyToday/StudyToday"
   ],
   "window": {
     "navigationBarTextStyle": "black",
