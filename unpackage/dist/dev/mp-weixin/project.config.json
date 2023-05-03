@@ -11,16 +11,16 @@
     "minified": false,
     "newFeature": true,
     "bigPackageSizeSupport": true,
+    "condition": false,
+    "ignoreUploadUnusedFiles": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
-    },
-    "condition": false
+    }
   },
   "compileType": "miniprogram",
-  "libVersion": "2.31.0",
-  "appid": "touristappid",
+  "libVersion": "2.25.3",
   "projectname": "learn-english",
   "condition": {},
   "editorSetting": {

@@ -56,3 +56,83 @@
   left: 50%;
   transform: translateX(-50%);
 }
+.content .panel .line {
+  height: 120rpx;
+  border-right: 1px solid #E5E4E9;
+}
+.content .panel .panel-title {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #999A9F;
+}
+.content .panel .panel-info {
+  margin-top: 24rpx;
+  font-size: 32rpx;
+  font-family: Roboto-Bold, Roboto;
+  font-weight: bold;
+  color: #202127;
+}
+.content .title {
+  font-size: 40rpx;
+  font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+  font-weight: 500;
+  color: #202127;
+}
+.content .part-1 {
+  margin-top: 166rpx;
+  padding: 0 32rpx;
+}
+.content .part-1 .swiper {
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 200rpx;
+}
+.content .part-1 .swiper-item {
+  display: block;
+  text-align: center;
+  height: 200rpx;
+  border: 1px solid green;
+}
+.content .part-2 {
+  padding: 0 30rpx;
+  margin-top: 64rpx;
+}
+.content .part-2 .more {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #999A9F;
+}
+.content .part-2 .courses {
+  margin-top: 16rpx;
+}
+.content .part-2 .courses .poster {
+  width: 207rpx;
+  height: 240rpx;
+  background: #F4F5F7;
+  border-radius: 16rpx;
+}
+.content .part-2 .courses .poster .add-course-label {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #999A9F;
+  margin-top: 24rpx;
+}
+.content .part-2 .courses .course-item {
+  margin-right: 34rpx;
+}
+.content .part-2 .courses .course-item .course-title {
+  font-size: 28rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #202127;
+  margin-top: 16rpx;
+}
+.content .part-2 .courses .course-item .course-info .course-info-text {
+  font-size: 24rpx;
+  font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+  font-weight: 400;
+  color: #999A9F;
+}

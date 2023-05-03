@@ -1,1 +1,1 @@
-<view class=""> find1 </view>
+<view class="find data-v-cde622b1"><view class="header data-v-cde622b1"><image class="banner data-v-cde622b1" mode="aspectFit" src="/static/images/find-bg.png"></image></view><view class="find-content flex data-v-cde622b1"><view class="left data-v-cde622b1"><view wx:for="{{a}}" wx:for-item="nav" bindtap="{{nav.b}}" class="{{['nav-item', 'flex', 'jc-c', 'ai-c', 'data-v-cde622b1', nav.c]}}">{{nav.a}}</view></view><view class="right data-v-cde622b1"></view></view></view>
