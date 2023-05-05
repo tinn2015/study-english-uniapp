@@ -5,7 +5,7 @@
 		</view>
 		<view class="find-content">
 			<view class="tip flex jc-sb ai-c">
-				<image src="../../static/images/horn.png" class="horn" mode=""></image>
+				<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
 				<text class="tip-text">推荐你一门系统学习课、高效提高英语能力</text>
 				<uni-icons type="forward"></uni-icons>
 			</view>
@@ -22,7 +22,7 @@
 			</view>
 			<view class="handles flex jc-sb ai-c">
 				<view class="flex fd-c ai-c">
-					<image class="add-icon" src="../../static/images/add-course.png" mode=""></image>
+					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
 					<text class='add-label'>添加课程</text>
 				</view>
 				<view class="get-study flex jc-c ai-c">开始学习</view>

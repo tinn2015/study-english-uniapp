@@ -1,7 +1,7 @@
 <template>
 	<view class="study-today">
 		<view class="header">
-			<image class="banner" mode="scaleToFill" src="../../../static/images/today-bg.png"></image>
+			<image class="banner" mode="scaleToFill" src="http://api.itso123.com/image/today-bg.png"></image>
 		</view>
 		<view class="find-content">
 			<view class="record-info flex jc-sb ai-c">
