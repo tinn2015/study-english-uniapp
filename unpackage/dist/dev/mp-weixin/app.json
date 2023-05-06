@@ -22,20 +22,20 @@
     "list": [
       {
         "pagePath": "pages/tabBar/home/Home",
-        "iconPath": "static/logo.png",
-        "selectedIconPath": "static/logo.png",
+        "iconPath": "static/images/tabbar/tab-study.png",
+        "selectedIconPath": "static/images/tabbar/tab-study-active.png",
         "text": "学习"
       },
       {
         "pagePath": "pages/tabBar/find/Find",
-        "iconPath": "static/logo.png",
-        "selectedIconPath": "static/logo.png",
+        "iconPath": "static/images/tabbar/tab-find.png",
+        "selectedIconPath": "static/images/tabbar/tab-find-active.png",
         "text": "发现"
       },
       {
         "pagePath": "pages/tabBar/my/My",
-        "iconPath": "static/logo.png",
-        "selectedIconPath": "static/logo.png",
+        "iconPath": "static/images/tabbar/tab-my.png",
+        "selectedIconPath": "static/images/tabbar/tab-my-active.png",
         "text": "我的"
       }
     ]
