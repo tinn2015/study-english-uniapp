@@ -103,5 +103,5 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     })
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/workspace/codes/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/douqiting01/Desktop/workspace/tinn/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
 wx.createPage(MiniProgramPage);
