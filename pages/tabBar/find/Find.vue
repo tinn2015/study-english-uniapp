@@ -1,7 +1,7 @@
 <template>
 	<view class="find">
 		<view class="header">
-			<image class="banner" mode="aspectFit" src="../../../static/images/find-bg.png"></image>
+			<image class="banner" mode="aspectFit" src="https://api.itso123.com/image/find-bg.png"></image>
 		</view>
 		<view class="find-content flex">
 			<view class="left">

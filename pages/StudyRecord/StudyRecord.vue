@@ -1,7 +1,7 @@
 <template>
 	<view class="study-record">
 		<view class="header">
-			<image class="banner" mode="scaleToFill" src="../../../static/images/record-bg.png"></image>
+			<image class="banner" mode="scaleToFill" src="https://api.itso123.com/image/record-bg.png"></image>
 		</view>
 		<view class="find-content">
 			<view class="record-info flex jc-sb ai-c">
