@@ -43,7 +43,7 @@
 					<view class="more flex jc-c ai-c" @click="routerToMore">更多 <uni-icons type="forward" size="12"></uni-icons></view>
 				</view>
 				<view class="courses flex">
-					<view v-for="item in courses" class="course-item">
+					<view v-for="item in courses" class="course-item" @click="routeToCourse">
 						<view class="poster"></view>
 						<view class="course-title">{{item.title}}</view>
 						<view class="course-info flex jc-sb ai-c">
@@ -110,6 +110,11 @@
 			console.log('init')
 		},
 		methods: {
+			routeToCourse () {
+				uni.navigateTo({
+					url: '/pages/Course/Course'
+				})
+			},
 			routerToMore () {
 				uni.navigateTo({
 					url: '/pages/CourseMore/CourseMore'

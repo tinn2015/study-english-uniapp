@@ -6,7 +6,9 @@
     "pages/Course/Course",
     "pages/CourseMore/CourseMore",
     "pages/StudyRecord/StudyRecord",
-    "pages/StudyToday/StudyToday"
+    "pages/StudyToday/StudyToday",
+    "pages/Lesson/Lesson",
+    "pages/Report/Report"
   ],
   "window": {
     "navigationBarTextStyle": "black",
@@ -15,8 +17,8 @@
     "backgroundColor": "#F8F8F8"
   },
   "tabBar": {
-    "color": "7A7E83",
-    "selectedColor": "#007AFF",
+    "color": "#999A9F",
+    "selectedColor": "#58C898",
     "borderStyle": "black",
     "backgroundColor": "#F8F8F8",
     "list": [

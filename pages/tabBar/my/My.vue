@@ -35,6 +35,20 @@
 				<view class=""></view>
 				<view class="btn flex jc-c ai-c">立即测试</view>
 			</view>
+			<view class="part-2">
+				<view class="item flex ai-c">
+					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
+					<view class="label">邀请奖励</view>
+				</view>
+				<view class="item flex ai-c">
+					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
+					<view class="label">帮助与反馈</view>
+				</view>
+				<view class="item flex ai-c">
+					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
+					<view class="label">英语水平测试</view>
+				</view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -203,6 +217,24 @@
 				font-family: PingFangSC-Semibold, PingFang SC;
 				font-weight: 600;
 				color: #FFFFFF;
+				margin-top: 32rpx;
+			}
+		}
+		.part-2 {
+			margin-top: 16rpx;
+			.item {
+				margin-top: 48rpx;
+			}
+			.label {
+				margin-left: 32rpx;
+				font-size: 32rpx;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #202127;
+			}
+			.icon {
+				width: 44rpx;
+				height: 44rpx;
 			}
 		}
 		.ft64 {

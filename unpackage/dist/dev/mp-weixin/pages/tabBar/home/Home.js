@@ -45,6 +45,11 @@ const _sfc_main = common_vendor.defineComponent({
     console.log("init");
   },
   methods: {
+    routeToCourse() {
+      common_vendor.index.navigateTo({
+        url: "/pages/Course/Course"
+      });
+    },
     routerToMore() {
       common_vendor.index.navigateTo({
         url: "/pages/CourseMore/CourseMore"
@@ -98,10 +103,11 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         c: common_vendor.t(item.viewNum)
       };
     }),
-    l: common_vendor.p({
+    l: common_vendor.o((...args) => _ctx.routeToCourse && _ctx.routeToCourse(...args)),
+    m: common_vendor.p({
       type: "plusempty"
     })
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "C:/Users/douqiting01/Desktop/workspace/tinn/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__file", "D:/workspace/codes/study-english-uniapp/pages/tabBar/home/Home.vue"]]);
 wx.createPage(MiniProgramPage);

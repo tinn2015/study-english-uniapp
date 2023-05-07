@@ -48,6 +48,19 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/Lesson/Lesson",
+			"style": {
+				"navigationBarTitleText": "章节"
+			}
+		},
+		{
+			"path": "pages/Report/Report",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {
@@ -57,8 +70,8 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-		"color": "7A7E83",
-		"selectedColor": "#007AFF",
+		"color": "#999A9F",
+		"selectedColor": "#58C898",
 		"borderStyle": "black",
 		"backgroundColor": "#F8F8F8",
 		"list": [{

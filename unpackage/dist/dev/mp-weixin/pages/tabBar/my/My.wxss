@@ -124,6 +124,24 @@
   font-family: PingFangSC-Semibold, PingFang SC;
   font-weight: 600;
   color: #FFFFFF;
+  margin-top: 32rpx;
+}
+.content .part-2 {
+  margin-top: 16rpx;
+}
+.content .part-2 .item {
+  margin-top: 48rpx;
+}
+.content .part-2 .label {
+  margin-left: 32rpx;
+  font-size: 32rpx;
+  font-family: PingFangSC-Regular, PingFang SC;
+  font-weight: 400;
+  color: #202127;
+}
+.content .part-2 .icon {
+  width: 44rpx;
+  height: 44rpx;
 }
 .content .ft64 {
   font-size: 64rpx;

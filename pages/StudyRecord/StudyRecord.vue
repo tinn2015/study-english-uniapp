@@ -1,6 +1,7 @@
 <template>
 	<view class="study-record">
 		<view class="header">
+			<Navigator></Navigator>
 			<image class="banner" mode="scaleToFill" src="https://api.itso123.com/image/record-bg.png"></image>
 		</view>
 		<view class="find-content">
@@ -33,7 +34,11 @@
 </template>
 
 <script>
+	import Navigator from '../../components/Navigator/Navigator.vue'
 	export default {
+		components: {
+			Navigator
+		},
 		data () {
 			return {
 				courses: [
