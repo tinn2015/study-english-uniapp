@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../../common/vendor.js");
+const utils_request = require("../../../utils/request.js");
 const Swiper = () => "./Swiper/Swiper.js";
 const _sfc_main = common_vendor.defineComponent({
   setup() {
@@ -45,6 +46,19 @@ const _sfc_main = common_vendor.defineComponent({
     console.log("init");
   },
   methods: {
+    request1() {
+      console.log("request");
+      common_vendor.index.login({
+        success(res) {
+          console.log("login", res);
+        }
+      });
+      utils_request.getLessons().then((res) => {
+        console.log("success", res);
+      }).catch((err) => {
+        console.log("err", err);
+      });
+    },
     routeToCourse() {
       common_vendor.index.navigateTo({
         url: "/pages/Course/Course"
@@ -91,20 +105,21 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     f: _ctx.autoplay,
     g: _ctx.interval,
     h: _ctx.duration,
-    i: common_vendor.p({
+    i: common_vendor.o((...args) => _ctx.request1 && _ctx.request1(...args)),
+    j: common_vendor.p({
       type: "forward",
       size: "12"
     }),
-    j: common_vendor.o((...args) => _ctx.routerToMore && _ctx.routerToMore(...args)),
-    k: common_vendor.f(_ctx.courses, (item, k0, i0) => {
+    k: common_vendor.o((...args) => _ctx.routerToMore && _ctx.routerToMore(...args)),
+    l: common_vendor.f(_ctx.courses, (item, k0, i0) => {
       return {
         a: common_vendor.t(item.title),
         b: common_vendor.t(item.tip),
         c: common_vendor.t(item.viewNum)
       };
     }),
-    l: common_vendor.o((...args) => _ctx.routeToCourse && _ctx.routeToCourse(...args)),
-    m: common_vendor.p({
+    m: common_vendor.o((...args) => _ctx.routeToCourse && _ctx.routeToCourse(...args)),
+    n: common_vendor.p({
       type: "plusempty"
     })
   };

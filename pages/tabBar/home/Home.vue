@@ -39,7 +39,7 @@
 			</view>
 			<view class="part-2">
 				<view class="header flex jc-sb ai-c">
-					<view class="title">轻松学</view>
+					<view class="title" @click="request1">轻松学</view>
 					<view class="more flex jc-c ai-c" @click="routerToMore">更多 <uni-icons type="forward" size="12"></uni-icons></view>
 				</view>
 				<view class="courses flex">
@@ -63,6 +63,7 @@
 
 <script>
 	import {onMounted, defineComponent, reactive} from 'vue'
+	import {getLessons} from '@/utils/request.js'
 	import Swiper from './Swiper/Swiper.vue'
 	import { onReady, onInit } from '@dcloudio/uni-app'
 	export default defineComponent({
@@ -110,6 +111,19 @@
 			console.log('init')
 		},
 		methods: {
+			request1 () {
+				console.log('request')
+				uni.login({
+					success (res) {
+						console.log('login', res)
+					}
+				})
+				getLessons().then((res) => {
+					console.log('success', res)
+				}).catch(err => {
+					console.log('err', err)
+				})
+			},
 			routeToCourse () {
 				uni.navigateTo({
 					url: '/pages/Course/Course'
