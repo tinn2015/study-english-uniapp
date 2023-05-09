@@ -66,17 +66,21 @@
 	import {getLessons} from '@/utils/request.js'
 	import Swiper from './Swiper/Swiper.vue'
 	import { onReady, onInit } from '@dcloudio/uni-app'
+	import { useLoginStore } from '@/stores/login';
 	export default defineComponent({
 		setup () {
-			console.log(11)
+					console.log(11);
 			// 小程序胶囊位置
 			const menuButtonInfo  = reactive(uni.getMenuButtonBoundingClientRect())
 			onReady(() => {
-				console.log('ready',menuButtonInfo )
+				console.log('ready',menuButtonInfo );
 			})
 			onInit(() => {
 				console.log('init2')
 			})
+			const loginStore = useLoginStore()
+			loginStore.login()
+			console.log('loginStore', loginStore)
 			return {
 				menuButtonInfo
 			}
