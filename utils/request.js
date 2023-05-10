@@ -1,11 +1,14 @@
-const baseUrl = 'https://api.itso123.com'
+const baseUrl = 'https://api.itso123.com/v1'
 
 const request = ({method = 'GET', url, data}) => {
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: baseUrl + url,
 			method,
-			data
+			data,
+			header: {
+				authorization: uni.getStorageSync('authorization')
+			}
 		}).then(result => {
 			const {data, statusCode, errMsg} = result
 			console.log('result', result, statusCode)
@@ -19,15 +22,23 @@ const request = ({method = 'GET', url, data}) => {
 	return 
 }
 
-export const login = (code) => {
-	return request({
+export const login = async (code) => {
+	const loginResult = await request({
 		url: '/user/login',
 		data: {
 			code
 		}
 	})
+	if (loginResult.result === '0') {
+		uni.setStorageSync('authorization', loginResult.authorization)
+		return true
+	}
+	return false
 }
 
-export const getLessons = () => {
-	return request({})
+export const getFavorite = () => {
+	return request({
+		url: '/lesson/favorite/query',
+		method: 'POST'
+	})
 }

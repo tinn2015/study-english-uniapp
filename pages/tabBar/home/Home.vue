@@ -38,13 +38,13 @@
 						<uni-icons type="forward" size="12"></uni-icons>
 					</view>
 				</view>
-				<view class="courses flex">
-					<view v-for="item in courses" class="course-item" @click="routeToCourse">
+				<view class="courses flex fw-w jc-sb">
+					<view v-for="item in favorites" class="course-item" @click="routeToCourse">
 						<view class="poster"></view>
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
 							<view class="course-info-text">{{ item.tip }}</view>
-							<view class="course-info-text">{{ item.viewNum }}</view>
+							<view class="course-info-text">{{ item.read }}</view>
 						</view>
 					</view>
 					<view class="poster flex fd-c jc-c ai-c">
@@ -59,13 +59,13 @@
 
 <script>
 import { onMounted, defineComponent, reactive } from 'vue';
-import { getLessons } from '@/utils/request.js';
+import { getFavorite } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
 export default defineComponent({
 	setup() {
-		console.log(11);
+		const favorites = reactive([])
 		// 小程序胶囊位置
 		const menuButtonInfo = reactive(uni.getMenuButtonBoundingClientRect());
 		onReady(() => {
@@ -76,9 +76,15 @@ export default defineComponent({
 		});
 		const loginStore = useLoginStore();
 		loginStore.login();
-		console.log('loginStore', loginStore);
+		
+		// 获取轻松学
+		getFavorite().then((res) => {
+			favorites.push(...res.lessons)
+			console.log('favorites', favorites)
+		})
 		return {
-			menuButtonInfo
+			menuButtonInfo,
+			favorites
 		};
 	},
 	data() {
@@ -88,6 +94,7 @@ export default defineComponent({
 			autoplay: true,
 			interval: 2000,
 			duration: 500,
+			favorites: [],
 			courses: [
 				{
 					poster: '',
@@ -153,6 +160,7 @@ export default defineComponent({
 <style lang="scss">
 .home {
 	height: 100vh;
+	overflow-x: hidden;
 }
 .status_bar {
 	height: 298rpx;
@@ -246,7 +254,7 @@ export default defineComponent({
 				}
 			}
 			.course-item {
-				margin-right: 34rpx;
+				// margin-right: 34rpx;
 				.course-title {
 					font-size: 28rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
