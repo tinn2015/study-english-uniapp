@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-navigator flex" :style="{top: top + 'px'}" @click="navigatorBack">
+	<view class="custom-navigator flex ai-c" :style="{top: top + 'px', height: height + 'px'}" @click="navigatorBack">
 		<view>
 			<uni-icons type="back"></uni-icons>
 		</view>
@@ -11,17 +11,24 @@
 	import {onMounted, defineComponent, reactive} from 'vue'
 	export default defineComponent({
 		props: {
-			
+			NavTop: Number
 		},
 		data () {
 			return {
-				top: 0
+				top: 0,
+				height: 0
 			}
 		},
 		mounted () {
+			// if (this.NavTop) {
+			// 	this.top = this.NavTop
+			// } else {
+				
+			// }
 			const menuButtonInfo  = reactive(uni.getMenuButtonBoundingClientRect())
 			console.log('custom-navigator', menuButtonInfo)
 			this.top = menuButtonInfo.top
+			this.height = menuButtonInfo.height
 		},
 		methods: {
 			navigatorBack () {

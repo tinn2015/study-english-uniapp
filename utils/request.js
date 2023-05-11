@@ -42,3 +42,13 @@ export const getFavorite = () => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 收藏夹（轻松学）的课程详情
+ */
+export const getFavoriteDetail = (id) => {
+	return request({
+		url: `/lesson/detail/${id}`,
+		method: 'POST'
+	})
+}

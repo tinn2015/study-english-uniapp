@@ -39,15 +39,15 @@
 					</view>
 				</view>
 				<view class="courses flex fw-w jc-sb">
-					<view v-for="item in favorites" class="course-item" @click="routeToCourse">
+					<view v-for="item in favorites" class="course-item" @click="routeToCourse(item.lessonId)">
 						<view class="poster"></view>
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
-							<view class="course-info-text">{{ item.tip }}</view>
+							<view class="course-info-text">{{ item.level }}</view>
 							<view class="course-info-text">{{ item.read }}</view>
 						</view>
 					</view>
-					<view class="poster flex fd-c jc-c ai-c">
+					<view class="poster flex fd-c jc-c ai-c course-add">
 						<uni-icons type="plusempty"></uni-icons>
 						<text class="add-course-label">添加课程</text>
 					</view>
@@ -63,6 +63,7 @@ import { getFavorite } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
+import { useLessonStore } from '@/stores/lessons.js'
 export default defineComponent({
 	setup() {
 		const favorites = reactive([])
@@ -84,7 +85,8 @@ export default defineComponent({
 		})
 		return {
 			menuButtonInfo,
-			favorites
+			favorites,
+			loginStore
 		};
 	},
 	data() {
@@ -133,7 +135,9 @@ export default defineComponent({
 					console.log('err', err);
 				});
 		},
-		routeToCourse() {
+		routeToCourse(id) {
+			const lessonStore = useLessonStore()
+			lessonStore.getFavoriteLesson(id)
 			uni.navigateTo({
 				url: '/pages/Course/Course'
 			});
@@ -232,6 +236,7 @@ export default defineComponent({
 	.part-2 {
 		padding: 0 30rpx;
 		margin-top: 64rpx;
+		padding-bottom: 64rpx;
 		.more {
 			font-size: 28rpx;
 			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
@@ -255,6 +260,7 @@ export default defineComponent({
 			}
 			.course-item {
 				// margin-right: 34rpx;
+				margin-top: 10rpx;
 				.course-title {
 					font-size: 28rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
@@ -270,6 +276,9 @@ export default defineComponent({
 						color: #999a9f;
 					}
 				}
+			}
+			.course-add {
+				margin-top: 10px;
 			}
 		}
 	}

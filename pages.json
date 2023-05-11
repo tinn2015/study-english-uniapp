@@ -24,8 +24,8 @@
 		{
 			"path": "pages/Course/Course",
 			"style": {
-				"navigationBarTitleText": ""
-				// "navigationStyle": "custom"
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{

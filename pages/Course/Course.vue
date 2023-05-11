@@ -1,7 +1,14 @@
 <template>
 	<view class="find">
 		<view class="header">
-			
+			<Navigator></Navigator>
+			<view class="box flex jc-sb">
+				<image class="poster" :src="lessonStore.favoriteLessonInfo.img" mode=""></image>
+				<view>
+					<view>{{lessonStore.favoriteLessonInfo.title}}</view>
+					<view>{{lessonStore.favoriteLessonInfo.descript}}</view>
+				</view>
+			</view>
 		</view>
 		<view class="find-content">
 			<view class="tip flex jc-sb ai-c">
@@ -32,7 +39,16 @@
 </template>
 
 <script>
+	import Navigator from '@/components/Navigator/Navigator.vue'
+	import {useLessonStore} from '@/stores/lessons.js'
 	export default {
+		setup () {
+			const lessonStore = useLessonStore()
+			console.log('lessonStore', lessonStore)
+			return {
+				lessonStore
+			}
+		},
 		data () {
 			return {
 				courses: [
@@ -52,6 +68,9 @@
 				]
 			}
 		},
+		components: {
+			Navigator
+		},
 		methods: {
 			routeToLesson () {
 				uni.navigateTo({
@@ -67,18 +86,30 @@
 		height: 100vh
 	}
 	.header {
-		height: 360rpx;
+		height: 514rpx;
 		width: 100%;
-		background: #808080;
+		background: #abcbd9;
+		box-sizing: border-box;
+		overflow: hidden;
 		.banner {
 			width: 100%;
 			height: 100%
+		}
+		.box {
+			margin-top: 120rpx;
+			box-sizing: border-box;
+		}
+		.poster {
+			width: 200rpx;
+			height: 266rpx;
+			border-radius: 16rpx;
+			border: 4rpx solid #FFFFFF;
 		}
 	}
 	.find-content {
 		position: relative;
 		top: -54rpx;
-		height: calc(100% - 360rpx + 54rpx);
+		height: calc(100% - 514rpx + 54rpx);
 		box-sizing: border-box;
 		border-radius: 32rpx 32rpx 0 0;
 		background: #ffffff;
