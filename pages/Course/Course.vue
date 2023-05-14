@@ -4,34 +4,45 @@
 			<Navigator></Navigator>
 			<view class="box flex jc-sb">
 				<image class="poster" :src="lessonStore.favoriteLessonInfo.img" mode=""></image>
-				<view>
-					<view>{{lessonStore.favoriteLessonInfo.title}}</view>
-					<view>{{lessonStore.favoriteLessonInfo.descript}}</view>
+				<view class="course-overview flex fd-c jc-sb">
+					<view class="top">
+						<view class="title">{{lessonStore.favoriteLessonInfo.title}}</view>
+						<view class="desc">{{lessonStore.favoriteLessonInfo.descript}}</view>
+					</view>
+					<view class="bottom flex">
+						<view>{{lessonStore.favoriteLessonInfo.level}}</view>
+						<view class="line">|</view>
+						<view>{{lessonStore.favoriteLessonInfo.read}}人已学</view>
+					</view>
 				</view>
 			</view>
 		</view>
 		<view class="find-content">
-			<view class="tip flex jc-sb ai-c">
+			<view class="tip flex jc-sb ai-c" v-if="lessonStore.favoriteLessonInfo.advUrl">
 				<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
-				<text class="tip-text">推荐你一门系统学习课、高效提高英语能力</text>
+				<text class="tip-text">{{lessonStore.favoriteLessonInfo.advTitle}}</text>
 				<uni-icons type="forward"></uni-icons>
 			</view>
 			<view class="process-box">
-				<view class="process-label">完成进度 0/2</view>
-				<view v-for="course in courses" class="flex jc-sb ai-c course-box">
-					<image class="course-img" :src="course.img" mode=""></image>
+				<view class="process-label">完成进度 {{lessonStore.favoriteLessonInfo.speed}}</view>
+				<view @click="sectionGotoStudy(section)" v-for="section in lessonStore.favoriteLessonInfo.sections" class="flex jc-sb ai-c course-box">
+					<image class="course-img" :src="section.img" mode=""></image>
 					<view class="course-info">
-						<view class="course-title">{{course.title}}</view>
-						<view class="course-desc">{{course.desc}}</view>
+						<view class="course-title">{{section.title}}</view>
+						<view class="course-desc">{{section.descript}}</view>
 					</view>
 					<uni-icons type="forward"></uni-icons>
 				</view>
 			</view>
 			<view class="handles flex jc-sb ai-c">
-				<view class="flex fd-c ai-c">
+				<view class="flex fd-c ai-c" @click="removeCourse">
+					<image class="add-icon" src="https://api.itso123.com/image/remove-course.png" mode=""></image>
+					<text class='add-label'>移除课程</text>
+				</view>
+				<!-- <view class="flex fd-c ai-c" v-else @click="addCourse">
 					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
 					<text class='add-label'>添加课程</text>
-				</view>
+				</view> -->
 				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
 			</view>
 		</view>
@@ -41,6 +52,7 @@
 <script>
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
+	import { removeFavoriteCourse, getSectionDetail } from "@/utils/request.js"
 	export default {
 		setup () {
 			const lessonStore = useLessonStore()
@@ -76,6 +88,27 @@
 				uni.navigateTo({
 					url:"/pages/Lesson/Lesson"
 				})
+			},
+			/**
+			 * 移除课程
+			 */
+			removeCourse () {
+				const lessonId = lessonStore.favoriteLessonInfo.lessonId
+				removeFavoriteCourse(id).then(res => {
+					console.log('removeFavoriteCourse', res)
+				})
+			},
+			
+			/**
+			 * 去学习页
+			 */
+			async sectionGotoStudy (section) {
+				const lessonStore = useLessonStore()
+				console.log(lessonStore)
+				await lessonStore.getSectionInfo(section)
+				uni.navigateTo({
+					url: "/pages/Lesson/Lesson"
+				})
 			}
 		}
 	}
@@ -83,7 +116,8 @@
 
 <style scoped lang="scss">
 	.find {
-		height: 100vh
+		height: 100vh;
+		overflow: hidden;
 	}
 	.header {
 		height: 514rpx;
@@ -98,6 +132,29 @@
 		.box {
 			margin-top: 120rpx;
 			box-sizing: border-box;
+			padding: 0 32rpx;
+			.course-overview {
+				margin-left: 32rpx;
+				.title {
+					font-size: 32rpx;
+					font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+					font-weight: 500;
+				}
+				.desc {
+					font-size: 24rpx;
+					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+					font-weight: 400;
+					margin-top: 8rpx;
+				}
+				.bottom {
+					font-size: 24rpx;
+					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+					font-weight: 400;
+				}
+				.line {
+					margin: 0 20rpx;
+				}
+			}
 		}
 		.poster {
 			width: 200rpx;
@@ -113,12 +170,14 @@
 		box-sizing: border-box;
 		border-radius: 32rpx 32rpx 0 0;
 		background: #ffffff;
-		padding: 32rpx;
+		padding: 32rpx 0;
 		.tip {
 			height: 72rpx;
 			background: #F4F5F7;
 			border-radius: 16rpx;
 			padding: 0 22rpx;
+			margin: 0 32rpx;
+			box-sizing: border-box;
 		}
 		.tip-text {
 			font-size: 28rpx;
@@ -131,7 +190,10 @@
 			height: 32rpx
 		}
 		.process-box {
-			margin-top: 32rpx;
+			margin: 32rpx 32rpx 0;
+			padding-right: 32rpx;
+			height: calc(100% - 260rpx);
+			overflow-y: scroll;
 			.process-label {
 				font-size: 24rpx;
 				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
@@ -166,13 +228,15 @@
 			}
 		}
 		.handles {
+			box-sizing: border-box;
 			border-top: 1px solid #BDBDBD;
-			position: absolute;
-			bottom: 84rpx;
+			// position: relative;
+			// z-index: 100;
+			// bottom: 84rpx;
+			height: 196rpx;
 			left: 0;
-			padding-left: 24rpx;
-			padding-right: 32rpx;
-			padding-top: 16rpx;
+			padding: 16rpx 24rpx;
+			// padding-top: 16rpx;
 			.add-label {
 				font-size: 24rpx;
 				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;

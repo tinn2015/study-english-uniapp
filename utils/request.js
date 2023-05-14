@@ -52,3 +52,23 @@ export const getFavoriteDetail = (id) => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 移除课程
+ */
+export const removeFavoriteCourse = (id) => {
+	return request({
+		url: `/lesson/favorite/del/${id}`,
+		method: 'POST'
+	})
+}
+
+/**
+ * 获取章节信息
+ */
+export const getSectionDetail = (id) => {
+	return request({
+		url: `/lesson/section/detail/${id}`,
+		method: 'POST'
+	})
+}

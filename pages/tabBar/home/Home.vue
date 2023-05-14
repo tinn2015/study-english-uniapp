@@ -47,7 +47,7 @@
 							<view class="course-info-text">{{ item.read }}</view>
 						</view>
 					</view>
-					<view class="poster flex fd-c jc-c ai-c course-add">
+					<view class="poster flex fd-c jc-c ai-c course-add" @click="routeToFind">
 						<uni-icons type="plusempty"></uni-icons>
 						<text class="add-course-label">添加课程</text>
 					</view>
@@ -156,6 +156,11 @@ export default defineComponent({
 			uni.navigateTo({
 				url: '/pages/StudyToday/StudyToday'
 			});
+		},
+		routeToFind () {
+			uni.switchTab({
+				url: "/pages/tabBar/find/Find"
+			})
 		}
 	}
 });
