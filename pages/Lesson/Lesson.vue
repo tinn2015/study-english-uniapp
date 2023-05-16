@@ -5,13 +5,15 @@
 				<view class="sentence">{{paragraph.sentence}}</view>
 				<view class="translation">{{paragraph.translation}}</view>
 				<view class="handles flex jc-c ai-c">
-					<view v-if="isRecording" @click="stopRecord">
-						正在录音中。。。
+					<view v-if="isRecording" @click="stopRecord" class="wave-box flex fd-c ai-c">
+						<!-- 正在录音中。。。 -->
+						<view class="wave-label">点击结束录音</view>
+						<view class="wave"></view>
 					</view>
 					<view v-else class="flex jc-c ai-c">
 						<view class="btn">
-							<image class="icon-mini" src="http://api.itso123.com/image/play.png" mode=""></image>
-							
+							<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini" src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
+							<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini" src="http://api.itso123.com/image/play.png" mode=""></image>
 						</view>
 						<view class="btn btn-mid" @click="record">
 							<image class="icon" src="http://api.itso123.com/image/microphone.png" mode=""></image>
@@ -53,7 +55,7 @@
 		id: 0,
 		info: {}
 	})
-	const isRecording = ref(false)
+	const isRecording = ref(true)
 	
 	const lessonStore = useLessonStore()
 	const { sectionInfo, currentSection } = lessonStore
@@ -107,6 +109,36 @@
 		recorderManager.stop()
 		isRecording.value = false
 	}
+	
+	/**
+	 * 播放句子
+	 */
+	const innerAudioContext = uni.createInnerAudioContext();
+	innerAudioContext.onPlay(() => {
+	  audioPlaying.value = true
+	  console.log('开始播放');
+	});
+	innerAudioContext.onError((res) => {
+	  console.log(res.errMsg);
+	  console.log(res.errCode);
+	  audioPlaying.value = false
+	});
+	innerAudioContext.onEnded(() => {
+		audioPlaying.value = false
+	})
+	innerAudioContext.onStop(() => {
+		audioPlaying.value = false
+	})
+	const audioPlaying = ref(false)
+	const playAudio = (url) => {
+		innerAudioContext.stop()
+		innerAudioContext.src = url;
+		innerAudioContext.play()
+	}
+	
+	const stopAudio = () => {
+		innerAudioContext.stop()
+	}
 </script>
 
 <style scoped lang="scss">
@@ -119,6 +151,8 @@
 	.paragraph-active {
 		padding: 32rpx;
 		.handles {
+			height: 150rpx;
+			width: 100%;
 			margin-top: 88rpx;
 			.icon-mini {
 				width: 96rpx;
@@ -136,23 +170,31 @@
 	.translation {
 		margin-top: 32rpx;
 	}
-	.part-1 {
-		height: 322rpx;
-		background: #F2F2F2;
-	}
-	.part-2 {
-	}
-	.part-3 {
-		padding: 0 32rpx;
-		margin-top: 60rpx;
-		.btn {
-			background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-			border-radius: 60rpx;
-			height: 96rpx;
-			font-size: 32rpx;
-			font-family: PingFangSC-Semibold, PingFang SC;
-			font-weight: 600;
-			color: #FFFFFF;
+	.wave-box {
+		width: 100%;
+		height: 100%;
+		.wave-label {
+			color: #8d8d8d;
+			margin-bottom: 20rpx;
 		}
 	}
+	.wave {
+	  position: relative;
+	  width: 50%;
+	  height: 8rpx;
+	  border-radius: 4rpx;
+	  animation: wave .5s infinite linear alternate;
+	  background: rgb(7,59,99);
+	  background: linear-gradient(90deg, #59c47f 0%, #6be7b7 100%);
+	}
+	
+	@keyframes wave {
+	  0% {
+	    width: 50%
+	  }
+	  100% {
+	    width: 90%;
+	  }
+	}
+
 </style>
