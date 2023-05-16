@@ -40,7 +40,7 @@
 				</view>
 				<view class="courses flex fw-w jc-sb">
 					<view v-for="item in favorites" class="course-item" @click="routeToCourse(item.lessonId)">
-						<view class="poster"></view>
+						<image class="poster" :src="item.img" mode=""></image>
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
 							<view class="course-info-text">{{ item.level }}</view>
