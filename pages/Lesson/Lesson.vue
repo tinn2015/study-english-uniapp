@@ -1,6 +1,6 @@
 <template>
 	<view class="lesson">
-		<view v-for="paragraph in sectionInfo">
+		<view v-for="(paragraph, index) in sectionInfo">
 			<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentLesson.id)">
 				<view class="sentence">{{paragraph.sentence}}</view>
 				<view class="translation">{{paragraph.translation}}</view>
@@ -12,19 +12,28 @@
 					</view>
 					<view v-else class="flex jc-c ai-c">
 						<view class="btn">
-							<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini" src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
-							<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini" src="http://api.itso123.com/image/play.png" mode=""></image>
+							<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
+								src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
+							<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
+								src="http://api.itso123.com/image/play.png" mode=""></image>
 						</view>
 						<view class="btn btn-mid" @click="record">
 							<image class="icon" src="http://api.itso123.com/image/microphone.png" mode=""></image>
 						</view>
 						<view class="btn">
-							<image class="icon-mini" src="http://api.itso123.com/image/speaker.png" mode=""></image>
+							<ToolTip :content="paragraph.result ? paragraph.result.tips : ''">
+								<image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
+									src="http://api.itso123.com/image/emoji-smile.png" mode=""></image>
+								<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
+									src="http://api.itso123.com/image/emoji-sad.png" mode=""></image>
+								<image v-else class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
+								</image>
+							</ToolTip>
 						</view>
 					</view>
 				</view>
 			</view>
-			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph)">
+			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph, index)">
 				<view>{{paragraph.sentence}}</view>
 				<view>{{paragraph.translation}}</view>
 			</view>
@@ -42,10 +51,22 @@
 </template>
 
 <script setup>
-	import {reactive, onBeforeMount, ref} from 'vue'
-	import { onReady } from '@dcloudio/uni-app'
-	import {useLessonStore} from '@/stores/lessons.js'
-	const routeToReport =  () => {
+	import {
+		reactive,
+		onBeforeMount,
+		ref,
+		createApp
+	} from 'vue'
+	import {
+		onReady
+	} from '@dcloudio/uni-app'
+	import {
+		useLessonStore
+	} from '@/stores/lessons.js'
+	import {
+		ToolTip
+	} from '@/components/ToolTip/ToolTip.vue'
+	const routeToReport = () => {
 		console.log(1111)
 		uni.navigateTo({
 			url: "/pages/Report/Report"
@@ -53,41 +74,52 @@
 	}
 	const currentLesson = reactive({
 		id: 0,
-		info: {}
+		info: {},
+		index: 0
 	})
-	const isRecording = ref(true)
-	
+	const isRecording = ref(false)
+
 	const lessonStore = useLessonStore()
-	const { sectionInfo, currentSection } = lessonStore
-	console.log('sectionInfo', sectionInfo)
+	const {
+		sectionInfo,
+		currentSection,
+		favoriteLessonInfo
+	} = lessonStore
+	console.log('favoriteLessonInfo', favoriteLessonInfo)
 	onBeforeMount(() => {
 		currentLesson.id = sectionInfo[0].id
 		currentLesson.info = sectionInfo[0]
+		currentLesson.index = 0
 		console.log('currentLesson', currentLesson, sectionInfo)
 	})
-	
+
 	// 切换段落
-	const changeParagraph = (paragraph) => {
+	const changeParagraph = (paragraph, index) => {
 		currentLesson.id = paragraph.id
 		currentLesson.info = paragraph
+		currentLesson.index = index
 	}
-	
+
 	// 录音
 	const recorderManager = uni.getRecorderManager()
 	recorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
 		// 上传录音
 		uni.uploadFile({
-			url: `https://api.itso123.com/v1/dialog/speak/analyse/${currentLesson.id}`,
+			url: `https://api.itso123.com/v1/dialog/speak/analyse/${favoriteLessonInfo.lessonId}/${currentLesson.id}`,
 			filePath: filePath.tempFilePath,
 			name: 'recfile',
-			cid: currentSection.id,
+			cid: currentLesson.id,
 			header: {
 				authorization: uni.getStorageSync('authorization')
 			},
 			success: (res) => {
 				console.log('录音上传成功', res)
-				isRecording.value = false
+				if (res.statusCode === 200) {
+					isRecording.value = false
+					sectionInfo[currentLesson.index]['result'] = JSON.parse(res.data)
+				}
+				console.log('sectionInfo', currentLesson.index, sectionInfo)
 			},
 			fail: (err) => {
 				console.log('录音上传失败', err)
@@ -104,24 +136,24 @@
 		})
 		isRecording.value = true
 	}
-	
+
 	const stopRecord = () => {
 		recorderManager.stop()
 		isRecording.value = false
 	}
-	
+
 	/**
 	 * 播放句子
 	 */
 	const innerAudioContext = uni.createInnerAudioContext();
 	innerAudioContext.onPlay(() => {
-	  audioPlaying.value = true
-	  console.log('开始播放');
+		audioPlaying.value = true
+		console.log('开始播放');
 	});
 	innerAudioContext.onError((res) => {
-	  console.log(res.errMsg);
-	  console.log(res.errCode);
-	  audioPlaying.value = false
+		console.log(res.errMsg);
+		console.log(res.errCode);
+		audioPlaying.value = false
 	});
 	innerAudioContext.onEnded(() => {
 		audioPlaying.value = false
@@ -135,10 +167,18 @@
 		innerAudioContext.src = url;
 		innerAudioContext.play()
 	}
-	
+
 	const stopAudio = () => {
 		innerAudioContext.stop()
 	}
+
+	// 注册局部组件
+	const app = createApp({
+		/* root component options */
+	})
+	app.component({
+		ToolTip
+	})
 </script>
 
 <style scoped lang="scss">
@@ -148,53 +188,62 @@
 		padding: 32rpx;
 		border-top: 1px solid #dddddd
 	}
+
 	.paragraph-active {
 		padding: 32rpx;
+
 		.handles {
 			height: 150rpx;
 			width: 100%;
 			margin-top: 88rpx;
+
 			.icon-mini {
 				width: 96rpx;
 				height: 96rpx
 			}
+
 			.icon {
 				width: 120rpx;
 				height: 120rpx
 			}
+
 			.btn-mid {
 				margin: 0 70rpx
 			}
 		}
 	}
+
 	.translation {
 		margin-top: 32rpx;
 	}
+
 	.wave-box {
 		width: 100%;
 		height: 100%;
+
 		.wave-label {
 			color: #8d8d8d;
 			margin-bottom: 20rpx;
 		}
 	}
+
 	.wave {
-	  position: relative;
-	  width: 50%;
-	  height: 8rpx;
-	  border-radius: 4rpx;
-	  animation: wave .5s infinite linear alternate;
-	  background: rgb(7,59,99);
-	  background: linear-gradient(90deg, #59c47f 0%, #6be7b7 100%);
-	}
-	
-	@keyframes wave {
-	  0% {
-	    width: 50%
-	  }
-	  100% {
-	    width: 90%;
-	  }
+		position: relative;
+		width: 50%;
+		height: 8rpx;
+		border-radius: 4rpx;
+		animation: wave .5s infinite linear alternate;
+		background: rgb(7, 59, 99);
+		background: linear-gradient(90deg, #59c47f 0%, #6be7b7 100%);
 	}
 
+	@keyframes wave {
+		0% {
+			width: 50%
+		}
+
+		100% {
+			width: 90%;
+		}
+	}
 </style>

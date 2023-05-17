@@ -7,7 +7,7 @@
 		<view class="content flex fd-c">
 			<view class="panel flex jc-sb ai-c">
 				<view class="flex-1 flex fd-c ai-c">
-					<view class="panel-title" @click="routerToRecord">
+					<view class="panel-title flex" @click="routerToRecord">
 						<text>累计学习</text>
 						<uni-icons type="forward" size="14"></uni-icons>
 					</view>
@@ -64,6 +64,7 @@ import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
+import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 export default defineComponent({
 	setup() {
 		const favorites = reactive([])
@@ -111,7 +112,8 @@ export default defineComponent({
 		console.log('mounted');
 	},
 	components: {
-		Swiper
+		Swiper,
+		ToolTip
 	},
 	onLoad() {
 		console.log('load');
