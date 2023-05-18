@@ -36,6 +36,31 @@ export const login = async (code) => {
 	return false
 }
 
+/**
+ * 历史课程（累计学习）列表查询
+ */
+export const getHistory = async (code) => {
+	return request({
+		url: '/lesson/history/query',
+		method: 'POST'
+	})
+}
+
+/**
+ * 今日学习列表查询
+ */
+export const getTodayLessons = async (code) => {
+	return request({
+		url: '/lesson/study/today/query',
+		method: 'POST'
+	})
+}
+
+
+
+/**
+ * 首页，轻松学
+ */
 export const getFavorite = () => {
 	return request({
 		url: '/lesson/favorite/query',

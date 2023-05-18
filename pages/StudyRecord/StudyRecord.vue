@@ -35,6 +35,7 @@
 
 <script>
 	import Navigator from '../../components/Navigator/Navigator.vue'
+	import { getHistory } from '@/utils/request.js'
 	export default {
 		components: {
 			Navigator
@@ -73,8 +74,18 @@
 						process: 30,
 						views: 1000
 					},
+					{
+						poster: '',
+						title: '日常必备口语30句',
+						process: 30,
+						views: 1000
+					}
 				]
 			}
+		},
+		async mounted () {
+			const {lessons} = await getHistory()
+			this.lessons = lessons
 		},
 		methods: {
 		}
@@ -98,10 +109,11 @@
 		position: relative;
 		top: -54rpx;
 		height: calc(100% - 360rpx + 54rpx);
+		overflow: auto;;
 		box-sizing: border-box;
 		border-radius: 32rpx 32rpx 0 0;
 		background: #ffffff;
-		padding: 32rpx;
+		padding: 32rpx 32rpx 60rpx;
 		.record-title {
 			font-size: 28rpx;
 			font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;

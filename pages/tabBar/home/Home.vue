@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { onMounted, defineComponent, reactive } from 'vue';
+import { onMounted, defineComponent, reactive, onBeforeMount } from 'vue';
 import { getFavorite } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit } from '@dcloudio/uni-app';
@@ -77,13 +77,15 @@ export default defineComponent({
 			console.log('init2');
 		});
 		const loginStore = useLoginStore();
-		loginStore.login();
-		
-		// 获取轻松学
-		getFavorite().then((res) => {
-			favorites.push(...res.lessons)
-			console.log('favorites', favorites)
+		onBeforeMount(async () => {
+			await loginStore.login();
+			// 获取轻松学
+			getFavorite().then((res) => {
+				favorites.push(...res.lessons)
+				console.log('favorites', favorites)
+			})
 		})
+		
 		return {
 			menuButtonInfo,
 			favorites,
