@@ -1,7 +1,7 @@
 <template>
 	<view class="lesson">
 		<view v-for="(paragraph, index) in sectionInfo">
-			<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentLesson.id)">
+			<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentParagraph.id)">
 				<view class="sentence">{{paragraph.sentence}}</view>
 				<view class="translation">{{paragraph.translation}}</view>
 				<view class="handles flex jc-c ai-c">
@@ -72,7 +72,7 @@
 			url: "/pages/Report/Report"
 		})
 	}
-	const currentLesson = reactive({
+	const currentParagraph = reactive({
 		id: 0,
 		info: {},
 		index: 0
@@ -83,21 +83,21 @@
 	const {
 		sectionInfo,
 		currentSection,
-		favoriteLessonInfo
+		lessonInfo
 	} = lessonStore
-	console.log('favoriteLessonInfo', favoriteLessonInfo)
+	console.log('lessonInfo', lessonInfo)
 	onBeforeMount(() => {
-		currentLesson.id = sectionInfo[0].id
-		currentLesson.info = sectionInfo[0]
-		currentLesson.index = 0
-		console.log('currentLesson', currentLesson, sectionInfo)
+		currentParagraph.id = sectionInfo[0].id
+		currentParagraph.info = sectionInfo[0]
+		currentParagraph.index = 0
+		console.log('currentParagraph', currentParagraph, sectionInfo)
 	})
 
 	// 切换段落
 	const changeParagraph = (paragraph, index) => {
-		currentLesson.id = paragraph.id
-		currentLesson.info = paragraph
-		currentLesson.index = index
+		currentParagraph.id = paragraph.id
+		currentParagraph.info = paragraph
+		currentParagraph.index = index
 	}
 
 	// 录音
@@ -106,10 +106,10 @@
 		console.log('filePath', filePath)
 		// 上传录音
 		uni.uploadFile({
-			url: `https://api.itso123.com/v1/dialog/speak/analyse/${favoriteLessonInfo.lessonId}/${currentLesson.id}`,
+			url: `https://api.itso123.com/v1/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
 			filePath: filePath.tempFilePath,
 			name: 'recfile',
-			cid: currentLesson.id,
+			cid: currentParagraph.id,
 			header: {
 				authorization: uni.getStorageSync('authorization')
 			},
@@ -117,10 +117,10 @@
 				console.log('录音上传成功', res)
 				if (res.statusCode === 200) {
 					isRecording.value = false
-					sectionInfo[currentLesson.index]['result'] = JSON.parse(res.data)
-					sectionInfo[currentLesson.index]['tipShow'] = true
+					sectionInfo[currentParagraph.index]['result'] = JSON.parse(res.data)
+					sectionInfo[currentParagraph.index]['tipShow'] = true
 				}
-				console.log('sectionInfo', currentLesson.index, sectionInfo)
+				console.log('sectionInfo', currentParagraph.index, sectionInfo)
 			},
 			fail: (err) => {
 				console.log('录音上传失败', err)

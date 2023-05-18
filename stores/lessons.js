@@ -4,7 +4,7 @@ import { getFavoriteDetail, getSectionDetail } from '@/utils/request.js';
 export const useLessonStore = defineStore('lesson', {
 	state: () => {
 		return { 
-			favoriteLessonInfo: {},
+			lessonInfo: {},
 			sectionInfo: {},
 			currentSection: {}
 		};
@@ -15,7 +15,7 @@ export const useLessonStore = defineStore('lesson', {
 		async getFavoriteLesson (id) {
 			const result = await getFavoriteDetail(id)
 			console.log('getFavoriteLesson', result)
-			this.favoriteLessonInfo = result
+			this.lessonInfo = result
 		},
 		async getSectionInfo (section) {
 			const result = await getSectionDetail(section.id)

@@ -3,29 +3,29 @@
 		<view class="header">
 			<Navigator></Navigator>
 			<view class="box flex jc-sb">
-				<image class="poster" :src="lessonStore.favoriteLessonInfo.img" mode=""></image>
+				<image class="poster" :src="lessonStore.lessonInfo.img" mode=""></image>
 				<view class="course-overview flex fd-c jc-sb">
 					<view class="top">
-						<view class="title">{{lessonStore.favoriteLessonInfo.title}}</view>
-						<view class="desc">{{lessonStore.favoriteLessonInfo.descript}}</view>
+						<view class="title">{{lessonStore.lessonInfo.title}}</view>
+						<view class="desc">{{lessonStore.lessonInfo.descript}}</view>
 					</view>
 					<view class="bottom flex">
-						<view>{{lessonStore.favoriteLessonInfo.level}}</view>
+						<view>{{lessonStore.lessonInfo.level}}</view>
 						<view class="line">|</view>
-						<view>{{lessonStore.favoriteLessonInfo.read}}人已学</view>
+						<view>{{lessonStore.lessonInfo.read}}人已学</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view class="find-content">
-			<view class="tip flex jc-sb ai-c" v-if="lessonStore.favoriteLessonInfo.advUrl">
+			<view class="tip flex jc-sb ai-c" v-if="lessonStore.lessonInfo.advUrl">
 				<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
-				<text class="tip-text">{{lessonStore.favoriteLessonInfo.advTitle}}</text>
+				<text class="tip-text">{{lessonStore.lessonInfo.advTitle}}</text>
 				<uni-icons type="forward"></uni-icons>
 			</view>
 			<view class="process-box">
-				<view class="process-label">完成进度 {{lessonStore.favoriteLessonInfo.speed}}</view>
-				<view @click="sectionGotoStudy(section)" v-for="section in lessonStore.favoriteLessonInfo.sections" class="flex jc-sb ai-c course-box">
+				<view class="process-label">完成进度 {{lessonStore.lessonInfo.speed}}</view>
+				<view @click="sectionGotoStudy(section)" v-for="section in lessonStore.lessonInfo.sections" class="flex jc-sb ai-c course-box">
 					<image class="course-img" :src="section.img" mode=""></image>
 					<view class="course-info">
 						<view class="course-title">{{section.title}}</view>
@@ -93,7 +93,7 @@
 			 * 移除课程
 			 */
 			removeCourse () {
-				const lessonId = lessonStore.favoriteLessonInfo.lessonId
+				const lessonId = lessonStore.lessonInfo.lessonId
 				removeFavoriteCourse(id).then(res => {
 					console.log('removeFavoriteCourse', res)
 				})
