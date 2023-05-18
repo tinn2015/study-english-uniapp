@@ -21,7 +21,7 @@
 							<image class="icon" src="http://api.itso123.com/image/microphone.png" mode=""></image>
 						</view>
 						<view class="btn">
-							<ToolTip :content="paragraph.result ? paragraph.result.tips : ''">
+							<ToolTip :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
 								<image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
 									src="http://api.itso123.com/image/emoji-smile.png" mode=""></image>
 								<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
@@ -118,6 +118,7 @@
 				if (res.statusCode === 200) {
 					isRecording.value = false
 					sectionInfo[currentLesson.index]['result'] = JSON.parse(res.data)
+					sectionInfo[currentLesson.index]['tipShow'] = true
 				}
 				console.log('sectionInfo', currentLesson.index, sectionInfo)
 			},
@@ -179,6 +180,9 @@
 	app.component({
 		ToolTip
 	})
+	const toolTipClose = () => {
+		console.log('toolTipClose')
+	}
 </script>
 
 <style scoped lang="scss">

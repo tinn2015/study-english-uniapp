@@ -1,6 +1,11 @@
 <template>
 	<view class="tool-tip">
-		<view class="tip" v-show="visible">{{content}}</view>
+		<uni-transition :mode-class="fade" :show="visible">
+			<view class="tip">{{content}}</view>
+		</uni-transition>
+<!-- 		<Transition name="fade">
+			<view class="tip" v-show="visible">{{content}}</view>
+		</Transition> -->
 		<view @click="changeStatus">
 			<slot></slot>
 		</view>
@@ -10,13 +15,19 @@
 <script>
 	export default {
 		props: {
-			show: Boolean,
+			show: {
+				type: Boolean,
+				default: false
+			},
 			content: String
 		},
 		data () {
 			return {
 				localShow: false
 			}
+		},
+		mounted() {
+			console.log('this.show', this.show)
 		},
 		computed: {
 			visible () {
@@ -33,6 +44,10 @@
 					this.show = false
 				} else {
 					this.localShow = !this.localShow
+				}
+				console.log('tootip changeStatus1', this.show, this.localShow)
+				if (!this.show && !this.localShow) {
+					this.$emit('close')
 				}
 			}
 		}
@@ -54,5 +69,16 @@
 			padding: 10rpx 20rpx;
 			box-sizing: border-box;
 		}
+	}
+</style>
+<style>
+	.fade-enter-active,
+	.fade-leave-active {
+	  transition: opacity 0.5s ease;
+	}
+	
+	.fade-enter-from,
+	.fade-leave-to {
+	  opacity: 0;
 	}
 </style>
