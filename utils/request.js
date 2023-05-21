@@ -97,3 +97,26 @@ export const getSectionDetail = (id) => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 发现课程列表查询（全部课程查询）
+ */
+export const getFindLessons = (key) => {
+	return request({
+		url: '/lesson/search/query',
+		method: 'POST',
+		data: {
+			class: key
+		}
+	})
+}
+
+/**
+ * 发现课程分类查询（全部课程分类查询）
+ */
+export const getFindClass = (key) => {
+	return request({
+		url: '/lesson/search/class/query',
+		method: 'POST'
+	})
+}

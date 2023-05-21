@@ -1,21 +1,22 @@
 <template>
 	<view class="find">
 		<view class="header">
+			<!-- <Navigator></Navigator> -->
 			<image class="banner" mode="aspectFit" src="https://api.itso123.com/image/find-bg.png"></image>
 		</view>
 		<view class="find-content flex">
 			<view class="left">
-				<view class="nav-item flex jc-c ai-c" @click="navTap(nav)" :class="currentNav === nav.id ? 'nav-active' : ''" v-for="nav in navLists">{{nav.label}}</view>
+				<view class="nav-item flex jc-c ai-c" @click="navTap(nav)" :class="currentNav === nav ? 'nav-active' : ''" v-for="nav in navLists">{{nav}}</view>
 			</view>
 			<view class="right">
 				<view class="filter-box flex jc-c ai-c">全部难度</view>
 				<view class="course-box">
 					<view v-for="course in courses" class="course-item flex ai-c" @click="getCourseDetail(course)">
-						<image :src="course.poster" class="poster" mode="aspectFit"></image>
+						<image :src="course.img" class="poster" mode="aspectFit"></image>
 						<view class="right-content">
 							<view class="title">{{course.title}}</view>
-							<view class="sub-title">{{course.subTitle}}</view>
-							<view class="info">{{course.views}}</view>
+							<view class="sub-title">{{course.level}}</view>
+							<view class="info">{{course.read}}</view>
 						</view>
 					</view>
 				</view>
@@ -25,31 +26,13 @@
 </template>
 
 <script>
+	import { getFindLessons, getFindClass } from '@/utils/request.js'
+	import Navigator from '@/components/Navigator/Navigator.vue'
 	export default {
 		data () {
 			return {
-				navLists: [
-					{
-						label: '为你推荐',
-						id: 1
-					},{
-						label: '每日一词',
-						id: 2
-					},{
-						label: '日常必备',
-						id: 3
-					},{
-						label: '玩转职场',
-						id: 4
-					},{
-						label: '旅游出行',
-						id: 5
-					},{
-						label: '亲子英语',
-						id: 6
-					},
-				],
-				currentNav: 1,
+				navLists: [],
+				currentNav: '',
 				courses: [
 					{
 						title: '日常必备口语30句',
@@ -80,9 +63,20 @@
 				]
 			}
 		},
+		async mounted () {
+			const {classList} = await getFindClass()
+			if (classList) {
+				this.navLists = classList
+				this.currentNav = classList[0]
+				const {lessons} = await getFindLessons(this.currentNav)
+				this.courses = lessons
+			}
+		},
 		methods: {
-			navTap (nav){
-				this.currentNav = nav.id
+			async navTap (nav){
+				const {lessons} = await getFindLessons(nav)
+				this.currentNav = nav
+				this.courses = lessons
 			},
 			getCourseDetail (course) {
 				console.log('course', course)
@@ -90,6 +84,9 @@
 					url: '/pages/Course/Course?courseId=1'
 				})
 			}
+		},
+		components: {
+			Navigator
 		}
 	}
 </script>
