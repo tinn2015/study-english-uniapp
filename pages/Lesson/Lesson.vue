@@ -27,12 +27,12 @@
 								<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
 									src="http://api.itso123.com/image/emoji-sad.png" mode=""></image>
 							</ToolTip>
-							<!-- <ToolTip content="发范德萨发发士大夫是的发是的发是的发士大夫 撒旦发射点 ">
-								<image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
+							<ToolTip content="发范德萨发发士大夫是的发是的发是的发士大夫 撒旦发射点 ">
+								<image class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
 								</image>
-							</ToolTip> -->
-							<image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
-							</image>
+							</ToolTip>
+							<!-- <image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
+							</image> -->
 						</view>
 					</view>
 				</view>
