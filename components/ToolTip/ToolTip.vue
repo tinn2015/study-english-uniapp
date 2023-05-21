@@ -67,7 +67,9 @@
 			transform: translateX(-50%) translateY(calc(-100% - 10rpx));
 			background: rgba(0,0,0,0.8);
 			padding: 10rpx 20rpx;
-			box-sizing: border-box;
+			// box-sizing: border-box;
+			max-width: 300rpx;
+			min-width: 200rpx;
 		}
 	}
 </style>

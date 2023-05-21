@@ -5,27 +5,27 @@
 			<image class="banner" mode="scaleToFill" src="https://api.itso123.com/image/record-bg.png"></image>
 		</view>
 		<view class="find-content">
-			<view class="record-info flex jc-sb ai-c">
+			<!-- <view class="record-info flex jc-sb ai-c">
 				<view class="record-title-process">
 					<view class="record-title">累计坚持学习</view>
 					<view class="record-process">已完成 5课/4天</view>
 				</view>
 				<view class="tip">你已打败了90%的同学</view>
-			</view>
+			</view> -->
 			<view class="record-courses">
-				<view v-for="course in courses" class="flex course-item">
-					<image class="poster" :src="course.poster" mode=""></image>
+				<view v-for="course in lessons" class="flex course-item">
+					<image class="poster" :src="course.img" mode=""></image>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
 							<view class="course-title">{{course.title}}</view>
 							<view class="course-process flex ai-c">
 								<view class="process">
-									<progress :percent="course.process" stroke-width="3" />
+									<progress :percent="course.percent" stroke-width="3" />
 								</view>
-								<view class="process-label">已完成<text>{{course.process}}%</text></view>
+								<view class="process-label">已完成<text>{{course.percent}}%</text></view>
 							</view>
 						</view>
-						<view class="course-views">{{course.views}}已学习</view>
+						<view class="course-views">{{course.read}}已学习</view>
 					</view>
 				</view>
 			</view>
@@ -42,50 +42,14 @@
 		},
 		data () {
 			return {
-				courses: [
-					{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},
-					{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					}
-				]
+				lessons: []
 			}
 		},
 		async mounted () {
 			const {lessons} = await getHistory()
-			this.lessons = lessons
+			if (lessons) {
+				this.lessons = lessons
+			}
 		},
 		methods: {
 		}
