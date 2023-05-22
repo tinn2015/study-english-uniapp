@@ -20,9 +20,9 @@
 							<view class="course-title">{{course.title}}</view>
 							<view class="course-process flex ai-c">
 								<view class="process">
-									<progress :percent="course.precent" stroke-width="3" />
+									<progress :percent="course.percent" stroke-width="3" />
 								</view>
-								<view class="process-label">已完成<text>{{course.precent}}%</text></view>
+								<view class="process-label">已完成<text>{{course.percent}}%</text></view>
 							</view>
 						</view>
 						<view class="course-views">{{course.read}}已学习</view>

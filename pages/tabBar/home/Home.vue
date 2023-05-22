@@ -38,8 +38,8 @@
 						<uni-icons type="forward" size="12"></uni-icons>
 					</view>
 				</view>
-				<view class="courses flex fw-w jc-sb">
-					<view v-for="item in favorites" class="course-item" @click="routeToCourse(item.lessonId)">
+				<view class="courses flex fw-w">
+					<view v-for="(item, index) in favorites" class="course-item" @click="routeToCourse(item.lessonId)" :class="{mr0: (index + 1) % 3 === 0}">
 						<image class="poster" :src="item.img" mode=""></image>
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
@@ -81,7 +81,11 @@ export default defineComponent({
 			await loginStore.login();
 			// 获取轻松学
 			getFavorite().then((res) => {
-				favorites.push(...res.lessons)
+				if (res.lessons > 8) {
+					favorites.push(...res.lessons)
+				} else {
+					favorites.push(...res.lessons.slice(0, 8))
+				}
 				console.log('favorites', favorites)
 			})
 		})
@@ -259,6 +263,7 @@ export default defineComponent({
 				height: 240rpx;
 				background: #f4f5f7;
 				border-radius: 16rpx;
+				box-sizing: border-box;
 				.add-course-label {
 					font-size: 28rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
@@ -268,7 +273,7 @@ export default defineComponent({
 				}
 			}
 			.course-item {
-				// margin-right: 34rpx;
+				margin-right: calc((100vw - (207rpx * 3) - 60rpx)/2);
 				margin-top: 10rpx;
 				.course-title {
 					font-size: 28rpx;
@@ -288,6 +293,9 @@ export default defineComponent({
 			}
 			.course-add {
 				margin-top: 10px;
+			}
+			.mr0 {
+				margin-right: 0;
 			}
 		}
 	}

@@ -35,14 +35,14 @@
 				</view>
 			</view>
 			<view class="handles flex jc-sb ai-c">
-				<view class="flex fd-c ai-c" @click="removeCourse">
+				<view class="flex fd-c ai-c" v-if="lessonStore.lessonInfo.isFavorite" @click="removeCourse">
 					<image class="add-icon" src="https://api.itso123.com/image/remove-course.png" mode=""></image>
 					<text class='add-label'>移除课程</text>
 				</view>
-				<!-- <view class="flex fd-c ai-c" v-else @click="addCourse">
+				<view class="flex fd-c ai-c" v-else @click="addCourse">
 					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
 					<text class='add-label'>添加课程</text>
-				</view> -->
+				</view>
 				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
 			</view>
 		</view>
@@ -52,7 +52,7 @@
 <script>
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
-	import { removeFavoriteCourse, getSectionDetail } from "@/utils/request.js"
+	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
 	export default {
 		setup () {
 			const lessonStore = useLessonStore()
@@ -93,9 +93,25 @@
 			 * 移除课程
 			 */
 			removeCourse () {
-				const lessonId = lessonStore.lessonInfo.lessonId
-				removeFavoriteCourse(id).then(res => {
+				const lessonId = this.lessonStore.lessonInfo.lessonId
+				removeFavoriteCourse(lessonId).then(res => {
 					console.log('removeFavoriteCourse', res)
+					this.lessonStore.getFavoriteLesson(lessonId)
+				})
+			},
+			
+			/**
+			 * 添加课程
+			 */
+			addCourse () {
+				const {img, lessonId, level, title} = this.lessonStore.lessonInfo
+				addFavoriteCourse({
+				  img,
+				  lessonId,
+				  level,
+				  title
+				}).then(() => {
+					this.lessonStore.getFavoriteLesson(lessonId)
 				})
 			},
 			

@@ -89,6 +89,17 @@ export const removeFavoriteCourse = (id) => {
 }
 
 /**
+ * 添加课程
+ */
+export const addFavoriteCourse = (data) => {
+	return request({
+		url: `/lesson/favorite/add`,
+		method: 'POST',
+		req: data
+	})
+}
+
+/**
  * 获取章节信息
  */
 export const getSectionDetail = (id) => {

@@ -1,61 +1,47 @@
 <template>
 	<view class="box">
-		<view v-for="course in courses" class="flex course-item">
-			<image class="poster" :src="course.poster" mode=""></image>
+		<view v-for="course in courses" class="flex course-item" @click="routeToCourse(course.lessonId)">
+			<image class="poster" :src="course.img" mode=""></image>
 			<view class="right-content flex fd-c jc-sb">
 				<view>
 					<view class="course-title">{{course.title}}</view>
 					<view class="course-process flex ai-c">
 						<view class="process">
-							<progress :percent="course.process" stroke-width="3" />
+							<progress :percent="course.percent" stroke-width="3" />
 						</view>
-						<view class="process-label">已完成<text>{{course.process}}%</text></view>
+						<view class="process-label">已完成<text>{{`${course.percent}`}}%</text></view>
 					</view>
 				</view>
-				<view class="course-views">{{course.views}}已学习</view>
+				<view class="course-views">{{course.read}}已学习</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import { getFavorite } from '@/utils/request.js';
+	import { useLessonStore } from '@/stores/lessons.js';
 	export default {
 		data () {
 			return {
-				courses: [
-					{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},
-				]
+				courses: []
 			}
+		},
+		beforeMount() {
+			// 获取轻松学
+			getFavorite().then((res) => {
+				this.courses = res.lessons
+				console.log('favorites', this.courses)
+			})
+		},
+		methods: {
+			routeToCourse(id) {
+				uni.navigateTo({
+					url: '/pages/Course/Course'
+				});
+				const lessonStore = useLessonStore()
+				lessonStore.getFavoriteLesson(id)
+			},
 		}
 	}
 </script>
