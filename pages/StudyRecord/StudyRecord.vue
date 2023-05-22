@@ -13,7 +13,7 @@
 				<view class="tip">你已打败了90%的同学</view>
 			</view> -->
 			<view class="record-courses">
-				<view v-for="course in lessons" class="flex course-item">
+				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.lessonId)">
 					<image class="poster" :src="course.img" mode=""></image>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
@@ -36,6 +36,7 @@
 <script>
 	import Navigator from '../../components/Navigator/Navigator.vue'
 	import { getHistory } from '@/utils/request.js'
+	import { useLessonStore } from '@/stores/lessons'
 	export default {
 		components: {
 			Navigator
@@ -52,6 +53,13 @@
 			}
 		},
 		methods: {
+			routeToCourse(id) {
+				const lessonStore = useLessonStore()
+				lessonStore.getFavoriteLesson(id)
+				uni.navigateTo({
+					url: '/pages/Course/Course'
+				});
+			},
 		}
 	}
 </script>

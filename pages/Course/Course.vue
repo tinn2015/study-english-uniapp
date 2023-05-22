@@ -2,7 +2,7 @@
 	<view class="find">
 		<view class="header">
 			<Navigator></Navigator>
-			<view class="box flex jc-sb">
+			<view class="box flex">
 				<image class="poster" :src="lessonStore.lessonInfo.img" mode=""></image>
 				<view class="course-overview flex fd-c jc-sb">
 					<view class="top">

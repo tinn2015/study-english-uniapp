@@ -13,7 +13,7 @@
 				<view class="tip">你已打败了90%的同学</view>
 			</view> -->
 			<view class="record-courses">
-				<view v-for="course in lessons" class="flex course-item">
+				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.lessonId)">
 					<image class="poster" :src="course.img" mode=""></image>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
@@ -35,51 +35,28 @@
 
 <script>
 	import { getTodayLessons } from "@/utils/request.js"
+	import { useLessonStore } from '@/stores/lessons'
 	export default {
 		data () {
 			return {
-				courses: [
-					{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},{
-						poster: '',
-						title: '日常必备口语30句',
-						process: 30,
-						views: 1000
-					},
-				]
+				lessons: []
 			}
 		},
 		async mounted () {
 			const {lessons} = await getTodayLessons()
 			if (lessons) {
+				console.log('lessons', lessons)
 				this.lessons = lessons
 			}
 		},
 		methods: {
+			routeToCourse(id) {
+				const lessonStore = useLessonStore()
+				lessonStore.getFavoriteLesson(id)
+				uni.navigateTo({
+					url: '/pages/Course/Course'
+				});
+			},
 		}
 	}
 </script>
