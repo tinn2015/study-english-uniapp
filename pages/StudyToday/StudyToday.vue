@@ -13,7 +13,7 @@
 				<view class="tip">你已打败了90%的同学</view>
 			</view> -->
 			<view class="record-courses">
-				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.lessonId)">
+				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.id)">
 					<image class="poster" :src="course.img" mode=""></image>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
