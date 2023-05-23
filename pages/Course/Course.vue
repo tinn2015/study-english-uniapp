@@ -63,21 +63,7 @@
 		},
 		data () {
 			return {
-				courses: [
-					{
-						img: '',
-						title: '01.基本词汇',
-						desc: 'Basic Words'
-					},{
-						img: '',
-						title: '012.基本词汇',
-						desc: 'Basic Words'
-					},{
-						img: '',
-						title: '03.基本词汇',
-						desc: 'Basic Words'
-					},
-				]
+				courses: [],
 			}
 		},
 		components: {
@@ -93,7 +79,7 @@
 			 * 移除课程
 			 */
 			removeCourse () {
-				const lessonId = this.lessonStore.lessonInfo.lessonId
+				const {lessonId} = this.lessonStore.lessonInfo
 				removeFavoriteCourse(lessonId).then(res => {
 					console.log('removeFavoriteCourse', res)
 					this.lessonStore.getFavoriteLesson(lessonId)

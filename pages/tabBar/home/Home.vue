@@ -156,9 +156,9 @@ export default defineComponent({
 					console.log('err', err);
 				});
 		},
-		routeToCourse(id) {
+		routeToCourse(lessonId) {
 			const lessonStore = useLessonStore()
-			lessonStore.getFavoriteLesson(id)
+			lessonStore.getFavoriteLesson(lessonId)
 			uni.navigateTo({
 				url: '/pages/Course/Course'
 			});
@@ -185,7 +185,8 @@ export default defineComponent({
 		},
 		routeToWebview (item) {
 			uni.navigateTo({
-				url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`
+				url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`,
+				
 			})
 		}
 	}
