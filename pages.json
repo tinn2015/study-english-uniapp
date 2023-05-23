@@ -61,6 +61,13 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/webview/webview",
+			"style": {
+				"navigationBarTitleText": ""
+				// "navigationStyle": "custom"
+			}
 		}
 	],
 	"globalStyle": {

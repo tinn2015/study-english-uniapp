@@ -131,3 +131,13 @@ export const getFindClass = (key) => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 学习页统计、热门广告位查询（累计学习、今日学习、热门）
+ */
+export const getHomeInfo = () => {
+	return request({
+		url: '/lesson/study/statistic/query',
+		method: 'POST'
+	})
+}

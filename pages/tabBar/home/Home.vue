@@ -11,7 +11,7 @@
 						<text>累计学习</text>
 						<uni-icons type="forward" size="14"></uni-icons>
 					</view>
-					<view class="panel-info">5课/20天</view>
+					<view class="panel-info">{{historyStatistic}}</view>
 				</view>
 				<view class="line"></view>
 				<view class="flex-1 flex fd-c ai-c">
@@ -19,15 +19,15 @@
 						<text>今日学习</text>
 						<uni-icons type="forward" size="14"></uni-icons>
 					</view>
-					<view class="panel-info">5课/20天</view>
+					<view class="panel-info">{{todayStatistic}}</view>
 				</view>
 			</view>
 			<view class="part-1">
 				<view class="title">热销</view>
 				<swiper class="swiper" circular :autoplay="autoplay" :interval="interval" :duration="duration">
-					<swiper-item><view class="swiper-item uni-bg-red" :style="{ background: 'yellow' }">A</view></swiper-item>
-					<swiper-item><view class="swiper-item uni-bg-green" :style="{ background: 'red' }">B</view></swiper-item>
-					<swiper-item><view class="swiper-item uni-bg-blue" :style="{ background: 'green' }">C</view></swiper-item>
+					<swiper-item v-for="item in hotBanners" @click="routeToWebview(item)">
+						<image class="swiper-item" :src="item.headPic" mode="scaleToFill"></image>
+					</swiper-item>
 				</swiper>
 			</view>
 			<view class="part-2">
@@ -58,8 +58,8 @@
 </template>
 
 <script>
-import { onMounted, defineComponent, reactive, onBeforeMount } from 'vue';
-import { getFavorite } from '@/utils/request.js';
+import { onMounted, defineComponent, reactive, onBeforeMount, ref } from 'vue';
+import { getFavorite, getHomeInfo } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
@@ -68,6 +68,9 @@ import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 export default defineComponent({
 	setup() {
 		const favorites = reactive([])
+		const historyStatistic = ref('')
+		const todayStatistic = ref('')
+		const hotBanners = reactive([])
 		// 小程序胶囊位置
 		const menuButtonInfo = reactive(uni.getMenuButtonBoundingClientRect());
 		onReady(() => {
@@ -88,12 +91,22 @@ export default defineComponent({
 				}
 				console.log('favorites', favorites)
 			})
+			// 获取统计数据和banner图
+			getHomeInfo().then((res) =>{
+				console.log('getHomeInfo', res)
+				hotBanners.push(...res.hotBanners)
+				historyStatistic.value = res.historyStatistic
+				todayStatistic.value = res.todayStatistic
+			})
 		})
 		
 		return {
 			menuButtonInfo,
 			favorites,
-			loginStore
+			loginStore,
+			todayStatistic,
+			historyStatistic,
+			hotBanners
 		};
 	},
 	data() {
@@ -169,6 +182,11 @@ export default defineComponent({
 			uni.switchTab({
 				url: "/pages/tabBar/find/Find"
 			})
+		},
+		routeToWebview (item) {
+			uni.navigateTo({
+				url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`
+			})
 		}
 	}
 });
@@ -243,7 +261,7 @@ export default defineComponent({
 			display: block;
 			text-align: center;
 			height: 200rpx;
-			border: 1px solid green;
+			width: 100%
 		}
 	}
 	.part-2 {
