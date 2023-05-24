@@ -28,6 +28,7 @@
 <script>
 	import { getFindLessons, getFindClass } from '@/utils/request.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
+	import { useLessonStore } from '@/stores/lessons.js'
 	export default {
 		data () {
 			return {
@@ -80,6 +81,8 @@
 			},
 			getCourseDetail (course) {
 				console.log('course', course)
+				const lessonStore = useLessonStore()
+				lessonStore.getFavoriteLesson(course.lessonId)
 				uni.navigateTo({
 					url: '/pages/Course/Course?courseId=1'
 				})

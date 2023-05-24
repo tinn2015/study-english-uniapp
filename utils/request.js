@@ -95,7 +95,7 @@ export const addFavoriteCourse = (data) => {
 	return request({
 		url: `/lesson/favorite/add`,
 		method: 'POST',
-		req: data
+		data
 	})
 }
 
