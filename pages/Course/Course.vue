@@ -46,12 +46,14 @@
 				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
 			</view>
 		</view>
+		<LoginPopup></LoginPopup>
 	</view>
 </template>
 
 <script>
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
+	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
 	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
 	export default {
 		setup () {
@@ -67,7 +69,8 @@
 			}
 		},
 		components: {
-			Navigator
+			Navigator,
+			LoginPopup
 		},
 		methods: {
 			routeToLesson () {
@@ -106,8 +109,8 @@
 			 */
 			async sectionGotoStudy (section) {
 				const lessonStore = useLessonStore()
-				console.log(lessonStore)
 				await lessonStore.getSectionInfo(section)
+				console.log('sectionGotoStudy')
 				uni.navigateTo({
 					url: "/pages/Lesson/Lesson"
 				})

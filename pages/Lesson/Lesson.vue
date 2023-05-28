@@ -2,8 +2,8 @@
 	<view class="lesson">
 		<view v-for="(paragraph, index) in sectionInfo">
 			<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentParagraph.id)">
-				<view class="sentence">{{paragraph.sentence}}</view>
-				<view class="translation">{{paragraph.translation}}</view>
+				<view class="sentence text-center">{{paragraph.sentence}}</view>
+				<view class="translation text-center">{{paragraph.translation}}</view>
 				<view class="handles flex jc-c ai-c">
 					<view v-if="isRecording" @click="stopRecord" class="wave-box flex fd-c ai-c">
 						<!-- 正在录音中。。。 -->
@@ -21,25 +21,31 @@
 							<image class="icon" src="http://api.itso123.com/image/microphone.png" mode=""></image>
 						</view>
 						<view class="btn">
+							<!-- <ToolTip :show="true" content="1111">11111</ToolTip> -->
 							<ToolTip v-if="paragraph.result" :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
-								<image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
-									src="http://api.itso123.com/image/emoji-smile.png" mode=""></image>
-								<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
-									src="http://api.itso123.com/image/emoji-sad.png" mode=""></image>
+								<!-- <image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
+									src="http://api.itso123.com/image/emoji-smile.png" mode=""></image> -->
+								<!-- <image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
+									src="http://api.itso123.com/image/emoji-sad.png" mode=""></image> -->
+									<image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
+										src="@/static/images/s1.png" mode=""></image>
+									<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
+									src="@/static/images/s3.png" mode=""></image>
 							</ToolTip>
 							<!-- <ToolTip content="发范德萨发发士大夫是的发是的发是的发士大夫 撒旦发射点 ">
 								<image class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
 								</image>
 							</ToolTip> -->
-							<image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
+							<!-- <image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode=""> -->
+							<image v-else  class="icon-mini" src="@/static/images/s2.png" mode="">
 							</image>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph, index)">
-				<view>{{paragraph.sentence}}</view>
-				<view class="mt60">{{paragraph.translation}}</view>
+				<view class="text-center">{{paragraph.sentence}}</view>
+				<!-- <view class="mt60">{{paragraph.translation}}</view> -->
 			</view>
 		</view>
 		<!-- <view class="part-1 flex jc-c ai-c">
@@ -59,7 +65,8 @@
 		reactive,
 		onBeforeMount,
 		ref,
-		createApp
+		createApp,
+		onMounted
 	} from 'vue'
 	import {
 		onReady
@@ -95,6 +102,9 @@
 		currentParagraph.info = sectionInfo[0]
 		currentParagraph.index = 0
 		console.log('currentParagraph', currentParagraph, sectionInfo)
+	})
+	onMounted(() => {
+		playAudio(currentParagraph.info.sentenceUrl)
 	})
 
 	// 切换段落
@@ -198,8 +208,16 @@
 	}
 
 	.paragraph-active {
-		padding: 32rpx;
-
+		padding: 40rpx;
+		.sentence {
+			font-size: 32rpx;
+			color: #1a9546;
+			font-weight: 600;
+		}
+		.translation {
+			font-size: 26rpx;
+			color: #808080;
+		}
 		.handles {
 			height: 150rpx;
 			width: 100%;
@@ -237,6 +255,10 @@
 			color: #8d8d8d;
 			margin-bottom: 20rpx;
 		}
+	}
+	
+	.text-center {
+		text-align: center;
 	}
 
 	.wave {

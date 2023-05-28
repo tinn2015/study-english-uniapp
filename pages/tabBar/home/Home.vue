@@ -54,6 +54,7 @@
 				</view>
 			</view>
 		</view>
+		<LoginPopup></LoginPopup>
 	</view>
 </template>
 
@@ -65,6 +66,7 @@ import { onReady, onInit } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
+import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
 export default defineComponent({
 	setup() {
 		const favorites = reactive([])
@@ -132,7 +134,8 @@ export default defineComponent({
 	},
 	components: {
 		Swiper,
-		ToolTip
+		ToolTip,
+		LoginPopup
 	},
 	onLoad() {
 		console.log('load');

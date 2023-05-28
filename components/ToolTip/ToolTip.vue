@@ -1,6 +1,6 @@
 <template>
 	<view class="tool-tip">
-		<uni-transition :mode-class="fade" :show="visible">
+		<uni-transition :mode-class="fade" :show="localShow">
 			<view class="tip">{{content}}</view>
 		</uni-transition>
 <!-- 		<Transition name="fade">
@@ -9,6 +9,7 @@
 		<view @click="changeStatus">
 			<slot></slot>
 		</view>
+		<view class="mask" @click="maskTap" v-if="localShow"></view>
 	</view>
 </template>
 
@@ -23,32 +24,38 @@
 		},
 		data () {
 			return {
-				localShow: false
+				localShow: false,
+			}
+		},
+		watch: {
+			show (val) {
+				this.localShow = val
 			}
 		},
 		mounted() {
 			console.log('this.show', this.show)
+			this.localShow = this.show
 		},
 		computed: {
-			visible () {
-				if (this.show || this.localShow) {
-					return true
-				} else {
-					return false
-				}
-			}
+			// visible () {
+			// 	if (this.show || this.localShow) {
+			// 		return true
+			// 	} else {
+			// 		return false
+			// 	}
+			// }
 		},
 		methods: {
 			changeStatus () {
-				if (this.show) {
-					this.show = false
-				} else {
-					this.localShow = !this.localShow
-				}
+				this.localShow = !this.localShow
 				console.log('tootip changeStatus1', this.show, this.localShow)
-				if (!this.show && !this.localShow) {
+				if (!this.localShow) {
 					this.$emit('close')
 				}
+			},
+			maskTap () {
+				console.log('maskTap', this.localShow, this.visible)
+				this.localShow = false
 			}
 		}
 	}
@@ -58,6 +65,7 @@
 	.tool-tip {
 		position: relative;
 		box-sizing: border-box;
+		z-index: 1000;
 		.tip {
 			color: #ffffff;
 			font-size: 26rpx;;
@@ -70,6 +78,13 @@
 			box-sizing: border-box;
 			min-width: 200rpx;
 			word-wrap: break-word;
+		}
+		.mask {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
 		}
 	}
 </style>

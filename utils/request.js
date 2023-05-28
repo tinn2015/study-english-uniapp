@@ -1,3 +1,4 @@
+import { useLoginStore } from '@/stores/login.js'
 const baseUrl = 'https://api.itso123.com/v1'
 
 const request = ({method = 'GET', url, data}) => {
@@ -12,6 +13,14 @@ const request = ({method = 'GET', url, data}) => {
 		}).then(result => {
 			const {data, statusCode, errMsg} = result
 			console.log('result', result, statusCode)
+			
+			// 登录已过期，请重新登录
+			if (data.result === '403' || data.result === '401') {
+				console.log('登录过期')
+				const loginStore = useLoginStore()
+				loginStore.setLoginStatus(false, true)
+				reject(data)
+			}
 			if (statusCode === 500) {
 				reject(errMsg)
 			} else {
@@ -31,6 +40,7 @@ export const login = async (code) => {
 	})
 	if (loginResult.result === '0') {
 		uni.setStorageSync('authorization', loginResult.authorization)
+		uni.setStorageSync('expireTime', new Date().getTime() + (loginResult.expireSec * 1000))
 		return true
 	}
 	return false
