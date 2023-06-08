@@ -54,9 +54,9 @@
 		<view class="part-2">
 			<view class="flex jc-c ai-c">Are you Canadian?</view>
 		</view> -->
-		<!-- <view class="part-3">
-			<view class="btn flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
-		</view> -->
+		<view class="report-box flex jc-c ai-c">
+			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
+		</view>
 	</view>
 </template>
 
@@ -241,6 +241,20 @@
 
 	.translation {
 		margin-top: 32rpx;
+	}
+	
+	.report-box {
+		margin-top: 60rpx;
+		.report {
+			width: 670rpx;
+			height: 96rpx;
+			background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+			border-radius: 60rpx;
+			font-size: 32rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 600;
+			color: #FFFFFF;
+		}
 	}
 	
 	.mt60 {
