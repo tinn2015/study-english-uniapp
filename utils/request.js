@@ -151,3 +151,17 @@ export const getHomeInfo = () => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 综合评测分析
+ */
+export const getReportOverAll = ({lessonId, sectionId}) => {
+	return request({
+		url: `/report/overall/generate/${lessonId}/${sectionId}`,
+		method: 'POST',
+		data: {
+			lid: lessonId,
+			sid: sectionId
+		}
+	})
+}
