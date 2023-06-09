@@ -54,7 +54,7 @@
 		<view class="part-2">
 			<view class="flex jc-c ai-c">Are you Canadian?</view>
 		</view> -->
-		<view class="report-box flex jc-c ai-c">
+		<view class="report-box flex jc-c ai-c" v-if="reportBtnVisible">
 			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
 		</view>
 	</view>
@@ -66,7 +66,7 @@
 		onBeforeMount,
 		ref,
 		createApp,
-		onMounted
+		onMounted,
 	} from 'vue'
 	import {
 		onReady
@@ -77,6 +77,9 @@
 	import {
 		ToolTip
 	} from '@/components/ToolTip/ToolTip.vue'
+	
+	import Navigator from '@/components/Navigator/Navigator.vue'
+	
 	const routeToReport = () => {
 		console.log(1111)
 		uni.navigateTo({
@@ -94,10 +97,12 @@
 	const {
 		sectionInfo,
 		currentSection,
-		lessonInfo
+		lessonInfo,
+		currentSectionFinished
 	} = lessonStore
 	console.log('lessonInfo', lessonInfo)
 	onBeforeMount(() => {
+		if (!sectionInfo.length) return
 		currentParagraph.id = sectionInfo[0].id
 		currentParagraph.info = sectionInfo[0]
 		currentParagraph.index = 0
@@ -106,6 +111,9 @@
 	onMounted(() => {
 		playAudio(currentParagraph.info.sentenceUrl)
 	})
+	
+	// 是否显示获取报告按钮
+	const reportBtnVisible = ref(currentSectionFinished)
 
 	// 切换段落
 	const changeParagraph = (paragraph, index) => {
@@ -130,9 +138,11 @@
 			success: (res) => {
 				console.log('录音上传成功', res)
 				if (res.statusCode === 200) {
+					const data = JSON.parse(res.data)
 					isRecording.value = false
-					sectionInfo[currentParagraph.index]['result'] = JSON.parse(res.data)
+					sectionInfo[currentParagraph.index]['result'] = data
 					sectionInfo[currentParagraph.index]['tipShow'] = true
+					reportBtnVisible.value = data.displayGetReport === 1
 				}
 				console.log('sectionInfo', currentParagraph.index, sectionInfo)
 			},

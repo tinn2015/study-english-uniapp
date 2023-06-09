@@ -1,6 +1,10 @@
 <template>
 	<view class="report">
-		<view class="part-1"></view>
+		<view class="part-1">
+			<Navigator></Navigator>
+			<view>{{result}}</view>
+			<view>{{text}}</view>
+		</view>
 		<view class="panel">
 			<view class="flex">
 				<view class="tip-label">仅超过了10%的用户</view>
@@ -23,7 +27,26 @@
 	</view>
 </template>
 
-<script>
+<script setup>
+	import { onBeforeMount, ref} from 'vue'
+	import { getReportOverAll } from '@/utils/request.js'
+	import { useLessonStore } from '@/stores/lessons.js'
+	import Navigator from '@/components/Navigator/Navigator.vue'
+	
+	const lessonStore = useLessonStore()
+	
+	const result = ref('')
+	const text = ref('')
+	
+	onBeforeMount(() => {
+		const { lessonId } = lessonStore.lessonInfo
+		const { id: sectionId } = lessonStore.currentSection
+		getReportOverAll({lessonId, sectionId}).then((res) => {
+			console.log('getReportOverAll', res)
+			result.value = res.evaluate
+			text.value = res.text
+		})
+	})
 </script>
 
 <style scoped lang="scss">
@@ -33,6 +56,7 @@
 	.part-1 {
 		height: 618rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+		padding-top: 120rpx;
 	}
 	.panel {
 		position: relative;

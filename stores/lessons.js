@@ -6,7 +6,9 @@ export const useLessonStore = defineStore('lesson', {
 		return { 
 			lessonInfo: {},
 			sectionInfo: {},
-			currentSection: {}
+			currentSection: {},
+			// 当前章节是否完成
+			currentSectionFinished: false
 		};
 	},
 	// 也可以这样定义
@@ -22,6 +24,7 @@ export const useLessonStore = defineStore('lesson', {
 			console.log('getSectionInfo', result)
 			this.sectionInfo = result.contexts
 			this.currentSection = section
+			this.currentSectionFinished = result.displayGetReport === 1
 			return true
 		},
 	},
