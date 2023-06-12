@@ -69,7 +69,8 @@
 		onMounted,
 	} from 'vue'
 	import {
-		onReady
+		onReady,
+		onUnload
 	} from '@dcloudio/uni-app'
 	import {
 		useLessonStore
@@ -81,7 +82,6 @@
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
 	const routeToReport = () => {
-		console.log(1111)
 		uni.navigateTo({
 			url: "/pages/Report/Report"
 		})
@@ -112,6 +112,11 @@
 		playAudio(currentParagraph.info.sentenceUrl)
 	})
 	
+	onUnload(() => {
+		console.log('onUnload')
+		stopAudio()
+	})
+	
 	// 是否显示获取报告按钮
 	const reportBtnVisible = ref(currentSectionFinished)
 
@@ -120,6 +125,7 @@
 		currentParagraph.id = paragraph.id
 		currentParagraph.info = paragraph
 		currentParagraph.index = index
+		playAudio(currentParagraph.info.sentenceUrl)
 	}
 
 	// 录音

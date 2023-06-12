@@ -56,7 +56,7 @@
 	.part-1 {
 		height: 618rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-		padding-top: 120rpx;
+		padding-top: 140rpx;
 	}
 	.panel {
 		position: relative;

@@ -9,7 +9,7 @@
 		<view @click="changeStatus">
 			<slot></slot>
 		</view>
-		<view class="mask" @click="maskTap" v-if="localShow"></view>
+		<!-- <view class="mask" @click="maskTap" v-if="localShow"></view> -->
 	</view>
 </template>
 
@@ -78,6 +78,7 @@
 			box-sizing: border-box;
 			min-width: 200rpx;
 			word-wrap: break-word;
+			display: none;
 		}
 		.mask {
 			position: fixed;
@@ -85,6 +86,11 @@
 			left: 0;
 			width: 100vw;
 			height: 100vh;
+		}
+		&:hover {
+			.tip {
+				display: block;
+			}
 		}
 	}
 </style>
