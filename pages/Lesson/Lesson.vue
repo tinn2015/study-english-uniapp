@@ -2,6 +2,7 @@
 	<view class="lesson">
 		<view v-for="(paragraph, index) in sectionInfo">
 			<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentParagraph.id)">
+				<image class="paragraph-avatar" :src="paragraph.headPic" mode=""></image>
 				<view class="sentence text-center">{{paragraph.sentence}}</view>
 				<view class="translation text-center">{{paragraph.translation}}</view>
 				<view class="handles flex jc-c ai-c">
@@ -225,8 +226,13 @@
 
 	.paragraph-active {
 		padding: 40rpx;
+		.paragraph-avatar {
+			width: 120rpx;
+			height: 120rpx;
+			border-radius: 50%;
+		}
 		.sentence {
-			font-size: 32rpx;
+			font-size: 44rpx;
 			color: #1a9546;
 			font-weight: 600;
 		}

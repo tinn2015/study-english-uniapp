@@ -303,6 +303,10 @@ export default defineComponent({
 					font-weight: 400;
 					color: #202127;
 					margin-top: 16rpx;
+					width: 207rpx;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
 				}
 				.course-info {
 					.course-info-text {

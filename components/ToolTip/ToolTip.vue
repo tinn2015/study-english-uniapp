@@ -1,7 +1,7 @@
 <template>
 	<view class="tool-tip">
 		<uni-transition :mode-class="fade" :show="localShow">
-			<view class="tip">{{content}}</view>
+			<view class="tip" :style="{'display': localShow ? 'block' : 'none'}">{{content}}</view>
 		</uni-transition>
 <!-- 		<Transition name="fade">
 			<view class="tip" v-show="visible">{{content}}</view>
