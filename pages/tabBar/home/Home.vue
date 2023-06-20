@@ -62,7 +62,7 @@
 import { onMounted, defineComponent, reactive, onBeforeMount, ref } from 'vue';
 import { getFavorite, getHomeInfo } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
-import { onReady, onInit } from '@dcloudio/uni-app';
+import { onReady, onInit, onShow } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
@@ -82,10 +82,20 @@ export default defineComponent({
 			console.log('init2');
 		});
 		const loginStore = useLoginStore();
+		onShow(() => {
+			console.log('home onshow')
+			getHomeData()
+		})
+		
 		onBeforeMount(async () => {
 			await loginStore.login();
+			// getHomeData()
+		})
+		
+		const getHomeData = () => {
 			// 获取轻松学
 			getFavorite().then((res) => {
+				favorites.splice(0, favorites.length)
 				if (res.lessons > 8) {
 					favorites.push(...res.lessons)
 				} else {
@@ -96,11 +106,12 @@ export default defineComponent({
 			// 获取统计数据和banner图
 			getHomeInfo().then((res) =>{
 				console.log('getHomeInfo', res)
+				hotBanners.splice(0, hotBanners.length)
 				hotBanners.push(...res.hotBanners)
 				historyStatistic.value = res.historyStatistic
 				todayStatistic.value = res.todayStatistic
 			})
-		})
+		}
 		
 		return {
 			menuButtonInfo,

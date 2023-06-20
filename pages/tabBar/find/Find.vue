@@ -171,6 +171,7 @@
 			width: 176rpx;
 			background: #F4F5F7;
 			overflow: hidden;
+			overflow-y: auto;
 		}
 		.right {
 			width: 100%;
