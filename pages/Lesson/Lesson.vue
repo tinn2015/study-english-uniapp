@@ -16,29 +16,33 @@
 							<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
 								src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
 							<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
-								src="http://api.itso123.com/image/play.png" mode=""></image>
+								src="http://api.itso123.com/image/audio-player.png" mode=""></image>
 						</view>
 						<view class="btn btn-mid" @click="record">
-							<image class="icon" src="http://api.itso123.com/image/microphone.png" mode=""></image>
+							<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 						</view>
-						<view class="btn">
-							<!-- <ToolTip :show="true" content="1111">11111</ToolTip> -->
-							<ToolTip v-if="paragraph.result" :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
-								<!-- <image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
-									src="http://api.itso123.com/image/emoji-smile.png" mode=""></image> -->
-								<!-- <image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
-									src="http://api.itso123.com/image/emoji-sad.png" mode=""></image> -->
-									<image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
-										src="@/static/images/s1.png" mode=""></image>
-									<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
-									src="@/static/images/s3.png" mode=""></image>
+						<view class="btn result">
+							<ToolTip v-if="paragraph.result"  :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
+									<view class="emoji-box">
+										<!-- <image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
+											src="@/static/images/s1.png" mode=""></image>
+										<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
+										src="@/static/images/s3.png" mode=""></image>
+										<image class="icon-mini" src="http://api.itso123.com/image/smile-face.png" mode="">
+										</image> -->
+										<view class="result-good result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo >= 80">{{paragraph.result.emo}}</view>
+										<view class="result-bad result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo < 60">
+											<image class="result-bad-mask" src="http://api.itso123.com/image/bad-mask.png" mode=""></image>
+										</view>
+										<view class="result-normal result-label flex jc-c ai-c" v-else>{{paragraph.result.emo}}</view>
+									</view>
 							</ToolTip>
 							<!-- <ToolTip content="发范德萨发发士大夫是的发是的发是的发士大夫 撒旦发射点 ">
 								<image class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
 								</image>
 							</ToolTip> -->
 							<!-- <image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode=""> -->
-							<image v-else  class="icon-mini" src="@/static/images/s2.png" mode="">
+							<image class="icon-mini default-icon" src="http://api.itso123.com/image/smile-face.png" mode="">
 							</image>
 						</view>
 					</view>
@@ -248,7 +252,63 @@
 
 			.icon-mini {
 				width: 96rpx;
-				height: 96rpx
+				height: 96rpx;
+				display: block;
+			}
+			
+			.default-icon {
+				opacity: 0.8;
+				// width: 56rpx;
+				// height: 56rpx;
+				// display: block;
+			}
+			
+			.result {
+				position: relative;
+			}
+			
+			.result-good {
+				width: 96rpx;
+				height: 96rpx;
+				background: rgba(32, 115, 64, 0.6);
+				position: absolute;
+				border-radius: 50%;
+				top: 0;
+				left: 0;
+				z-index: 100;
+			}
+			.result-normal {
+				width: 96rpx;
+				height: 96rpx;
+				background: rgba(229, 134, 12, 0.6);
+				position: absolute;
+				border-radius: 50%;
+				top: 0;
+				left: 0;
+				z-index: 100;
+			}
+			
+			.result-bad {
+				width: 96rpx;
+				height: 96rpx;
+				background: rgba(229, 85, 12, 0.6);
+				position: absolute;
+				border-radius: 50%;
+				top: 0;
+				left: 0;
+				z-index: 100;
+				.result-bad-mask {
+					width: 56rpx;
+					height: 44rpx;
+					display: block;
+				}
+			}
+			
+			.result-label {
+				font-size: 48rpx;
+				font-family: Roboto-Bold, Roboto;
+				font-weight: bold;
+				color: #FFFFFF;
 			}
 
 			.icon {

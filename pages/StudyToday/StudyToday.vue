@@ -2,7 +2,7 @@
 	<view class="study-today">
 		<view class="header">
 			<Navigator></Navigator>
-			<image class="banner" mode="scaleToFill" src="http://api.itso123.com/image/record-bg.png"></image>
+			<image class="banner" mode="scaleToFill" src="http://api.itso123.com/image/study-today-bg.png"></image>
 		</view>
 		<view class="find-content">
 			<!-- <view class="record-info flex jc-sb ai-c">

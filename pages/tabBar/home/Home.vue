@@ -9,7 +9,7 @@
 				<view class="flex-1 flex fd-c ai-c">
 					<view class="panel-title flex" @click="routerToRecord">
 						<text>累计学习</text>
-						<uni-icons type="forward" size="14"></uni-icons>
+						<uni-icons type="forward" size="15" color="#999A9F"></uni-icons>
 					</view>
 					<view class="panel-info">{{historyStatistic}}</view>
 				</view>
@@ -17,7 +17,7 @@
 				<view class="flex-1 flex fd-c ai-c">
 					<view class="panel-title" @click="routerToToday">
 						<text>今日学习</text>
-						<uni-icons type="forward" size="14"></uni-icons>
+						<uni-icons type="forward" size="15" color="#999A9F"></uni-icons>
 					</view>
 					<view class="panel-info">{{todayStatistic}}</view>
 				</view>
@@ -35,7 +35,7 @@
 					<view class="title" @click="request1">轻松学</view>
 					<view class="more flex jc-c ai-c" @click="routerToMore">
 						更多
-						<uni-icons type="forward" size="12"></uni-icons>
+						<uni-icons type="forward" size="13" color="#999A9F"></uni-icons>
 					</view>
 				</view>
 				<view class="courses flex fw-w">
@@ -44,7 +44,10 @@
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
 							<view class="course-info-text">{{ item.level }}</view>
-							<view class="course-info-text">{{ item.read }}</view>
+							<view class="course-info-text">
+								<image class="eye-icon" src="https://api.itso123.com/image/read-eye-icon.png" mode=""></image>
+								<text>{{ item.read }}</text>
+							</view>
 						</view>
 					</view>
 					<view class="poster flex fd-c jc-c ai-c course-add" @click="routeToFind">
@@ -55,6 +58,7 @@
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>
+		<!-- <GetUserProfilePopup></GetUserProfilePopup> -->
 	</view>
 </template>
 
@@ -67,6 +71,7 @@ import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
+// import GetUserProfilePopup from '@/components/GetUserProfilePopup/GetUserProfilePopup.vue'
 export default defineComponent({
 	setup() {
 		const favorites = reactive([])
@@ -88,6 +93,7 @@ export default defineComponent({
 		})
 		
 		onBeforeMount(async () => {
+			// loginStore.getUserProfile()
 			await loginStore.login();
 			// getHomeData()
 		})
@@ -146,7 +152,8 @@ export default defineComponent({
 	components: {
 		Swiper,
 		ToolTip,
-		LoginPopup
+		LoginPopup,
+		// GetUserProfilePopup
 	},
 	onLoad() {
 		console.log('load');
@@ -271,12 +278,14 @@ export default defineComponent({
 			overflow: hidden;
 			box-sizing: border-box;
 			height: 200rpx;
+			margin-top:  20rpx;
 		}
 		.swiper-item {
 			display: block;
 			text-align: center;
 			height: 200rpx;
-			width: 100%
+			width: 100%;
+			border-radius: 8rpx;
 		}
 	}
 	.part-2 {
@@ -290,7 +299,7 @@ export default defineComponent({
 			color: #999a9f;
 		}
 		.courses {
-			margin-top: 16rpx;
+			// margin-top: 16rpx;
 			.poster {
 				width: 207rpx;
 				height: 240rpx;
@@ -307,7 +316,7 @@ export default defineComponent({
 			}
 			.course-item {
 				margin-right: calc((100vw - (207rpx * 3) - 60rpx)/2);
-				margin-top: 10rpx;
+				margin-top: 20rpx;
 				.course-title {
 					font-size: 28rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
@@ -325,6 +334,11 @@ export default defineComponent({
 						font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
 						font-weight: 400;
 						color: #999a9f;
+					}
+					.eye-icon {
+						width: 24rpx;
+						height: 16rpx;
+						margin-right: 5rpx;
 					}
 				}
 			}

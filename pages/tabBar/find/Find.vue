@@ -168,7 +168,7 @@
 		background: #ffffff;
 		.left {
 			border-radius: 32rpx 0 0 0;
-			width: 176rpx;
+			width: 200rpx;
 			background: #F4F5F7;
 			overflow: hidden;
 			overflow-y: auto;
