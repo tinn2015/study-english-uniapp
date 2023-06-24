@@ -26,7 +26,7 @@
 			<view class="process-box">
 				<view class="process-label">完成进度 {{lessonStore.lessonInfo.speed}}</view>
 				<view @click="sectionGotoStudy(section)" v-for="section in lessonStore.lessonInfo.sections" class="flex jc-sb ai-c course-box">
-					<image class="course-img" :src="section.img" mode=""></image>
+					<image class="course-img" src="https://api.itso123.com/image/section-icon.png" mode=""></image>
 					<view class="course-info">
 						<view class="course-title">{{section.title}}</view>
 						<view class="course-desc">{{section.descript}}</view>
@@ -130,12 +130,13 @@
 		background: #abcbd9;
 		box-sizing: border-box;
 		overflow: hidden;
+		background: linear-gradient(180deg, #59C47F 0%, #6BE7B7 100%);
 		.banner {
 			width: 100%;
 			height: 100%
 		}
 		.box {
-			margin-top: 120rpx;
+			margin-top: 140rpx;
 			box-sizing: border-box;
 			padding: 0 32rpx;
 			.course-overview {
@@ -144,17 +145,20 @@
 					font-size: 32rpx;
 					font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
 					font-weight: 500;
+					color: #FFFFFF;
 				}
 				.desc {
 					font-size: 24rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
 					font-weight: 400;
+					color: #D6F1E1;
 					margin-top: 8rpx;
 				}
 				.bottom {
 					font-size: 24rpx;
 					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
 					font-weight: 400;
+					color: #D6F1E1
 				}
 				.line {
 					margin: 0 20rpx;
