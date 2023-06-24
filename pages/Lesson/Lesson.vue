@@ -55,7 +55,8 @@
 		<view class="part-2">
 			<view class="flex jc-c ai-c">Are you Canadian?</view>
 		</view> -->
-		<view class="report-box flex jc-c ai-c" v-if="reportBtnVisible">
+		<!-- v-if="reportBtnVisible" -->
+		<view class="report-box flex jc-c ai-c" >
 			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
 		</view>
 	</view>

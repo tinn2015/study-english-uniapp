@@ -2,18 +2,25 @@
 	<view class="report">
 		<view class="part-1">
 			<Navigator></Navigator>
-			<view>{{result}}</view>
-			<view>{{text}}</view>
+			<view class="flex jc-sb ai-c">
+				<view class="text-box">
+					<view class="text-1">恭喜你</view>
+					<view class="text-2">已完成本课学习</view>
+				</view>
+				<view class="chart-box">
+					<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff'}}}" :chartData="radarData"/>
+				</view>
+			</view>
 		</view>
 		<view class="panel">
 			<view class="flex">
-				<view class="tip-label">仅超过了10%的用户</view>
-				<view class="tip">有待提高</view>
+				<view class="tip-label">{{ranking.label}}</view>
+				<view class="tip flex jc-c ai-c">{{ranking.result}}</view>
 			</view>
-			<view class="plan flex ai-c">
+			<!-- <view class="plan flex ai-c">
 				<view class="label">还需要加油哦！查看建议学习方案</view>
 				<uni-icons class="icon" type="forward" size="18" color="#999A9F"></uni-icons>
-			</view>
+			</view> -->
 		</view>
 		<view class="part-2">
 			<view class="title">薄弱点分析</view>
@@ -22,30 +29,75 @@
 					<view class="">Are you Canadian?</view>
 					<view></view>
 				</view>
+				<view class="sentence-problems-box">
+					<view class="sentence-item" v-for="item in sentenceProblems">
+						<view>
+							{{item.Word}}
+						</view>
+						<view>{{item.desc}}</view>
+					</view>
+				</view>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import { onBeforeMount, ref} from 'vue'
+	import { onBeforeMount, reactive, ref} from 'vue'
 	import { getReportOverAll } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
 	const lessonStore = useLessonStore()
+
+	const ranking = reactive({
+		label: '',
+		result: ''
+	})
 	
-	const result = ref('')
-	const text = ref('')
+	const radarData = reactive({
+		"categories": [],
+		"series": [{
+			// "name": "成交量1",
+			"data": []
+		}]
+	})
+	
+	const sentenceProblems = reactive([])
+	const phoneticSymbolProblem = reactive({})
 	
 	onBeforeMount(() => {
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
 		getReportOverAll({lessonId, sectionId}).then((res) => {
 			console.log('getReportOverAll', res)
-			result.value = res.evaluate
-			text.value = res.text
+			const { Ranking, skill, words } = res
+			/* 雷达图 */
+			// const categories = []
+			// const data = []
+			skill.forEach(i => {
+				radarData.categories.push(i.Name)
+				radarData.series[0].data.push(parseInt(i.Value))
+			})
+			console.log('radarData', radarData)
+			
+			/* 排名 */
+			ranking.label = Ranking.tips
+			ranking.result = Ranking.tipsAction
+			
+			/* 句子问题 */
+			words.forEach(i => {
+				sentenceProblems.push(i)
+			})
 		})
+	})
+	
+	const ChartData =  reactive({
+		"categories": ["维度1", "维度2", "维度3", "维度4"],
+		"series": [{
+			// "name": "成交量1",
+			"data": [90, 110, 165, 195]
+		}]
 	})
 </script>
 
@@ -54,9 +106,29 @@
 		// position: relative;
 	}
 	.part-1 {
-		height: 618rpx;
+		height: 500rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-		padding-top: 140rpx;
+		padding-top: 100rpx;
+		.text-box {
+			padding-left: 32rpx
+		}
+		.text-1 {
+			font-size: 48rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 600;
+			color: #FFFFFF;
+		}
+		.text-2 {
+			font-size: 32rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 600;
+			color: #FFFFFF;
+			margin-top: 8rpx;
+		}
+		.chart-box {
+			width: 400rpx;
+			height: 400rpx;
+		}
 	}
 	.panel {
 		position: relative;
