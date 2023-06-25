@@ -2,18 +2,17 @@
 	<view class="report">
 		<view class="part-1">
 			<Navigator></Navigator>
-			<view class="flex jc-sb ai-c">
+			<view class="flex fd-c jc-c ai-c">
 				<view class="text-box">
-					<view class="text-1">恭喜你</view>
-					<view class="text-2">已完成本课学习</view>
+					<view class="text-1">恭喜你已完成本课学习</view>
 				</view>
 				<view class="chart-box">
-					<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff'}}}" :chartData="radarData"/>
+					<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 35}}}" :chartData="radarData"/>
 				</view>
 			</view>
 		</view>
 		<view class="panel">
-			<view class="flex">
+			<view class="flex jc-sb ai-c">
 				<view class="tip-label">{{ranking.label}}</view>
 				<view class="tip flex jc-c ai-c">{{ranking.result}}</view>
 			</view>
@@ -25,12 +24,15 @@
 		<view class="part-2">
 			<view class="title">薄弱点分析</view>
 			<view class="box">
-				<view class="item">
-					<view class="">Are you Canadian?</view>
-					<view></view>
+				<view class="example-text">Are you Canadian?</view>
+				<view class="item item-box mt62">
+					<view class="tag flex jc-c ai-c">发音问题</view>
+					<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
+					<view class="more">你的音标还有这些问题</view>
 				</view>
-				<view class="sentence-problems-box">
-					<view class="sentence-item" v-for="item in sentenceProblems">
+				<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
+					<view class="tag flex jc-c ai-c">单词问题</view>
+					<view class="sentence-item">
 						<view>
 							{{item.Word}}
 						</view>
@@ -64,14 +66,16 @@
 	})
 	
 	const sentenceProblems = reactive([])
-	const phoneticSymbolProblem = reactive({})
+	const phoneticSymbolProblem = reactive({
+		data: {}
+	})
 	
 	onBeforeMount(() => {
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
-		getReportOverAll({lessonId, sectionId}).then((res) => {
+		getReportOverAll({lessonId: 24, sectionId: 40}).then((res) => {
 			console.log('getReportOverAll', res)
-			const { Ranking, skill, words } = res
+			const { Ranking, skill, words, report } = res
 			/* 雷达图 */
 			// const categories = []
 			// const data = []
@@ -89,6 +93,9 @@
 			words.forEach(i => {
 				sentenceProblems.push(i)
 			})
+			
+			/* 发音问题 */
+			phoneticSymbolProblem.data = report
 		})
 	})
 	
@@ -108,7 +115,7 @@
 	.part-1 {
 		height: 500rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-		padding-top: 100rpx;
+		padding-top: 120rpx;
 		.text-box {
 			padding-left: 32rpx
 		}
@@ -126,8 +133,8 @@
 			margin-top: 8rpx;
 		}
 		.chart-box {
-			width: 400rpx;
-			height: 400rpx;
+			width: 360rpx;
+			height: 360rpx;
 		}
 	}
 	.panel {
@@ -152,7 +159,7 @@
 			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
 			font-weight: 400;
 			color: #1DAD6F;
-			padding: 2rpx 8rpx;
+			padding: 4rpx 8rpx;
 			margin-left: 24rpx;
 		}
 		.plan {
@@ -181,5 +188,45 @@
 			border-radius: 24rpx;
 			padding: 40rpx
 		}
+		.item-box {
+			background: #F4F5F7;
+			border-radius: 16rpx;
+			padding: 58rpx 24rpx 24rpx;
+			position: relative;
+			.tag {
+				background: #58C898;
+				border-radius: 8rpx;
+				font-size: 28rpx;
+				font-family: PingFangSC-Medium, PingFang SC;
+				font-weight: 500;
+				color: #FFFFFF;
+				width: 144rpx;
+				height: 56rpx;
+				position: absolute;
+				top: -14rpx;
+			}
+		}
+		.example-text {
+			font-size: 44rpx;
+			font-family: Roboto-Medium, Roboto;
+			font-weight: 500;
+			color: #202127;
+		}
+		.problem-mark {
+			font-size: 28rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: #202127;
+		}
+		.more {
+			font-size: 28rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: #E85F1E;
+			margin-top: 32rpx;
+		}
+	}
+	.mt62 {
+		margin-top: 62rpx;
 	}
 </style>
