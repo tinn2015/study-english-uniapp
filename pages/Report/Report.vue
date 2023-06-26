@@ -32,14 +32,40 @@
 				</view>
 				<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
 					<view class="tag flex jc-c ai-c">单词问题</view>
-					<view class="sentence-item">
-						<view>
-							{{item.Word}}
-						</view>
-						<view>{{item.desc}}</view>
+					<view class="sentence-item flex fw-w ai-c">
+						<text class="mark">{{item.desc}}</text>
+						<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
 					</view>
 				</view>
+				<view class="handle flex jc-sb ai-c">
+					<view class="score-box flex ai-c">
+						<image class="score-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
+						<view class="score">{{phoneticSymbolProblem.data.score}}分</view>
+					</view>
+					<view class="btn flex jc-c ai-c">再练一次</view>
+				</view>
 			</view>
+		</view>
+		<view class="feedback-box">
+			<view class="feedback-title">评价反馈</view>
+			<view class="feedback-options flex jc-ad ai-c">
+				<view class="feedback-option flex fd-c ai-c jc-c">
+					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-bad-emoji.png" mode=""></image>
+					<view class="feedback-option-label">几乎没作用</view>
+				</view>
+				<view class="feedback-option flex fd-c ai-c jc-c">
+					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-normal-emoji.png" mode=""></image>
+					<view class="feedback-option-label">有一点作用</view>
+				</view>
+				<view class="feedback-option flex fd-c ai-c jc-c">
+					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
+					<view class="feedback-option-label">非常好用</view>
+				</view>
+			</view>
+		</view>
+		<view class="handles flex jc-sb ai-c">
+			<view class="btn-left btn flex jc-c ai-c">重新练习</view>
+			<view class="btn-right btn flex jc-c ai-c">学习下一节</view>
 		</view>
 	</view>
 </template>
@@ -218,12 +244,93 @@
 			font-weight: 400;
 			color: #202127;
 		}
+		.mark {
+			font-size: 28rpx;
+			font-family: PingFangSC-Regular, PingFang SC;
+			font-weight: 400;
+			color: #202127;
+		}
+		.horn {
+			width: 32rpx;
+			height: 28rpx;
+			margin-left: 16rpx;
+		}
 		.more {
 			font-size: 28rpx;
 			font-family: PingFangSC-Regular, PingFang SC;
 			font-weight: 400;
 			color: #E85F1E;
 			margin-top: 32rpx;
+		}
+		.handle {
+			margin-top: 40rpx;
+			height: 76rpx;
+			.score-icon {
+				width: 36rpx;
+				height: 36rpx
+			}
+			.score {
+				font-size: 32rpx;
+				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+				font-weight: 400;
+				color: #202127;
+				margin-left: 16rpx;
+			}
+			.btn {
+				width: 192rpx;
+				height: 76rpx;
+				border-radius: 38rpx;
+				background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+				font-size: 32rpx;
+				font-family: PingFangSC-Semibold, PingFang SC;
+				font-weight: 600;
+				color: #FFFFFF;
+			}
+		}
+	}
+	.feedback-box {
+		margin-top: 80rpx;
+		.feedback-title {
+			font-size: 28rpx;
+			font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+			font-weight: 500;
+			color: #202127;
+			text-align: center;
+		}
+		.feedback-options {
+			margin-top: 32rpx;
+		}
+		.feedback-option-icon {
+			width: 80rpx;
+			height: 80rpx
+		}
+		.feedback-option-label {
+			font-size: 28rpx;
+			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+			font-weight: 400;
+			color: #202127;
+			margin-top: 16rpx;
+		}
+	}
+	.handles {
+		margin-top: 48rpx;
+		padding: 14rpx 30rpx 84rpx;
+		border-top: 1rpx solid #BDBDBD;
+		.btn {
+			width: 327rpx;
+			height: 96rpx;
+			border-radius: 60rpx;
+			font-size: 32rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 600;
+		}
+		.btn-left {
+			background: #F4F5F7;
+			color: #58C898;
+		}
+		.btn-right {
+			background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+			color: #ffffff;
 		}
 	}
 	.mt62 {
