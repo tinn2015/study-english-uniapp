@@ -11,7 +11,7 @@
 	import {onMounted, defineComponent, reactive} from 'vue'
 	export default defineComponent({
 		props: {
-			NavTop: Number
+			NavTop: Number,
 		},
 		data () {
 			return {

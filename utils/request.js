@@ -165,3 +165,20 @@ export const getReportOverAll = ({lessonId, sectionId}) => {
 		}
 	})
 }
+
+/**
+ * 报告页，学习效果的评价反馈
+ */
+export const studyFeedback = ({label, lessonId, reportId, sectionId}) => {
+	console.log('studyFeedback', label, lessonId, reportId, sectionId)
+	return request({
+		url: `/statistics/report/appraise/set`,
+		method: 'POST',
+		data: {
+			label,
+			lessonId,
+			reportId,
+			sectionId
+		}
+	})
+}

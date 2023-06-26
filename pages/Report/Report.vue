@@ -1,78 +1,82 @@
 <template>
 	<view class="report">
-		<view class="part-1">
+		<view class="nav">
 			<Navigator></Navigator>
-			<view class="flex fd-c jc-c ai-c">
-				<view class="text-box">
-					<view class="text-1">恭喜你已完成本课学习</view>
-				</view>
-				<view class="chart-box">
-					<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 35}}}" :chartData="radarData"/>
-				</view>
-			</view>
 		</view>
-		<view class="panel">
-			<view class="flex jc-sb ai-c">
-				<view class="tip-label">{{ranking.label}}</view>
-				<view class="tip flex jc-c ai-c">{{ranking.result}}</view>
-			</view>
-			<!-- <view class="plan flex ai-c">
-				<view class="label">还需要加油哦！查看建议学习方案</view>
-				<uni-icons class="icon" type="forward" size="18" color="#999A9F"></uni-icons>
-			</view> -->
-		</view>
-		<view class="part-2">
-			<view class="title">薄弱点分析</view>
-			<view class="box">
-				<view class="example-text">Are you Canadian?</view>
-				<view class="item item-box mt62">
-					<view class="tag flex jc-c ai-c">发音问题</view>
-					<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
-					<view class="more">你的音标还有这些问题</view>
-				</view>
-				<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
-					<view class="tag flex jc-c ai-c">单词问题</view>
-					<view class="sentence-item flex fw-w ai-c">
-						<text class="mark">{{item.desc}}</text>
-						<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
+		<view class="scroll-box">
+			<view class="part-1">
+				<view class="flex fd-c jc-c ai-c">
+					<view class="text-box">
+						<view class="text-1">恭喜你已完成本课学习</view>
+					</view>
+					<view class="chart-box">
+						<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 35}}}" :chartData="radarData"/>
 					</view>
 				</view>
-				<view class="handle flex jc-sb ai-c">
-					<view class="score-box flex ai-c">
-						<image class="score-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
-						<view class="score">{{phoneticSymbolProblem.data.score}}分</view>
+			</view>
+			<view class="panel">
+				<view class="flex jc-sb ai-c">
+					<view class="tip-label">{{ranking.label}}</view>
+					<view class="tip flex jc-c ai-c">{{ranking.result}}</view>
+				</view>
+				<!-- <view class="plan flex ai-c">
+					<view class="label">还需要加油哦！查看建议学习方案</view>
+					<uni-icons class="icon" type="forward" size="18" color="#999A9F"></uni-icons>
+				</view> -->
+			</view>
+			<view class="part-2">
+				<view class="title">薄弱点分析</view>
+				<view class="box">
+					<view class="example-text">Are you Canadian?</view>
+					<view class="item item-box mt62">
+						<view class="tag flex jc-c ai-c">发音问题</view>
+						<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
+						<view class="more">你的音标还有这些问题</view>
 					</view>
-					<view class="btn flex jc-c ai-c">再练一次</view>
+					<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
+						<view class="tag flex jc-c ai-c">单词问题</view>
+						<view class="sentence-item flex fw-w ai-c">
+							<text class="mark">{{item.desc}}</text>
+							<image @click="playAudio(item.audioUrl)" class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
+						</view>
+					</view>
+					<view class="handle flex jc-sb ai-c">
+						<view class="score-box flex ai-c">
+							<image class="score-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
+							<view class="score">{{phoneticSymbolProblem.data.score}}分</view>
+						</view>
+						<view class="btn flex jc-c ai-c" @click="studyAgain">再练一次</view>
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="feedback-box">
-			<view class="feedback-title">评价反馈</view>
-			<view class="feedback-options flex jc-ad ai-c">
-				<view class="feedback-option flex fd-c ai-c jc-c">
-					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-bad-emoji.png" mode=""></image>
-					<view class="feedback-option-label">几乎没作用</view>
-				</view>
-				<view class="feedback-option flex fd-c ai-c jc-c">
-					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-normal-emoji.png" mode=""></image>
-					<view class="feedback-option-label">有一点作用</view>
-				</view>
-				<view class="feedback-option flex fd-c ai-c jc-c">
-					<image class="feedback-option-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
-					<view class="feedback-option-label">非常好用</view>
+			<view class="feedback-box">
+				<view class="feedback-title">评价反馈</view>
+				<view class="feedback-options flex jc-ad ai-c">
+					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('C')">
+						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-bad-emoji.png" mode=""></image>
+						<view class="feedback-option-label">几乎没作用</view>
+					</view>
+					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('B')">
+						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-normal-emoji.png" mode=""></image>
+						<view class="feedback-option-label">有一点作用</view>
+					</view>
+					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('A')">
+						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
+						<view class="feedback-option-label">非常好用</view>
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="handles flex jc-sb ai-c">
-			<view class="btn-left btn flex jc-c ai-c">重新练习</view>
-			<view class="btn-right btn flex jc-c ai-c">学习下一节</view>
+			<view class="handles flex jc-sb ai-c">
+				<view class="btn-left btn flex jc-c ai-c" @click="studyAgain">重新练习</view>
+				<view class="btn-right btn flex jc-c ai-c" @click="studyNext">学习下一节</view>
+			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-	import { onBeforeMount, reactive, ref} from 'vue'
-	import { getReportOverAll } from '@/utils/request.js'
+	import { onBeforeMount, reactive, ref, nextTick} from 'vue'
+	import { getReportOverAll, studyFeedback } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
@@ -96,19 +100,36 @@
 		data: {}
 	})
 	
+	// 单词播放
+	const innerAudioContext = uni.createInnerAudioContext();
+
+	const playAudio = (url) => {
+		innerAudioContext.stop()
+		innerAudioContext.src = url;
+		innerAudioContext.play()
+	}
+	
+	const stopAudio = () => {
+		innerAudioContext.stop()
+	}
+	let reportId = 0
+	const categories = []
+	const seriesData = []
 	onBeforeMount(() => {
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
-		getReportOverAll({lessonId: 24, sectionId: 40}).then((res) => {
+		getReportOverAll({lessonId, sectionId}).then((res) => {
 			console.log('getReportOverAll', res)
-			const { Ranking, skill, words, report } = res
+			const { Ranking, skill, words, report, reportId:rid } = res
 			/* 雷达图 */
-			// const categories = []
-			// const data = []
+			
 			skill.forEach(i => {
-				radarData.categories.push(i.Name)
-				radarData.series[0].data.push(parseInt(i.Value))
+				categories.push(i.Name)
+				seriesData.push(parseInt(i.Value))
 			})
+			radarData.categories = categories
+			radarData.series[0].data = seriesData
+			
 			console.log('radarData', radarData)
 			
 			/* 排名 */
@@ -122,26 +143,75 @@
 			
 			/* 发音问题 */
 			phoneticSymbolProblem.data = report
+			
+			reportId = rid
 		})
 	})
+	// nextTick(() => {
+	// 	radarData.categories = categories
+	// 	radarData.series[0].data = seriesData
+	// })
 	
-	const ChartData =  reactive({
-		"categories": ["维度1", "维度2", "维度3", "维度4"],
-		"series": [{
-			// "name": "成交量1",
-			"data": [90, 110, 165, 195]
-		}]
-	})
+	const studyAgain = async () => {
+		// console.log('currentSection', lessonStore.currentSection)
+		// await lessonStore.getSectionInfo(lessonStore.currentSection)
+		// console.log('sectionGotoStudy')
+		uni.navigateTo({
+			url: "/pages/Lesson/Lesson"
+		})
+	}
+	
+	const feedback = (label) => {
+		const { lessonId } = lessonStore.lessonInfo
+		const { id: sectionId } = lessonStore.currentSection
+		console.log('')
+		studyFeedback({
+			label,
+			reportId,
+			lessonId,
+			sectionId
+		})
+	}
+	
+	const studyNext = () => {
+		const { nextSection } = lessonStore
+		console.log('nextSection', nextSection)
+		if (!nextSection) {
+			uni.showToast({
+				icon: 'none',
+				title: '当前课程已学完'
+			})
+		} else {
+			lessonStore.changeCurrentSection()
+			uni.navigateTo({
+				url: "/pages/Lesson/Lesson"
+			})
+		}
+	}
 </script>
 
 <style scoped lang="scss">
 	.report {
 		// position: relative;
+		// padding-top: 120rpx;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		box-sizing: border-box;
+	}
+	.scroll-box {
+		// padding-top: 120rpx;
+		height: calc(100% - 120rpx);
+		overflow-y: auto;
+		// background: #ffffff;
+	}
+	.nav {
+		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+		height: 120rpx
 	}
 	.part-1 {
 		height: 500rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-		padding-top: 120rpx;
 		.text-box {
 			padding-left: 32rpx
 		}

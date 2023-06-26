@@ -25,7 +25,7 @@
 			</view>
 			<view class="process-box">
 				<view class="process-label">完成进度 {{lessonStore.lessonInfo.speed}}</view>
-				<view @click="sectionGotoStudy(section)" v-for="section in lessonStore.lessonInfo.sections" class="flex jc-sb ai-c course-box">
+				<view @click="sectionGotoStudy(section, index)" v-for="(section, index) in lessonStore.lessonInfo.sections" class="flex jc-sb ai-c course-box">
 					<image class="course-img" src="https://api.itso123.com/image/section-icon.png" mode=""></image>
 					<view class="course-info">
 						<view class="course-title">{{section.title}}</view>
@@ -107,9 +107,10 @@
 			/**
 			 * 去学习页
 			 */
-			async sectionGotoStudy (section) {
+			async sectionGotoStudy (section, index) {
+				console.log('sectionGotoStudy', index)
 				const lessonStore = useLessonStore()
-				await lessonStore.getSectionInfo(section)
+				await lessonStore.getSectionInfo(section, index)
 				console.log('sectionGotoStudy')
 				uni.navigateTo({
 					url: "/pages/Lesson/Lesson"
