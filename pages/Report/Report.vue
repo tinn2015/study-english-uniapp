@@ -10,7 +10,7 @@
 						<view class="text-1">恭喜你已完成本课学习</view>
 					</view>
 					<view class="chart-box">
-						<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 35}}}" :chartData="radarData"/>
+						<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 60}}}" :chartData="radarData"/>
 					</view>
 				</view>
 			</view>
@@ -27,7 +27,7 @@
 			<view class="part-2">
 				<view class="title">薄弱点分析</view>
 				<view class="box">
-					<view class="example-text">Are you Canadian?</view>
+					<view class="example-text">{{phoneticSymbolProblem.data.text}}</view>
 					<view class="item item-box mt62">
 						<view class="tag flex jc-c ai-c">发音问题</view>
 						<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
@@ -229,7 +229,7 @@
 			margin-top: 8rpx;
 		}
 		.chart-box {
-			width: 360rpx;
+			// width: 360rpx;
 			height: 360rpx;
 		}
 	}
@@ -385,7 +385,7 @@
 	.handles {
 		margin-top: 48rpx;
 		padding: 14rpx 30rpx 84rpx;
-		border-top: 1rpx solid #BDBDBD;
+		border-top: 1rpx solid #dcd9d9;
 		.btn {
 			width: 327rpx;
 			height: 96rpx;

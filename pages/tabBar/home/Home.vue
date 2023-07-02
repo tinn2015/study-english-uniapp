@@ -218,6 +218,7 @@ export default defineComponent({
 .home {
 	height: 100vh;
 	overflow-x: hidden;
+	box-sizing: border-box;
 }
 .status_bar {
 	height: 298rpx;

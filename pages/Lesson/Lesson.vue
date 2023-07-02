@@ -21,15 +21,10 @@
 						<view class="btn btn-mid" @click="record">
 							<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 						</view>
-						<view class="btn result">
-							<ToolTip v-if="paragraph.result"  :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
+						<!-- 有结果按钮 -->
+						<view v-if="paragraph.result" class="btn result">
+							<ToolTip  :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
 									<view class="emoji-box">
-										<!-- <image v-if="paragraph.result && paragraph.result.emo >= 80" class="icon-mini"
-											src="@/static/images/s1.png" mode=""></image>
-										<image v-else-if="paragraph.result && paragraph.result.emo < 80" class="icon-mini"
-										src="@/static/images/s3.png" mode=""></image>
-										<image class="icon-mini" src="http://api.itso123.com/image/smile-face.png" mode="">
-										</image> -->
 										<view class="result-good result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo >= 80">{{paragraph.result.emo}}</view>
 										<view class="result-bad result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo < 60">
 											<image class="result-bad-mask" src="http://api.itso123.com/image/bad-mask.png" mode=""></image>
@@ -37,31 +32,31 @@
 										<view class="result-normal result-label flex jc-c ai-c" v-else>{{paragraph.result.emo}}</view>
 									</view>
 							</ToolTip>
-							<!-- <ToolTip content="发范德萨发发士大夫是的发是的发是的发士大夫 撒旦发射点 ">
-								<image class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode="">
+							<view class="icon-box flex jc-c ai-c">
+								<image class="result-icon-mini default-icon" src="http://api.itso123.com/image/smile-face.png" mode="">
 								</image>
-							</ToolTip> -->
-							<!-- <image v-else  class="icon-mini" src="http://api.itso123.com/image/emoji-normal.png" mode=""> -->
-							<image class="icon-mini default-icon" src="http://api.itso123.com/image/smile-face.png" mode="">
-							</image>
+							</view>
+						</view>
+						<!-- 默认时按钮 -->
+						<view v-else class="result-default flex jc-c ai-c">
+							<image class="result-icon-mini" src="http://api.itso123.com/image/smile-default.png" mode=""></image>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph, index)">
 				<view class="text-center">{{paragraph.sentence}}</view>
-				<!-- <view class="mt60">{{paragraph.translation}}</view> -->
+				<view class="mt16 paragraph-translate">{{paragraph.translation}}</view>
+				<view class="triangle" v-if="paragraph.result"  :style="{'borderTopColor': paragraph.result.emo > 80 ? '#207340' : paragraph.result.emo < 60 ? '#FF0000' : '#E5860C'}"></view>
+				<view v-if="paragraph.result" class="triangle-label" >{{ paragraph.result.emo }}</view>
 			</view>
 		</view>
-		<!-- <view class="part-1 flex jc-c ai-c">
-			<view>Excuse me,are you Am</view>
-		</view>
-		<view class="part-2">
-			<view class="flex jc-c ai-c">Are you Canadian?</view>
-		</view> -->
 		<!-- v-if="reportBtnVisible" -->
 		<view class="report-box flex jc-c ai-c" >
 			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
+<!-- 			<view class="subscript-box triangle">
+				11
+			</view> -->
 		</view>
 	</view>
 </template>
@@ -225,8 +220,19 @@
 	.paragraph {
 		background: #F2F2F2;
 		// height: 160rpx;
-		padding: 32rpx;
-		border-top: 1px solid #dddddd
+		padding: 120rpx 32rpx;
+		border-top: 1px solid #dddddd;
+		color: #999A9F;
+		font-size: 44rpx;
+		font-family: Roboto-Regular, Roboto;
+		font-weight: 400;
+		position: relative;
+		.paragraph-translate {
+			font-size: 28rpx;
+			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+			font-weight: 400;
+			color: #999A9F;
+		}
 	}
 
 	.paragraph-active {
@@ -256,6 +262,17 @@
 				display: block;
 			}
 			
+			.icon-box {
+				width: 96rpx;
+				height: 96rpx;
+			}
+			
+			.result-icon-mini {
+				width: 56rpx;
+				height: 56rpx;
+				display: block;
+			}
+			
 			.default-icon {
 				opacity: 0.8;
 				// width: 56rpx;
@@ -265,6 +282,13 @@
 			
 			.result {
 				position: relative;
+			}
+			
+			.result-default {
+				width: 96rpx;
+				height: 96rpx;
+				background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+				border-radius: 50%
 			}
 			
 			.result-good {
@@ -328,6 +352,7 @@
 	
 	.report-box {
 		margin-top: 60rpx;
+		position: relative;
 		.report {
 			width: 670rpx;
 			height: 96rpx;
@@ -338,6 +363,34 @@
 			font-weight: 600;
 			color: #FFFFFF;
 		}
+	}
+	
+	.triangle {
+	  width: 0;
+	  height: 0;
+	  border-left: 80rpx solid transparent;
+	  border-bottom: 80rpx solid transparent;
+	  // border-right: 80rpx solid transparent;
+	  border-top: 80rpx solid #207340;
+	  position: absolute;
+	  right: 0;
+	  top: 0;
+	  opacity: 0.3;
+	}
+	
+	.triangle-label {
+		position: absolute;
+		right: 8rpx;
+		top: 8rpx;
+		font-size: 28rpx;
+		font-family: Roboto-Regular, Roboto;
+		font-weight: 400;
+		color: #FFFFFF;
+	}
+	
+	
+	.mt16 {
+		margin-top: 16rpx;
 	}
 	
 	.mt60 {

@@ -137,7 +137,7 @@
 			height: 100%
 		}
 		.box {
-			margin-top: 140rpx;
+			margin-top: 150rpx;
 			box-sizing: border-box;
 			padding: 0 32rpx;
 			.course-overview {
@@ -239,7 +239,7 @@
 		}
 		.handles {
 			box-sizing: border-box;
-			border-top: 1px solid #BDBDBD;
+			border-top: 1px solid #dcd9d9;
 			// position: relative;
 			// z-index: 100;
 			// bottom: 84rpx;
