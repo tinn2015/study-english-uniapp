@@ -174,7 +174,7 @@
 	}
 	
 	const studyNext = () => {
-		const { nextSection } = lessonStore
+		const { nextSection,  currentSectionIndex} = lessonStore
 		console.log('nextSection', nextSection)
 		if (!nextSection) {
 			uni.showToast({
@@ -182,7 +182,7 @@
 				title: '当前课程已学完'
 			})
 		} else {
-			lessonStore.changeCurrentSection()
+			lessonStore.getSectionInfo(nextSection, currentSectionIndex)
 			uni.navigateTo({
 				url: "/pages/Lesson/Lesson"
 			})

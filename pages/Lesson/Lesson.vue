@@ -52,7 +52,7 @@
 			</view>
 		</view>
 		<!-- v-if="reportBtnVisible" -->
-		<view class="report-box flex jc-c ai-c" >
+		<view class="report-box flex jc-c ai-c" v-if="reportBtnVisible">
 			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
 <!-- 			<view class="subscript-box triangle">
 				11
