@@ -23,6 +23,7 @@
 				</view>
 			</view>
 			<view class="part-1">
+				<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button>
 				<view class="title">热销</view>
 				<swiper class="swiper" circular :autoplay="autoplay" :interval="interval" :duration="duration">
 					<swiper-item v-for="item in hotBanners" @click="routeToWebview(item)">
@@ -64,7 +65,7 @@
 
 <script>
 import { onMounted, defineComponent, reactive, onBeforeMount, ref } from 'vue';
-import { getFavorite, getHomeInfo } from '@/utils/request.js';
+import { getFavorite, getHomeInfo, getPhoneCode } from '@/utils/request.js';
 import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit, onShow } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
@@ -162,6 +163,11 @@ export default defineComponent({
 		console.log('init');
 	},
 	methods: {
+		getPhoneNumber (e) {
+			getPhoneCode(e.detail.code).then(res => {
+				console.log(res)
+			})
+		},
 		request1() {
 			console.log('request');
 			uni.login({

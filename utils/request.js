@@ -182,3 +182,13 @@ export const studyFeedback = ({label, lessonId, reportId, sectionId}) => {
 		}
 	})
 }
+
+export const getPhoneCode = (code) => {
+	return request({
+		url: `/user/phone/bind?code=${code}`,
+		method: 'POST',
+		data: {
+			code
+		}
+	})
+}
