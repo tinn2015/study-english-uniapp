@@ -10,7 +10,11 @@
 						<view class="text-1">恭喜你已完成本课学习</view>
 					</view>
 					<view class="chart-box">
-						<qiun-data-charts type="radar" :opts="{legend:{position: 'bottom', show: false},extra:{tooltip: {showBox: false},radar:{gridType:'circle', gridColor: '#ffffff', opacity: 0.5, labelShow: true, labelColor: '#ffffff', radius: 60}}}" :chartData="radarData"/>
+						<qiun-data-charts
+						      type="radar"
+						      :opts="chartOptions"
+						      :chartData="radarData"
+						    />
 					</view>
 				</view>
 			</view>
@@ -86,7 +90,32 @@
 		label: '',
 		result: ''
 	})
-	
+	// 图标样式
+	const chartOptions = reactive({
+		color: ["#1CA73A", "#91CB74", "#FAC858", "#EE6666", "#73C0DE", "#3CA272", "#FC8452", "#9A60B4",
+			"#ea7ccc"
+		],
+		fontColor: "#ffffff",
+		// padding: [5,5,5,5],
+		dataLabel: false,
+		enableScroll: false,
+		legend: {
+			show: false,
+			position: "right",
+			lineHeight: 25
+		},
+		extra: {
+			radar: {
+				gridType: "radar", // circle
+				gridColor: "#eeeeee",
+				gridCount: 4,
+				opacity: 0.8,
+				max: 200,
+				labelShow: true,
+				border: true
+			}
+		},
+	})
 	const radarData = reactive({
 		"categories": [],
 		"series": [{
