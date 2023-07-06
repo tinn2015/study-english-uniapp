@@ -106,11 +106,11 @@
 		},
 		extra: {
 			radar: {
-				gridType: "radar", // circle
-				gridColor: "#eeeeee",
+				gridType: "circle", // circle radar
+				gridColor: "#bcf0ff",
 				gridCount: 4,
-				opacity: 0.8,
-				max: 200,
+				opacity: 0.5,
+				max: 100,
 				labelShow: true,
 				border: true
 			}

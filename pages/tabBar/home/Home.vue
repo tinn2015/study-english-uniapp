@@ -23,7 +23,7 @@
 				</view>
 			</view>
 			<view class="part-1">
-				<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button>
+				<!-- <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button> -->
 				<view class="title">热销</view>
 				<swiper class="swiper" circular :autoplay="autoplay" :interval="interval" :duration="duration">
 					<swiper-item v-for="item in hotBanners" @click="routeToWebview(item)">

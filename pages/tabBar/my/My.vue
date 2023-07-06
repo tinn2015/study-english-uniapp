@@ -42,7 +42,8 @@
 				</view>
 				<view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
-					<view class="label">帮助与反馈</view>
+					<!-- <view class="label">帮助与反馈</view> -->
+					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
 				<view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
@@ -231,6 +232,13 @@
 				font-family: PingFangSC-Regular, PingFang SC;
 				font-weight: 400;
 				color: #202127;
+			}
+			.contact-btn {
+				padding: 0;
+				background: none;
+				&::after {
+					border: none
+				}
 			}
 			.icon {
 				width: 44rpx;
