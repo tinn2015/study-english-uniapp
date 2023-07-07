@@ -74,7 +74,21 @@ import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
 // import GetUserProfilePopup from '@/components/GetUserProfilePopup/GetUserProfilePopup.vue'
 export default defineComponent({
+	onShareAppMessage(res) {
+		if (res.from === 'button') {// 来自页面内分享按钮
+		  console.log(res.target)
+		}
+		return {
+		  title: '开口说英语',
+		  path: 'pages/tabBar/home/Home',
+		  imageUrl: 'https://api.itso123.com/image/find-bg.png'
+		}
+	  },
 	setup() {
+		wx.showShareMenu({
+		  withShareTicket: true,
+		  menus: ['shareAppMessage', 'shareTimeline']
+		})
 		const favorites = reactive([])
 		const historyStatistic = ref('')
 		const todayStatistic = ref('')
