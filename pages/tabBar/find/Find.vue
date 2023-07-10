@@ -5,9 +5,12 @@
 			<image class="banner" mode="aspectFit" src="https://api.itso123.com/image/find-bg.png"></image>
 		</view>
 		<view class="find-content flex">
-			<view class="left">
+			<scroll-view class="left" scroll-y="true" :enhanced="true" 	:show-scrollbar="false">
 				<view class="nav-item flex jc-c ai-c" @click="navTap(nav)" :class="currentNav === nav ? 'nav-active' : ''" v-for="nav in navLists">{{nav}}</view>
-			</view>
+			</scroll-view>
+			<!-- <view class="left">
+				<view class="nav-item flex jc-c ai-c" @click="navTap(nav)" :class="currentNav === nav ? 'nav-active' : ''" v-for="nav in navLists">{{nav}}</view>
+			</view> -->
 			<view class="right">
 				<view class="filter-box flex jc-c ai-c">
 					<view style="width: 220rpx;">
@@ -144,7 +147,7 @@
 		components: {
 			Navigator
 		}
-	}
+	} 
 </script>
 
 <style scoped lang="scss">

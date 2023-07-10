@@ -26,8 +26,8 @@ export const useLessonStore = defineStore('lesson', {
 			this.lessonInfo = result
 		},
 		async getSectionInfo (section, index) {
-			const result = await getSectionDetail(section.id)
-			console.log('getSectionInfo', result, this.lessonInfo.sections.length)
+			const result = await getSectionDetail(section.id, this.lessonInfo.lessonId)
+			console.log('getSectionDetail', result, this.lessonInfo)
 			this.sectionInfo = result.contexts
 			this.currentSection = section
 			this.currentSectionIndex = index

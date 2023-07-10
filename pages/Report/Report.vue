@@ -3,7 +3,8 @@
 		<view class="nav">
 			<Navigator></Navigator>
 		</view>
-		<view class="scroll-box">
+
+		<scroll-view class="scroll-box" scroll-y="true">
 			<view class="part-1">
 				<view class="flex fd-c jc-c ai-c">
 					<view class="text-box">
@@ -13,7 +14,7 @@
 						<qiun-data-charts
 						      type="radar"
 						      :opts="chartOptions"
-						      :chartData="radarData"
+						      :chartData="radarData.data"
 						    />
 					</view>
 				</view>
@@ -41,7 +42,9 @@
 						<view class="tag flex jc-c ai-c">单词问题</view>
 						<view class="sentence-item flex fw-w ai-c">
 							<text class="mark">{{item.desc}}</text>
-							<image @click="playAudio(item.audioUrl)" class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
+							<view class="horn-box flex jc-c ai-c" @click="playAudio(item.audioUrl)">
+								<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
+							</view>
 						</view>
 					</view>
 					<view class="handle flex jc-sb ai-c">
@@ -59,14 +62,17 @@
 					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('C')">
 						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-bad-emoji.png" mode=""></image>
 						<view class="feedback-option-label">几乎没作用</view>
+						<image v-show="feedbackChecked === 'C'" class="feedback-checked" src="https://api.itso123.com/image/checked-green.png" mode=""></image>
 					</view>
 					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('B')">
 						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-normal-emoji.png" mode=""></image>
 						<view class="feedback-option-label">有一点作用</view>
+						<image v-show="feedbackChecked === 'B'" class="feedback-checked" src="https://api.itso123.com/image/checked-green.png" mode=""></image>
 					</view>
 					<view class="feedback-option flex fd-c ai-c jc-c" @click="feedback('A')">
 						<image class="feedback-option-icon" src="https://api.itso123.com/image/report-good-emoji.png" mode=""></image>
 						<view class="feedback-option-label">非常好用</view>
+						<image v-show="feedbackChecked === 'A'" class="feedback-checked" src="https://api.itso123.com/image/checked-green.png" mode=""></image>
 					</view>
 				</view>
 			</view>
@@ -74,12 +80,12 @@
 				<view class="btn-left btn flex jc-c ai-c" @click="studyAgain">重新练习</view>
 				<view class="btn-right btn flex jc-c ai-c" @click="studyNext">学习下一节</view>
 			</view>
-		</view>
+		</scroll-view>
 	</view>
 </template>
 
 <script setup>
-	import { onBeforeMount, reactive, ref, nextTick} from 'vue'
+	import { onBeforeMount, reactive, ref, nextTick, onMounted} from 'vue'
 	import { getReportOverAll, studyFeedback } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
@@ -117,11 +123,13 @@
 		},
 	})
 	const radarData = reactive({
-		"categories": [],
-		"series": [{
-			// "name": "成交量1",
-			"data": []
-		}]
+		data: {
+			"categories": [],
+			"series": [{
+				// "name": "成交量1",
+				"data": []
+			}]
+		}
 	})
 	
 	const sentenceProblems = reactive([])
@@ -144,7 +152,7 @@
 	let reportId = 0
 	const categories = []
 	const seriesData = []
-	onBeforeMount(() => {
+	onMounted(() => {
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
 		getReportOverAll({lessonId, sectionId}).then((res) => {
@@ -156,10 +164,18 @@
 				categories.push(i.Name)
 				seriesData.push(parseInt(i.Value))
 			})
-			radarData.categories = categories
-			radarData.series[0].data = seriesData
-			
-			console.log('radarData', radarData)
+			// radarData.categories = categories
+			// radarData.series[0].data = seriesData
+			const data = {
+				categories,
+				series: [{
+					data: seriesData
+				}] 
+			}
+			setTimeout(() => {
+				radarData.data = data
+				console.log('radarData', radarData)
+			}, 1000)
 			
 			/* 排名 */
 			ranking.label = Ranking.tips
@@ -189,7 +205,7 @@
 			url: "/pages/Lesson/Lesson"
 		})
 	}
-	
+	const feedbackChecked = ref('')
 	const feedback = (label) => {
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
@@ -199,6 +215,8 @@
 			reportId,
 			lessonId,
 			sectionId
+		}).then(() => {
+			feedbackChecked.value = label
 		})
 	}
 	
@@ -241,6 +259,7 @@
 	.part-1 {
 		height: 500rpx;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+		padding-top: 20rpx;
 		.text-box {
 			padding-left: 32rpx
 		}
@@ -349,10 +368,14 @@
 			font-weight: 400;
 			color: #202127;
 		}
+		.horn-box {
+			margin-left: 16rpx;
+			width: 50rpx;
+			height: 50rpx;
+		}
 		.horn {
 			width: 32rpx;
 			height: 28rpx;
-			margin-left: 16rpx;
 		}
 		.more {
 			font-size: 28rpx;
@@ -409,6 +432,15 @@
 			font-weight: 400;
 			color: #202127;
 			margin-top: 16rpx;
+		}
+		.feedback-option {
+			position: relative
+		}
+		.feedback-checked {
+			width: 32rpx;
+			height: 32rpx;
+			position: absolute;
+			top: 64rpx;
 		}
 	}
 	.handles {

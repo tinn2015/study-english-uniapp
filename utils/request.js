@@ -112,9 +112,9 @@ export const addFavoriteCourse = (data) => {
 /**
  * 获取章节信息
  */
-export const getSectionDetail = (id) => {
+export const getSectionDetail = (id, lessonId) => {
 	return request({
-		url: `/lesson/section/detail/${id}`,
+		url: `/lesson/section/detail/${lessonId}/${id}`,
 		method: 'POST'
 	})
 }
