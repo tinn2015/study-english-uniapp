@@ -85,8 +85,9 @@
 </template>
 
 <script setup>
-	import { onBeforeMount, reactive, ref, nextTick, onMounted} from 'vue'
-	import { getReportOverAll, studyFeedback } from '@/utils/request.js'
+	import { onBeforeMount, reactive, ref, nextTick} from 'vue'
+	import { onLoad } from '@dcloudio/uni-app'
+	import { getReportOverAll, studyFeedback, getReport } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
@@ -152,50 +153,62 @@
 	let reportId = 0
 	const categories = []
 	const seriesData = []
-	onMounted(() => {
+	onLoad((options) => {
+		console.log('options', options)
 		const { lessonId } = lessonStore.lessonInfo
 		const { id: sectionId } = lessonStore.currentSection
-		getReportOverAll({lessonId, sectionId}).then((res) => {
-			console.log('getReportOverAll', res)
-			const { Ranking, skill, words, report, reportId:rid } = res
-			/* 雷达图 */
-			
-			skill.forEach(i => {
-				categories.push(i.Name)
-				seriesData.push(parseInt(i.Value))
+		if (options.type === 'gen') {
+			getReportOverAll({lessonId, sectionId}).then((res) => {
+				console.log('getReportOverAll', res)
+				updateView(res)
 			})
-			// radarData.categories = categories
-			// radarData.series[0].data = seriesData
-			const data = {
-				categories,
-				series: [{
-					data: seriesData
-				}] 
-			}
-			setTimeout(() => {
-				radarData.data = data
-				console.log('radarData', radarData)
-			}, 1000)
-			
-			/* 排名 */
-			ranking.label = Ranking.tips
-			ranking.result = Ranking.tipsAction
-			
-			/* 句子问题 */
-			words.forEach(i => {
-				sentenceProblems.push(i)
+		} else {
+			getReport(lessonStore.currentReportId).then(res => {
+				console.log('getReport', res)
+				updateView(res)
 			})
-			
-			/* 发音问题 */
-			phoneticSymbolProblem.data = report
-			
-			reportId = rid
-		})
+		}
+		
 	})
-	// nextTick(() => {
-	// 	radarData.categories = categories
-	// 	radarData.series[0].data = seriesData
-	// })
+	
+	/**
+	 * 根据请求数据更新视图
+	 */
+	const updateView = (res) => {
+		const { Ranking, skill, words, report, reportId:rid } = res
+		/* 雷达图 */
+		
+		skill.forEach(i => {
+			categories.push(i.Name)
+			seriesData.push(parseInt(i.Value))
+		})
+		// radarData.categories = categories
+		// radarData.series[0].data = seriesData
+		const data = {
+			categories,
+			series: [{
+				data: seriesData
+			}] 
+		}
+		setTimeout(() => {
+			radarData.data = data
+			console.log('radarData', radarData)
+		}, 1000)
+		
+		/* 排名 */
+		ranking.label = Ranking.tips
+		ranking.result = Ranking.tipsAction
+		
+		/* 句子问题 */
+		words.forEach(i => {
+			sentenceProblems.push(i)
+		})
+		
+		/* 发音问题 */
+		phoneticSymbolProblem.data = report
+		
+		reportId = rid
+	}
 	
 	const studyAgain = async () => {
 		// console.log('currentSection', lessonStore.currentSection)

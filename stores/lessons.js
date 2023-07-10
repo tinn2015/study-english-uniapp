@@ -13,8 +13,17 @@ export const useLessonStore = defineStore('lesson', {
 			 * 用于学习下一节功能
 			 */
 			currentSectionIndex: 0,
-			// 当前章节是否完成
-			currentSectionFinished: false
+			/**
+			 * 报告按钮状态
+			 * 0： 不展示按钮
+			 * 1： 显示并生成报告
+			 * 2： 显示按钮， 查看报告
+			 */
+			currentSectionFinished: 0,
+			/**
+			 * 当前报告的id
+			 */
+			currentReportId: ''
 		};
 	},
 	// 也可以这样定义
@@ -39,7 +48,8 @@ export const useLessonStore = defineStore('lesson', {
 				this.nextSection = this.lessonInfo.sections[index + 1]
 			}
 			console.log('nextSection', this.nextSection, index)
-			this.currentSectionFinished = result.displayGetReport === 1
+			this.currentSectionFinished = result.displayGetReport
+			this.currentReportId = result.reportId
 			return true
 		},
 		/**

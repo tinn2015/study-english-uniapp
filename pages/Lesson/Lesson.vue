@@ -52,11 +52,9 @@
 			</view>
 		</view>
 		<!-- v-if="reportBtnVisible" -->
-		<view class="report-box flex jc-c ai-c">
-			<view class="report flex jc-c ai-c" @click="routeToReport">完成并获取报告</view>
-<!-- 			<view class="subscript-box triangle">
-				11
-			</view> -->
+		<view class="report-box flex jc-c ai-c" v-if="reportBtnVisible !== 0">
+			<view class="report flex jc-c ai-c" v-if="reportBtnVisible === 1" @click="routeToReport('gen')">生成并获取报告</view>
+			<view class="report flex jc-c ai-c" v-else @click="routeToReport('get')">查看报告</view>
 		</view>
 	</view>
 </template>
@@ -82,9 +80,9 @@
 	
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
-	const routeToReport = () => {
+	const routeToReport = (type) => {
 		uni.navigateTo({
-			url: "/pages/Report/Report"
+			url: `/pages/Report/Report?type=${type}`
 		})
 	}
 	const currentParagraph = reactive({
@@ -149,7 +147,7 @@
 					isRecording.value = false
 					sectionInfo[currentParagraph.index]['result'] = data
 					sectionInfo[currentParagraph.index]['tipShow'] = true
-					reportBtnVisible.value = data.displayGetReport === 1
+					reportBtnVisible.value = data.displayGetReport
 				}
 				console.log('sectionInfo', currentParagraph.index, sectionInfo)
 			},
@@ -217,6 +215,9 @@
 </script>
 
 <style scoped lang="scss">
+	.lesson {
+		padding-bottom: 60rpx
+	}
 	.paragraph {
 		background: #F2F2F2;
 		// height: 160rpx;

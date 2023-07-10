@@ -167,6 +167,16 @@ export const getReportOverAll = ({lessonId, sectionId}) => {
 }
 
 /**
+ * 查看报告
+ */
+export const getReport = (reportId) => {
+	return request({
+		url: `/report/query/${reportId}`,
+		method: 'POST',
+	})
+}
+
+/**
  * 报告页，学习效果的评价反馈
  */
 export const studyFeedback = ({label, lessonId, reportId, sectionId}) => {
