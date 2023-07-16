@@ -90,7 +90,14 @@
 		info: {},
 		index: 0
 	})
+	// 是否在录音中， 用于控制录音动画
 	const isRecording = ref(false)
+	/**
+	 * 是否中断录音上传
+	 * 切换录音时需要中断上传
+	 */
+	const interruptRecording = ref(false)
+	
 
 	const lessonStore = useLessonStore()
 	const {
@@ -124,6 +131,10 @@
 		currentParagraph.id = paragraph.id
 		currentParagraph.info = paragraph
 		currentParagraph.index = index
+		if (isRecording.value) {
+			interruptRecording.value = true
+			stopRecord()
+		}
 		playAudio(currentParagraph.info.sentenceUrl)
 	}
 
@@ -131,6 +142,12 @@
 	const recorderManager = uni.getRecorderManager()
 	recorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
+		console.log('interruptRecording', interruptRecording.value)
+		if (interruptRecording.value) {
+			console.log('[中断录音上传]')
+			interruptRecording.value = false
+			return
+		}
 		// 上传录音
 		uni.uploadFile({
 			url: `https://api.itso123.com/v1/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
@@ -143,8 +160,9 @@
 			success: (res) => {
 				console.log('录音上传成功', res)
 				if (res.statusCode === 200) {
-					const data = JSON.parse(res.data)
+					const data = res.data && JSON.parse(res.data)
 					isRecording.value = false
+					interruptRecording.value = false
 					sectionInfo[currentParagraph.index]['result'] = data
 					sectionInfo[currentParagraph.index]['tipShow'] = true
 					reportBtnVisible.value = data.displayGetReport

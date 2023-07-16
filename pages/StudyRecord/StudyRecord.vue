@@ -111,15 +111,21 @@
 			margin-left: 32rpx;
 		}
 		.poster {
-			width: 152rpx;
-			height: 200rpx;
+			width: 180rpx;
+			height: 236rpx;
 			background: #eeeeee;
 			border-radius: 12rpx;
 		}
+		.course-title {
+			font-size: 32rpx;
+			font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+			font-weight: 500;
+			color: #202127;
+		}
 		.course-process {
-			margin-top: 20rpx;
+			margin-top: 40rpx;
 			.process {
-				width: 160rpx;
+				width: 180rpx;
 			}
 			.process-label {
 				margin-left: 16rpx;

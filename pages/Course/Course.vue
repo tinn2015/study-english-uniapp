@@ -73,7 +73,10 @@
 			LoginPopup
 		},
 		methods: {
-			routeToLesson () {
+			async routeToLesson () {
+				const lessonStore = useLessonStore()
+				const section = lessonStore.lessonInfo.sections[0]
+				await lessonStore.getSectionInfo(section, 0)
 				uni.navigateTo({
 					url:"/pages/Lesson/Lesson"
 				})

@@ -85,10 +85,6 @@ export default defineComponent({
 		}
 	  },
 	setup() {
-		wx.showShareMenu({
-		  withShareTicket: true,
-		  menus: ['shareAppMessage', 'shareTimeline']
-		})
 		const favorites = reactive([])
 		const historyStatistic = ref('')
 		const todayStatistic = ref('')
@@ -245,6 +241,7 @@ export default defineComponent({
 	width: 100%;
 	color: red;
 	background: linear-gradient(90deg, #59c47f 0%, #6be7b7 100%);
+	overflow: hidden;
 	.label {
 		position: relative;
 		left: 20rpx;
