@@ -178,6 +178,7 @@
 		console.log('record error', err)
 	})
 	const record = () => {
+		stopAudio()
 		recorderManager.start({
 			format: "wav",
 			sampleRate: 8000
