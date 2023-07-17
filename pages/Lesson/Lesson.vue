@@ -163,8 +163,14 @@
 					const data = res.data && JSON.parse(res.data)
 					isRecording.value = false
 					interruptRecording.value = false
-					sectionInfo[currentParagraph.index]['result'] = data
-					sectionInfo[currentParagraph.index]['tipShow'] = true
+					const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
+					console.log('句子上下文 序号 sectionIndex', sectionIndex)
+					if (sectionIndex > -1) {
+						sectionInfo[sectionIndex].result = data
+						sectionInfo[sectionIndex].tipShow = true
+					}
+					// sectionInfo[currentParagraph.index]['result'] = data
+					// sectionInfo[currentParagraph.index]['tipShow'] = true
 					reportBtnVisible.value = data.displayGetReport
 				}
 				console.log('sectionInfo', currentParagraph.index, sectionInfo)
