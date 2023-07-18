@@ -179,6 +179,7 @@
 	})
 	const record = () => {
 		stopAudio()
+		playPromptAudio()
 		recorderManager.start({
 			format: "wav",
 			sampleRate: 8000
@@ -187,8 +188,19 @@
 	}
 
 	const stopRecord = () => {
+		playPromptAudio()
 		recorderManager.stop()
 		isRecording.value = false
+	}
+	
+	/**
+	 * 播放叮的一声
+	 */
+	const promptAudioContext = uni.createInnerAudioContext();
+	
+	const playPromptAudio = () => {
+		promptAudioContext.src = "http://api.itso123.com/image/prompt.mp3";
+		promptAudioContext.play()
 	}
 
 	/**
