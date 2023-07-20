@@ -26,7 +26,7 @@
 				<!-- <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button> -->
 				<view class="title">热销</view>
 				<swiper class="swiper" circular :autoplay="autoplay" :interval="interval" :duration="duration">
-					<swiper-item v-for="item in hotBanners" @click="routeToWebview(item)">
+					<swiper-item v-for="item in hotBanners" @click="bannerTap(item)">
 						<image class="swiper-item" :src="item.headPic" mode="scaleToFill"></image>
 					</swiper-item>
 				</swiper>
@@ -128,6 +128,7 @@ export default defineComponent({
 				historyStatistic.value = res.historyStatistic
 				todayStatistic.value = res.todayStatistic
 			})
+			
 		}
 		
 		return {
@@ -220,11 +221,14 @@ export default defineComponent({
 				url: "/pages/tabBar/find/Find"
 			})
 		},
-		routeToWebview (item) {
-			uni.navigateTo({
-				url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`,
-				
-			})
+		bannerTap (item) {
+			if (item.type && item.type === 'lesson') {
+				this.routeToCourse(item.lessonId)
+			} else {
+				uni.navigateTo({
+					url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`,
+				})
+			}
 		}
 	}
 });
