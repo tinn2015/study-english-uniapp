@@ -28,7 +28,7 @@ export const useLoginStore = defineStore('loginStore', {
 		checkNeedLogin () {
 			const now = new Date().getTime()
 			const expireTime = uni.getStorageSync('expireTime')
-			if (!uni.getStorageSync('authorization') || !expireTime || expireTime <= now || now - expireTime < 3600 * 24 * 1000) {
+			if (!uni.getStorageSync('authorization') || !expireTime || expireTime <= now || (now > expireTime && now - expireTime < 3600 * 24 * 1000)) {
 				return true
 			} else {
 				return false

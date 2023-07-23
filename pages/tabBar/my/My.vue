@@ -10,14 +10,14 @@
 					<view class="panel-title">
 						<text>已学课程</text>
 					</view>
-					<view class="panel-info"><text class="ft64">5</text> 课</view>
+					<view class="panel-info"><text class="ft64">{{learned.lessons}}</text> 课</view>
 				</view>
 				<view class="line"></view>
 				<view class="flex-1 flex fd-c ai-c">
 					<view class="panel-title">
 						<text>已学单词</text>
 					</view>
-					<view class="panel-info"><text class="ft64">20</text> 个</view>
+					<view class="panel-info"><text class="ft64">{{learned.words}}</text> 个</view>
 				</view>
 			</view>
 			<view class="activity-tip flex jc-sb">
@@ -27,28 +27,35 @@
 				</view>
 				<view class="btn">立即领取</view>
 			</view>
-			<view class="part-1">
+			<view class="part-3">
+				<view class="header flex jc-sb">
+					<view class="title">每日一句</view>
+				</view>
+				<view class="daily-en">{{ oneSentencePerDay.en }}</view>
+				<view class="label">{{ oneSentencePerDay.cn }}</view>
+			</view>
+			<!-- <view class="part-1">
 				<view class="header flex jc-sb">
 					<view class="title">我的英语水平</view>
 				</view>
 				<view class="label">未知 ｜5分钟测试英语水平，获取分析报告</view>
 				<view class=""></view>
 				<view class="btn flex jc-c ai-c">立即测试</view>
-			</view>
+			</view> -->
 			<view class="part-2">
-				<view class="item flex ai-c">
+				<!-- <view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
 					<view class="label">邀请奖励</view>
-				</view>
+				</view> -->
 				<view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
 					<!-- <view class="label">帮助与反馈</view> -->
 					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
-				<view class="item flex ai-c">
+				<!-- <view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
 					<view class="label">英语水平测试</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</view>
@@ -56,7 +63,8 @@
 
 <script>
 	import {onMounted, defineComponent, reactive} from 'vue'
-	import { onReady, onInit } from '@dcloudio/uni-app'
+	import { onReady, onInit, onShow } from '@dcloudio/uni-app'
+	import { getMe } from '@/utils/request.js'
 	export default defineComponent({
 		setup () {
 			console.log(11)
@@ -68,8 +76,28 @@
 			onInit(() => {
 				console.log('init2')
 			})
+			// 已学内容
+			const learned = reactive({
+				lessons: 0,
+				words: 0
+			})
+			const oneSentencePerDay = reactive({
+				cn: "",
+				en: ""
+			})
+			onShow(() => {
+				getMe().then(res => {
+					learned.lessons = res.studyLessons
+					learned.words = res.studyWords
+					console.log('me', res, learned)
+					oneSentencePerDay.cn = res.dailyCn
+					oneSentencePerDay.en = res.dailyEn
+				})
+			})
 			return {
-				menuButtonInfo
+				menuButtonInfo,
+				learned,
+				oneSentencePerDay
 			}
 		},
 		data () {
@@ -243,6 +271,32 @@
 			.icon {
 				width: 44rpx;
 				height: 44rpx;
+			}
+		}
+		.part-3 {
+			background: #FFFFFF;
+			box-shadow: 0rpx 0rpx 24rpx 0rpx rgba(0,0,0,0.1);
+			border-radius: 24rpx;
+			margin-top: 32rpx;
+			padding:40rpx;
+			.title {
+				font-size: 40rpx;
+				font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
+				font-weight: 500;
+				color: #202127;
+			}
+			.label{
+				margin-top: 20rpx;
+				font-size: 28rpx;
+				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+				font-weight: 400;
+				color: #999A9F;
+			}
+			.daily-en {
+				color: #59C47F;
+				font-size: 40rpx;
+				margin-top: 20rpx;
+				font-weight: 500;
 			}
 		}
 		.ft64 {

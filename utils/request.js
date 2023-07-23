@@ -193,6 +193,9 @@ export const studyFeedback = ({label, lessonId, reportId, sectionId}) => {
 	})
 }
 
+/**
+ * 获取手机号
+ */
 export const getPhoneCode = (code) => {
 	return request({
 		url: `/user/phone/bind?code=${code}`,
@@ -200,5 +203,15 @@ export const getPhoneCode = (code) => {
 		data: {
 			code
 		}
+	})
+}
+
+/**
+ * 我的页面
+ */
+export const getMe = () => {
+	return request({
+		url: `/statistics/me/query`,
+		method: 'POST'
 	})
 }

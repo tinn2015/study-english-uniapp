@@ -100,6 +100,10 @@ export default defineComponent({
 		const loginStore = useLoginStore();
 		onShow(() => {
 			console.log('home onshow')
+			uni.showLoading({
+				title: "加载中",
+				icon: "none"
+			})
 			getHomeData()
 		})
 		
@@ -111,24 +115,39 @@ export default defineComponent({
 		
 		const getHomeData = () => {
 			// 获取轻松学
-			getFavorite().then((res) => {
+			// getFavorite().then((res) => {
+			// 	favorites.splice(0, favorites.length)
+			// 	if (res.lessons > 8) {
+			// 		favorites.push(...res.lessons)
+			// 	} else {
+			// 		favorites.push(...res.lessons.slice(0, 8))
+			// 	}
+			// 	console.log('favorites', favorites)
+			// })
+			// // 获取统计数据和banner图
+			// getHomeInfo().then((res) =>{
+			// 	console.log('getHomeInfo', res)
+			// 	hotBanners.splice(0, hotBanners.length)
+			// 	hotBanners.push(...res.hotBanners)
+			// 	historyStatistic.value = res.historyStatistic
+			// 	todayStatistic.value = res.todayStatistic
+			// 	uni.hideLoading()
+			// })
+			Promise.all([getFavorite(), getHomeInfo()]).then((resultList) => {
+				console.log('resultList', resultList)
 				favorites.splice(0, favorites.length)
-				if (res.lessons > 8) {
-					favorites.push(...res.lessons)
+				if (resultList[0].lessons > 8) {
+					favorites.push(...resultList[0].lessons)
 				} else {
-					favorites.push(...res.lessons.slice(0, 8))
+					favorites.push(...resultList[0].lessons.slice(0, 8))
 				}
-				console.log('favorites', favorites)
-			})
-			// 获取统计数据和banner图
-			getHomeInfo().then((res) =>{
-				console.log('getHomeInfo', res)
+				
 				hotBanners.splice(0, hotBanners.length)
-				hotBanners.push(...res.hotBanners)
-				historyStatistic.value = res.historyStatistic
-				todayStatistic.value = res.todayStatistic
+				hotBanners.push(...resultList[1].hotBanners)
+				historyStatistic.value = resultList[1].historyStatistic
+				todayStatistic.value = resultList[1].todayStatistic
+				uni.hideLoading()
 			})
-			
 		}
 		
 		return {
