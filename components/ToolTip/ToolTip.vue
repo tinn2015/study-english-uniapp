@@ -47,8 +47,15 @@
 		},
 		methods: {
 			changeStatus () {
-				this.localShow = !this.localShow
+				// this.localShow = !this.localShow
+				if (!this.localShow && this.content) {
+					 this.localShow = true
+				} else {
+					this.localShow = false
+				}
+				// this.localShow = !this.localShow
 				console.log('tootip changeStatus1', this.show, this.localShow)
+				console.log('tooltip content', this.content)
 				if (!this.localShow) {
 					this.$emit('close')
 				}

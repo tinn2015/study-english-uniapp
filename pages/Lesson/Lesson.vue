@@ -22,14 +22,14 @@
 							<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 						</view>
 						<!-- 有结果按钮 -->
-						<view v-if="paragraph.result" class="btn result">
+						<view v-if="parseInt(paragraph.score)" class="btn result">
 							<ToolTip  :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
-									<view class="emoji-box">
-										<view class="result-good result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo >= 80">{{paragraph.result.emo}}</view>
-										<view class="result-bad result-label flex jc-c ai-c" v-if="paragraph.result && paragraph.result.emo < 60">
+									<view class="emoji-box" @click="playSelfAudio(paragraph.result || paragraph)">
+										<view class="result-good result-label flex jc-c ai-c" v-if="parseInt(paragraph.score) && parseInt(paragraph.score) >= 80">{{parseInt(paragraph.score)}}</view>
+										<view class="result-bad result-label flex jc-c ai-c" v-if="parseInt(paragraph.score) && parseInt(paragraph.score) < 60">
 											<image class="result-bad-mask" src="http://api.itso123.com/image/bad-mask.png" mode=""></image>
 										</view>
-										<view class="result-normal result-label flex jc-c ai-c" v-else>{{paragraph.result.emo}}</view>
+										<view class="result-normal result-label flex jc-c ai-c" v-else>{{parseInt(paragraph.score)}}</view>
 									</view>
 							</ToolTip>
 							<view class="icon-box flex jc-c ai-c">
@@ -47,8 +47,8 @@
 			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph, index)">
 				<view class="text-center">{{paragraph.sentence}}</view>
 				<view class="mt16 paragraph-translate">{{paragraph.translation}}</view>
-				<view class="triangle" v-if="paragraph.result"  :style="{'borderTopColor': paragraph.result.emo > 80 ? '#207340' : paragraph.result.emo < 60 ? '#FF0000' : '#E5860C'}"></view>
-				<view v-if="paragraph.result" class="triangle-label" >{{ paragraph.result.emo }}</view>
+				<view class="triangle" v-if="parseInt(paragraph.score) !== ''"  :style="{'borderTopColor': parseInt(paragraph.score) > 80 ? '#207340' : parseInt(paragraph.score) < 60 ? '#FF0000' : '#E5860C'}"></view>
+				<view v-if="parseInt(paragraph.score) !== ''" class="triangle-label" >{{ parseInt(paragraph.score) }}</view>
 			</view>
 		</view>
 		<!-- v-if="reportBtnVisible" -->
@@ -121,6 +121,7 @@
 	onUnload(() => {
 		console.log('onUnload')
 		stopAudio()
+		selfAudioContext.stop()
 	})
 	
 	// 是否显示获取报告按钮
@@ -135,6 +136,7 @@
 			interruptRecording.value = true
 			stopRecord()
 		}
+		selfAudioContext.stop()
 		playAudio(currentParagraph.info.sentenceUrl)
 	}
 
@@ -167,6 +169,8 @@
 					console.log('句子上下文 序号 sectionIndex', sectionIndex)
 					if (sectionIndex > -1) {
 						sectionInfo[sectionIndex].result = data
+						sectionInfo[sectionIndex].score = data.emo
+						sectionInfo[sectionIndex].recUrl = data.recUrl
 						sectionInfo[sectionIndex].tipShow = true
 					}
 					// sectionInfo[currentParagraph.index]['result'] = data
@@ -182,20 +186,17 @@
 	})
 	recorderManager.onError((err) => {
 		console.log('record error', err)
+		stopRecord()
 	})
 	const record = () => {
 		stopAudio()
-		playPromptAudio()
-		recorderManager.start({
-			format: "wav",
-			sampleRate: 8000
-		})
 		isRecording.value = true
+		playPromptAudio('startPrompt')
 	}
 
 	const stopRecord = () => {
-		playPromptAudio()
 		recorderManager.stop()
+		playPromptAudio('endPrompt')
 		isRecording.value = false
 	}
 	
@@ -203,11 +204,34 @@
 	 * 播放叮的一声
 	 */
 	const promptAudioContext = uni.createInnerAudioContext();
+	const promptType = ref('')
 	
-	const playPromptAudio = () => {
+	const playPromptAudio = (type) => {
 		promptAudioContext.src = "http://api.itso123.com/image/prompt.mp3";
 		promptAudioContext.play()
+		promptType.value = type
+		console.log('playPromptAudio', type, type === 'startRecord')
 	}
+	
+	promptAudioContext.onEnded(() => {
+		if (promptType.value === 'startPrompt') {
+			recorderManager.start({
+				format: "wav",
+				sampleRate: 8000
+			})
+		}
+	})
+	
+	/**
+	 * 播放自己的句子
+	 */
+	const selfAudioContext = uni.createInnerAudioContext();
+	
+	const playSelfAudio = (result) => {
+		selfAudioContext.src = result.recUrl;
+		selfAudioContext.play()
+	}
+	
 
 	/**
 	 * 播放句子
@@ -454,7 +478,7 @@
 		width: 50%;
 		height: 8rpx;
 		border-radius: 4rpx;
-		animation: wave .5s infinite linear alternate;
+		animation: wave .4s infinite linear alternate;
 		background: rgb(7, 59, 99);
 		background: linear-gradient(90deg, #59c47f 0%, #6be7b7 100%);
 	}
