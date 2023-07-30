@@ -39,7 +39,7 @@
 						</view>
 						<!-- 默认时按钮 -->
 						<view v-else class="result-default flex jc-c ai-c">
-							<image class="result-icon-mini" src="http://api.itso123.com/image/smile-default.png" mode=""></image>
+							<image class="result-icon-mini" src="http://api.itso123.com/image/i.png" mode=""></image>
 						</view>
 					</view>
 				</view>
@@ -47,8 +47,8 @@
 			<view class="paragraph flex fd-c jc-sb ai-c" v-else @click="changeParagraph(paragraph, index)">
 				<view class="text-center">{{paragraph.sentence}}</view>
 				<view class="mt16 paragraph-translate">{{paragraph.translation}}</view>
-				<view class="triangle" v-if="parseInt(paragraph.score) !== ''"  :style="{'borderTopColor': parseInt(paragraph.score) > 80 ? '#207340' : parseInt(paragraph.score) < 60 ? '#FF0000' : '#E5860C'}"></view>
-				<view v-if="parseInt(paragraph.score) !== ''" class="triangle-label" >{{ parseInt(paragraph.score) }}</view>
+				<view class="triangle" v-if="paragraph.score !== ''"  :style="{'borderTopColor': parseInt(paragraph.score) > 80 ? '#207340' : parseInt(paragraph.score) < 60 ? '#FF0000' : '#E5860C'}"></view>
+				<view v-if="paragraph.score !== ''" class="triangle-label" >{{ parseInt(paragraph.score) }}</view>
 			</view>
 		</view>
 		<!-- v-if="reportBtnVisible" -->
@@ -81,6 +81,12 @@
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	
 	const routeToReport = (type) => {
+		stopSelfAudioContext()
+		stopAudio()
+		if (isRecording.value) {
+			interruptRecording.value = true
+			stopRecord()
+		}
 		uni.navigateTo({
 			url: `/pages/Report/Report?type=${type}`
 		})
@@ -121,7 +127,7 @@
 	onUnload(() => {
 		console.log('onUnload')
 		stopAudio()
-		selfAudioContext.stop()
+		stopSelfAudioContext()
 	})
 	
 	// 是否显示获取报告按钮
@@ -136,7 +142,7 @@
 			interruptRecording.value = true
 			stopRecord()
 		}
-		selfAudioContext.stop()
+		stopSelfAudioContext()
 		playAudio(currentParagraph.info.sentenceUrl)
 	}
 
@@ -189,8 +195,8 @@
 		stopRecord()
 	})
 	const record = () => {
+		stopSelfAudioContext()
 		stopAudio()
-		isRecording.value = true
 		playPromptAudio('startPrompt')
 	}
 
@@ -207,6 +213,7 @@
 	const promptType = ref('')
 	
 	const playPromptAudio = (type) => {
+		promptAudioContext.stop()
 		promptAudioContext.src = "http://api.itso123.com/image/prompt.mp3";
 		promptAudioContext.play()
 		promptType.value = type
@@ -215,6 +222,7 @@
 	
 	promptAudioContext.onEnded(() => {
 		if (promptType.value === 'startPrompt') {
+			isRecording.value = true
 			recorderManager.start({
 				format: "wav",
 				sampleRate: 8000
@@ -228,8 +236,15 @@
 	const selfAudioContext = uni.createInnerAudioContext();
 	
 	const playSelfAudio = (result) => {
+		stopAudio()
 		selfAudioContext.src = result.recUrl;
 		selfAudioContext.play()
+	}
+	/**
+	 * 停止播放自己的录音
+	 */
+	const stopSelfAudioContext = () => {
+		selfAudioContext.stop()
 	}
 	
 
@@ -254,6 +269,7 @@
 	})
 	const audioPlaying = ref(false)
 	const playAudio = (url) => {
+		stopSelfAudioContext()
 		innerAudioContext.stop()
 		innerAudioContext.src = url;
 		innerAudioContext.play()

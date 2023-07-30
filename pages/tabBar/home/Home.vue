@@ -109,8 +109,10 @@ export default defineComponent({
 		
 		onBeforeMount(async () => {
 			// loginStore.getUserProfile()
-			await loginStore.login();
-			// getHomeData()
+			const loginFlag = await loginStore.login();
+			if (!loginFlag) {	
+				getHomeData()
+			}
 		})
 		
 		const getHomeData = () => {

@@ -64,6 +64,7 @@ export const useLoginStore = defineStore('loginStore', {
 			const loginRes = await login(result.code)
 			this.setLoginStatus(true)
 			console.log('login result', result, loginRes)
+			return false
 		},
 		
 		getUserInfo () {
