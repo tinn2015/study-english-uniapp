@@ -197,6 +197,7 @@
 	const record = () => {
 		stopSelfAudioContext()
 		stopAudio()
+		isRecording.value = true
 		playPromptAudio('startPrompt')
 	}
 
@@ -222,7 +223,6 @@
 	
 	promptAudioContext.onEnded(() => {
 		if (promptType.value === 'startPrompt') {
-			isRecording.value = true
 			recorderManager.start({
 				format: "wav",
 				sampleRate: 8000

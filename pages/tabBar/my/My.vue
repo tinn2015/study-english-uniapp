@@ -52,6 +52,15 @@
 					<!-- <view class="label">帮助与反馈</view> -->
 					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
+				<view class="item">
+					<view class="flex ai-c">
+						<image src="http://api.itso123.com/image/en-test.png" mode="" class="icon"></image>
+						<view class="label">语速设置</view>
+					</view>
+					<view class="sub-item">
+						<uni-data-checkbox v-model="speechRate" :localdata="speechRateOptions" selectedColor="#59C47F"></uni-data-checkbox>
+					</view>
+				</view>
 				<!-- <view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
 					<view class="label">英语水平测试</view>
@@ -114,7 +123,13 @@
 						tip: '零基础',
 						viewNum: '1200'
 					}
-				]
+				],
+				speechRate: 'sh',
+				speechRateOptions: [
+				  {value: 'bj',text: '慢速'},
+				  {value: 'sh',text: '正常'},
+				  {value: 'gz',text: '快速'}
+				],
 			}
 		},
 		mounted () {
@@ -260,6 +275,10 @@
 				font-family: PingFangSC-Regular, PingFang SC;
 				font-weight: 400;
 				color: #202127;
+			}
+			.sub-item {
+				margin-left: 76rpx;
+				margin-top: 20rpx;
 			}
 			.contact-btn {
 				padding: 0;
