@@ -2,7 +2,7 @@
 	<view class="home flex fd-c">
 		<view class="status_bar">
 			<!-- 这里是状态栏 -->
-			<view class="label" :style="{ top: menuButtonInfo.top + 'px' }">Hello!</view>
+			<view class="label" :style="{ top: menuButtonInfo.top + 'px' }">Hi! 欢迎来到开口说练口语</view>
 		</view>
 		<view class="content flex fd-c">
 			<view class="panel flex jc-sb ai-c">
@@ -270,7 +270,7 @@ export default defineComponent({
 	.label {
 		position: relative;
 		left: 20rpx;
-		font-size: 48rpx;
+		font-size: 43rpx;
 		font-family: Roboto-Bold, Roboto;
 		font-weight: bold;
 		color: #ffffff;
