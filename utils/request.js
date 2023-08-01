@@ -215,3 +215,16 @@ export const getMe = () => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 语速设置
+ */
+export const setSpeechRate = (speechRate) => {
+	return request({
+		url: `/user/speech/rate/set`,
+		method: 'POST',
+		data: {
+			speechRate
+		}
+	})
+}

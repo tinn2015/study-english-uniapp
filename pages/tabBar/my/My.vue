@@ -23,9 +23,11 @@
 			<view class="activity-tip flex jc-sb">
 				<view class="left flex jc-c ai-c">
 					<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
-					<view class="tip">限时领取高效学习计划</view>
+					<!-- <view class="tip">限时领取高效学习计划</view> -->
+					<view class="tip">快速提升你的口语能力</view>
 				</view>
-				<view class="btn">立即领取</view>
+				<!-- <view class="btn">立即领取</view> -->
+				<view class="btn">立即行动</view>
 			</view>
 			<view class="part-3">
 				<view class="header flex jc-sb">
@@ -47,19 +49,19 @@
 					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
 					<view class="label">邀请奖励</view>
 				</view> -->
-				<view class="item flex ai-c">
-					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
-					<!-- <view class="label">帮助与反馈</view> -->
-					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
-				</view>
 				<view class="item">
 					<view class="flex ai-c">
 						<image src="http://api.itso123.com/image/en-test.png" mode="" class="icon"></image>
 						<view class="label">语速设置</view>
 					</view>
 					<view class="sub-item">
-						<uni-data-checkbox v-model="speechRate" :localdata="speechRateOptions" selectedColor="#59C47F"></uni-data-checkbox>
+						<uni-data-checkbox v-model="speechRate" :localdata="speechRateOptions" @change="speechRateChange" selectedColor="#59C47F"></uni-data-checkbox>
 					</view>
+				</view>
+				<view class="item flex ai-c">
+					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
+					<!-- <view class="label">帮助与反馈</view> -->
+					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
 				<!-- <view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
@@ -71,9 +73,9 @@
 </template>
 
 <script>
-	import {onMounted, defineComponent, reactive} from 'vue'
+	import {onMounted, defineComponent, reactive, ref} from 'vue'
 	import { onReady, onInit, onShow } from '@dcloudio/uni-app'
-	import { getMe } from '@/utils/request.js'
+	import { getMe, setSpeechRate } from '@/utils/request.js'
 	export default defineComponent({
 		setup () {
 			console.log(11)
@@ -94,6 +96,7 @@
 				cn: "",
 				en: ""
 			})
+			const speechRate = ref(1)
 			onShow(() => {
 				getMe().then(res => {
 					learned.lessons = res.studyLessons
@@ -101,12 +104,14 @@
 					console.log('me', res, learned)
 					oneSentencePerDay.cn = res.dailyCn
 					oneSentencePerDay.en = res.dailyEn
+					speechRate.value = res.speechRate
 				})
 			})
 			return {
 				menuButtonInfo,
 				learned,
-				oneSentencePerDay
+				oneSentencePerDay,
+				speechRate
 			}
 		},
 		data () {
@@ -124,11 +129,10 @@
 						viewNum: '1200'
 					}
 				],
-				speechRate: 'sh',
 				speechRateOptions: [
-				  {value: 'bj',text: '慢速'},
-				  {value: 'sh',text: '正常'},
-				  {value: 'gz',text: '快速'}
+				  {value: 0,text: '慢速'},
+				  {value: 1,text: '正常'},
+				  {value: 2,text: '快速'}
 				],
 			}
 		},
@@ -156,6 +160,11 @@
 				uni.navigateTo({
 					url: '/pages/StudyToday/StudyToday'
 				})
+			},
+			speechRateChange (e) {
+				console.log('speechRateChange', e)
+				const speechRate = e.detail.value
+				setSpeechRate(speechRate)
 			}
 		}
 	})
