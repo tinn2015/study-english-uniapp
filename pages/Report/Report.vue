@@ -36,7 +36,7 @@
 					<view class="item item-box mt62">
 						<view class="tag flex jc-c ai-c">发音问题</view>
 						<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
-						<view class="more">你的音标还有这些问题</view>
+						<!-- <view class="more">你的音标还有这些问题</view> -->
 					</view>
 					<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
 						<view class="tag flex jc-c ai-c">单词问题</view>

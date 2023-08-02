@@ -192,7 +192,8 @@
 	})
 	recorderManager.onError((err) => {
 		console.log('record error', err)
-		stopRecord()
+		playPromptAudio('endPrompt')
+		isRecording.value = false
 	})
 	const record = () => {
 		stopSelfAudioContext()
