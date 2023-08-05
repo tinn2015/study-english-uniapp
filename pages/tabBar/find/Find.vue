@@ -44,7 +44,18 @@
 	import { getFindLessons, getFindClass } from '@/utils/request.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import { useLessonStore } from '@/stores/lessons.js'
+	import { shareMenu } from '@/utils/share.js'
 	export default {
+		onShareAppMessage(res) {
+			if (res.from === 'button') {// 来自页面内分享按钮
+			  console.log(res.target)
+			}
+			return {
+			  title: '一对一口语练习，就在“开口说”',
+			  path: 'pages/tabBar/find/Find',
+			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			}
+		  },
 		data () {
 			return {
 				navLists: [],
@@ -104,6 +115,7 @@
 			}
 		},
 		async mounted () {
+			shareMenu()
 			const {classList} = await getFindClass()
 			if (classList) {
 				this.navLists = classList

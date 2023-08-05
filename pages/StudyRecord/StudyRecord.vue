@@ -37,7 +37,18 @@
 	import Navigator from '../../components/Navigator/Navigator.vue'
 	import { getHistory } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons'
+	import { shareMenu } from '@/utils/share.js'
 	export default {
+		onShareAppMessage(res) {
+			if (res.from === 'button') {// 来自页面内分享按钮
+			  console.log(res.target)
+			}
+			return {
+			  title: '一对一口语练习，就在“开口说”',
+			  path: 'pages/tabBar/home/Home',
+			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			}
+		  },
 		components: {
 			Navigator
 		},
@@ -47,6 +58,7 @@
 			}
 		},
 		async mounted () {
+			shareMenu()
 			const {lessons} = await getHistory()
 			if (lessons) {
 				this.lessons = lessons

@@ -2,7 +2,7 @@
 	<view class="home flex fd-c">
 		<view class="status_bar">
 			<!-- 这里是状态栏 -->
-			<view class="label" :style="{ top: menuButtonInfo.top + 'px' }">Hi! 欢迎来到开口说练口语</view>
+			<view class="label" :style="{ top: menuButtonInfo.top + 'px' }">Hi，欢迎来到开口说练口语</view>
 		</view>
 		<view class="content flex fd-c">
 			<view class="panel flex jc-sb ai-c">
@@ -72,6 +72,7 @@ import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
+import { shareMenu } from '@/utils/share.js'
 // import GetUserProfilePopup from '@/components/GetUserProfilePopup/GetUserProfilePopup.vue'
 export default defineComponent({
 	onShareAppMessage(res) {
@@ -79,11 +80,16 @@ export default defineComponent({
 		  console.log(res.target)
 		}
 		return {
-		  title: '开口说英语',
+		  title: '一对一口语练习，就在“开口说”',
 		  path: 'pages/tabBar/home/Home',
-		  imageUrl: 'https://api.itso123.com/image/find-bg.png'
+		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
 		}
 	  },
+	onShareTimeline() {
+		return {
+			title: '一对一口语练习，就在“开口说”'
+		}
+	},
 	setup() {
 		const favorites = reactive([])
 		const historyStatistic = ref('')
@@ -92,6 +98,7 @@ export default defineComponent({
 		// 小程序胶囊位置
 		const menuButtonInfo = reactive(uni.getMenuButtonBoundingClientRect());
 		onReady(() => {
+			shareMenu()
 			console.log('ready', menuButtonInfo);
 		});
 		onInit(() => {
@@ -166,7 +173,7 @@ export default defineComponent({
 			background: ['color1', 'color2', 'color3'],
 			indicatorDots: false,
 			autoplay: true,
-			interval: 2000,
+			interval: 5000,
 			duration: 500,
 			favorites: [],
 			courses: [
@@ -320,14 +327,14 @@ export default defineComponent({
 		.swiper {
 			overflow: hidden;
 			box-sizing: border-box;
-			height: 200rpx;
+			height: 257rpx;
 			margin-top:  20rpx;
 		}
 		.swiper-item {
 			display: block;
 			text-align: center;
-			height: 200rpx;
-			width: 100%;
+			height: 257rpx;
+			width: 686rpx;
 			border-radius: 8rpx;
 		}
 	}
@@ -345,7 +352,7 @@ export default defineComponent({
 			// margin-top: 16rpx;
 			.poster {
 				width: 207rpx;
-				height: 240rpx;
+				height: 276rpx;
 				background: #f4f5f7;
 				border-radius: 16rpx;
 				box-sizing: border-box;

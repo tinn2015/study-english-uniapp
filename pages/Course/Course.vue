@@ -55,8 +55,17 @@
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
 	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
+	import { shareMenu } from '@/utils/share.js'
 	export default {
+		onShareAppMessage(res) {
+			return {
+			  title: '一对一口语练习，就在“开口说”',
+			  path: 'pages/tabBar/home/Home',
+			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			}
+		  },
 		setup () {
+			shareMenu()
 			const lessonStore = useLessonStore()
 			console.log('lessonStore', lessonStore)
 			return {

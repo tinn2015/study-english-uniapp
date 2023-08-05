@@ -21,13 +21,22 @@
 <script>
 	import { getFavorite } from '@/utils/request.js';
 	import { useLessonStore } from '@/stores/lessons.js';
+	import { shareMenu } from '@/utils/share.js'
 	export default {
+		onShareAppMessage(res) {
+			return {
+			  title: '一对一口语练习，就在“开口说”',
+			  path: 'pages/tabBar/home/Home',
+			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			}
+		  },
 		data () {
 			return {
 				courses: []
 			}
 		},
 		beforeMount() {
+			shareMenu()
 			// 获取轻松学
 			getFavorite().then((res) => {
 				this.courses = res.lessons

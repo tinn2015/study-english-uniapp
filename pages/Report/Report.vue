@@ -90,6 +90,16 @@
 	import { getReportOverAll, studyFeedback, getReport } from '@/utils/request.js'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import Navigator from '@/components/Navigator/Navigator.vue'
+	import { shareMenu } from '@/utils/share.js'
+	
+	shareMenu()
+	const onShareAppMessage = (res) => {
+		return {
+		  title: '一对一口语练习，就在“开口说”',
+		  path: 'pages/tabBar/home/Home',
+		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		}
+	  }
 	
 	const lessonStore = useLessonStore()
 
