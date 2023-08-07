@@ -179,6 +179,7 @@
 			}
 		}
 		.poster {
+			min-width: 200rpx;
 			width: 200rpx;
 			height: 266rpx;
 			border-radius: 16rpx;
