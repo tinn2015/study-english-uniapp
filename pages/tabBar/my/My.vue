@@ -2,7 +2,10 @@
 	<view class="my flex fd-c">
 		<view class="status_bar">
 			<!-- 这里是状态栏 -->
-			<!-- <view class="label" :style="{top: menuButtonInfo.top + 'px'}">Hello!</view> -->
+			<view class="login-box" :style="{top: menuButtonInfo.top + 'px'}" v-if="phoneNumber">{{phoneNumber}}</view>
+			<button v-else class="login-box" :style="{top: menuButtonInfo.top + 'px'}" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
+				登录/注册
+			</button>
 		</view>
 		<view class="content flex fd-c">
 			<view class="panel flex jc-sb ai-c">
@@ -23,7 +26,7 @@
 			<view class="activity-tip flex jc-sb">
 				<view class="left flex jc-c ai-c">
 					<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
-					<!-- <view class="tip">限时领取高效学习计划</view> -->
+					<!-- <view class="tip">限时领取高效学习计划</view>-->
 					<view class="tip">快速提升你的口语能力</view>
 				</view>
 				<!-- <view class="btn">立即领取</view> -->
@@ -75,7 +78,7 @@
 <script>
 	import {onMounted, defineComponent, reactive, ref} from 'vue'
 	import { onReady, onInit, onShow } from '@dcloudio/uni-app'
-	import { getMe, setSpeechRate } from '@/utils/request.js'
+	import { getMe, setSpeechRate, getPhoneCode } from '@/utils/request.js'
 	import { shareMenu } from '@/utils/share.js'
 	export default defineComponent({
 		onShareAppMessage(res) {
@@ -145,10 +148,13 @@
 				  {value: 1,text: '正常'},
 				  {value: 2,text: '快速'}
 				],
+				phoneNumber: ''
 			}
 		},
 		mounted () {
 			console.log('mounted')
+			const userPhoneNumber = uni.getStorageSync('userPhoneNumber')
+			this.phoneNumber = userPhoneNumber
 		},
 		onLoad () {
 			console.log('load')
@@ -157,6 +163,16 @@
 			console.log('init')
 		},
 		methods: {
+			getPhoneNumber (e) {
+				getPhoneCode(e.detail.code).then(res => {
+					console.log(res)
+					this.phoneNumber = res.phone
+					uni.setStorage({
+						key: 'userPhoneNumber',
+						data: res.phone
+					})
+				})
+			},
 			routerToMore () {
 				uni.navigateTo({
 					url: '/pages/CourseMore/CourseMore'
@@ -190,6 +206,21 @@
 		width: 100%;
 		color: red;
 		background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+		.login-box {
+			position: relative;
+			left: 20rpx;
+			font-size: 43rpx;
+			font-family: Roboto-Bold, Roboto;
+			font-weight: bold;
+			color: #ffffff;
+			background: none;
+			border:none;
+			outline: none;
+			text-align: left;
+			&::after {
+				border:none;
+			}
+		}
 	}
 	.content {
 		position: relative;

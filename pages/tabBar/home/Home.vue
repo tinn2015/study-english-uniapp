@@ -55,6 +55,10 @@
 						<uni-icons type="plusempty"></uni-icons>
 						<text class="add-course-label">添加课程</text>
 					</view>
+					<!-- <button class="poster flex fd-c jc-c ai-c course-add" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
+						<uni-icons type="plusempty"></uni-icons>
+						<text class="add-course-label">添加课程</text>
+					</button> -->
 				</view>
 			</view>
 		</view>
@@ -394,6 +398,10 @@ export default defineComponent({
 			}
 			.course-add {
 				margin-top: 10px;
+				background-color: #f4f5f7;
+				&::after {
+					border: none
+				}
 			}
 			.mr0 {
 				margin-right: 0;
