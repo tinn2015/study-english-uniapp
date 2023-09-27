@@ -2,6 +2,7 @@ import { useLoginStore } from '@/stores/login.js'
 const miniProgram = uni.getAccountInfoSync().miniProgram
 console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 const baseUrl = miniProgram.envVersion === 'release' ? 'https://api.itso123.com/v1' : 'https://api.itso123.com/v2'
+console.log('====baseUrl====', baseUrl)
 
 const request = ({method = 'GET', url, data}) => {
 	return new Promise((resolve, reject) => {

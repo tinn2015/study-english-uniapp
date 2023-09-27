@@ -213,18 +213,21 @@ export default defineComponent({
 		},
 		request1() {
 			console.log('request');
-			uni.login({
-				success(res) {
-					console.log('login', res);
-				}
+			// uni.login({
+			// 	success(res) {
+			// 		console.log('login', res);
+			// 	}
+			// });
+			// getLessons()
+			// 	.then(res => {
+			// 		console.log('success', res);
+			// 	})
+			// 	.catch(err => {
+			// 		console.log('err', err);
+			// 	});
+			uni.navigateTo({
+				url: '/pages/Chat/Chat'
 			});
-			getLessons()
-				.then(res => {
-					console.log('success', res);
-				})
-				.catch(err => {
-					console.log('err', err);
-				});
 		},
 		routeToCourse(lessonId) {
 			const lessonStore = useLessonStore()
