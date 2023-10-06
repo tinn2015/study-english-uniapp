@@ -167,8 +167,11 @@
 			return
 		}
 		// 上传录音
+		const miniProgram = uni.getAccountInfoSync().miniProgram
+		console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
+		const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
 		uni.uploadFile({
-			url: `https://api.itso123.com/v1/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
+			url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
 			filePath: filePath.tempFilePath,
 			name: 'recfile',
 			cid: currentParagraph.id,
