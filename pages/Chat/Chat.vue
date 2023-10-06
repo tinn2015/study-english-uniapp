@@ -2,11 +2,13 @@
 	<view class="chat flex fd-c">
 		<view class="chat-box flex-1"></view>
 		<view class="footer-box flex jc-sb ai-c">
-			<view class="icon"></view>
-			<view class="input-box flex-1">
-				<input type="text" @input="onInput">
+			<view class="icon">
+				<image class="icon" src="../../static/images/chat/audio.png" mode=""></image>
 			</view>
-			<view class="send-box text-center flex jc-c ai-c" :style="{width: textInput ? '160rpx' : 0}">发送</view>
+			<view class="input-box flex-1">
+				<input class="input flex ai-c" type="text" @input="onInput">
+			</view>
+			<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '160rpx' : 0}">发送</view>
 		</view>
 	</view>
 </template>
@@ -15,7 +17,7 @@
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
-	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
+	import { getChatHistory, sendChatText } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
 	export default {
 		onShareAppMessage(res) {
@@ -35,9 +37,14 @@
 		},
 		data () {
 			return {
-				courses: [],
+				dialogs: [],
 				textInput: ''
 			}
+		},
+		async mounted() {
+			const dialogHistory = await getChatHistory(11)
+			this.dialogs.push(...dialogHistory)
+			console.log('dialogHistory', this.dialogs)
 		},
 		components: {
 			Navigator,
@@ -47,6 +54,12 @@
 			onInput (e) {
 				console.log('oninput', e.detail.value)
 				this.textInput = e.detail.value
+			},
+			textSend () {
+				sendChatText({
+					"lessonId": 11,
+					 "text": this.textInput,
+				})
 			}
 		}
 	}
@@ -75,6 +88,9 @@
 			background: #fff;
 			margin: 0 20rpx;
 			height: 60rpx;
+			.input {
+				height: 60rpx;
+			}
 		}
 		.send-box {
 			width: 0;
@@ -85,6 +101,7 @@
 			overflow: hidden;
 			transition: all .3s ease-in-out; 
 			white-space: nowrap;
+			
 		}
 	}
 </style>

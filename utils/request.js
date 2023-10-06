@@ -4,6 +4,7 @@ console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync
 const baseUrl = miniProgram.envVersion === 'release' ? 'https://api.itso123.com/v1' : 'https://api.itso123.com/v2'
 console.log('====baseUrl====', baseUrl)
 
+
 const request = ({method = 'GET', url, data}) => {
 	return new Promise((resolve, reject) => {
 		uni.request({
@@ -229,5 +230,43 @@ export const setSpeechRate = (speechRate) => {
 		data: {
 			speechRate
 		}
+	})
+}
+
+// ============================== 闲聊接口 ===============================
+
+/**
+ *  获取历史
+ * 	lid: 课程id
+ */
+export const getChatHistory = (lid, data) => {
+	return request({
+		url: `/chat/records/query/${lid}`,
+		method: 'POST',
+		data
+	})
+}
+
+/**
+ *  文本聊天
+ * 
+ */
+export const sendChatText = (data) => {
+	return request({
+		url: `/dialog/chat/text/analyse`,
+		method: 'POST',
+		data
+	})
+}
+
+/**
+ *  语音聊天
+ * 
+ */
+export const getChatAudio = (lid, data) => {
+	return request({
+		url: `/dialog/chat/voice/analyse/${lid}`,
+		method: 'POST',
+		data
 	})
 }
