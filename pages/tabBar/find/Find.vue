@@ -27,7 +27,10 @@
 				</view>
 				<view class="course-box">
 					<view v-for="course in currentCourse" class="course-item flex ai-c" @click="getCourseDetail(course)">
-						<image :src="course.img" class="poster" mode="scaleToFill"></image>
+						<view class="poster-box p-r">
+							<image :src="course.img" class="poster" mode="scaleToFill"></image>
+							<image v-show="course.mode === 0" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
+						</view>
 						<view class="right-content">
 							<view class="title">{{course.title}}</view>
 							<view class="sub-title">{{course.level}}</view>
@@ -241,6 +244,14 @@
 				height: 162rpx;
 				background: #D8D8D8;
 				border-radius: 12rpx;
+			}
+			.vip {
+				width: 60rpx;
+				height: 60rpx;
+				top: -30rpx;
+				left: -20rpx;
+				transform: rotate(-30deg);
+				z-index: 10000;
 			}
 		}
 		.nav-item {

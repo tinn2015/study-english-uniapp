@@ -14,7 +14,10 @@
 			</view> -->
 			<view class="record-courses">
 				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.lessonId)">
-					<image class="poster" :src="course.img" mode=""></image>
+					<view class="poster-box p-r">
+						<image class="poster" :src="course.img" mode=""></image>
+						<image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
+					</view>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
 							<view class="course-title">{{course.title}}</view>
@@ -127,6 +130,13 @@
 			height: 236rpx;
 			background: #eeeeee;
 			border-radius: 12rpx;
+		}
+		.vip {
+			width: 60rpx;
+			height: 60rpx;
+			top: -30rpx;
+			left: -20rpx;
+			transform: rotate(-30deg);
 		}
 		.course-title {
 			font-size: 32rpx;

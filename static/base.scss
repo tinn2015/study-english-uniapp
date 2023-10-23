@@ -10,6 +10,7 @@
 	align-items: center;
 }
 
+
 .jc-c {
 	justify-content: center;
 }
@@ -22,10 +23,34 @@
 	justify-content: space-around;
 }
 
+.jc-fs {
+	justify-content: flex-start;
+}
+
+.jc-fe {
+	justify-content: flex-end;
+}
+
 .flex-1 {
 	flex: 1
 }
 
 .fw-w {
 	flex-wrap: wrap;
+}
+
+.fd-r {
+	flex-direction: row;
+}
+
+.fd-rr {
+	flex-direction: row-reverse;
+}
+
+.p-r {
+	position: relative;
+}
+
+.p-a {
+	position: absolute;
 }

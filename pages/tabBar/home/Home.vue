@@ -41,7 +41,10 @@
 				</view>
 				<view class="courses flex fw-w">
 					<view v-for="(item, index) in favorites" class="course-item" @click="routeToCourse(item.lessonId)" :class="{mr0: (index + 1) % 3 === 0}">
-						<image class="poster" :src="item.img" mode=""></image>
+						<view class="poster-box">
+							<image class="poster" :src="item.img" mode=""></image>
+							<image v-show="item.mode === 2" class="vip" src="../../../static/images/vip.png" mode=""></image>
+						</view>
 						<view class="course-title">{{ item.title }}</view>
 						<view class="course-info flex jc-sb ai-c">
 							<view class="course-info-text">{{ item.level }}</view>
@@ -357,6 +360,9 @@ export default defineComponent({
 		}
 		.courses {
 			// margin-top: 16rpx;
+			.poster-box {
+				position: relative;
+			}
 			.poster {
 				width: 207rpx;
 				height: 276rpx;
@@ -370,6 +376,14 @@ export default defineComponent({
 					color: #999a9f;
 					margin-top: 24rpx;
 				}
+			}
+			.vip {
+				width: 60rpx;
+				height: 60rpx;
+				position: absolute;
+				top: -30rpx;
+				left: -20rpx;
+				transform: rotate(-30deg);
 			}
 			.course-item {
 				margin-right: calc((100vw - (207rpx * 3) - 60rpx)/2);

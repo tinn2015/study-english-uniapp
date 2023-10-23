@@ -241,7 +241,7 @@ export const setSpeechRate = (speechRate) => {
  */
 export const getChatHistory = (lid, data) => {
 	return request({
-		url: `/chat/records/query/${lid}`,
+		url: `/dialog/chat/records/query/${lid}`,
 		method: 'POST',
 		data
 	})
