@@ -29,7 +29,7 @@
 					<view v-for="course in currentCourse" class="course-item flex ai-c" @click="getCourseDetail(course)">
 						<view class="poster-box p-r">
 							<image :src="course.img" class="poster" mode="scaleToFill"></image>
-							<image v-show="course.mode === 0" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
+							<image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
 						</view>
 						<view class="right-content">
 							<view class="title">{{course.title}}</view>
