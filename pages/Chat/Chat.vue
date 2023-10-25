@@ -2,24 +2,32 @@
 	<view class="chat flex fd-c">
 		<view class="chat-box flex-1">
 			<view v-for="item in dialogs" class="chat-item flex" :class="item.role === 0 ? 'fd-r' : 'fd-rr'">
+				<!-- robot -->
 				<view v-if="item.role === 0" class="flex ai-c jc-fs chat-robot chat-item-info">
-					{{item.text}}
+					<view class="flex">
+						<image class="avatar" src="../../static/images/chat/self-avatar.png" mode=""></image>
+						<view class="robot-text flex fw-w ai-c">{{item.text}}</view>
+					</view>
 				</view>
+				<!-- self -->
 				<view v-else class="flex ai-c jc-fe chat-self chat-item-info">
-					{{item.text}}
+					<view class="flex">
+						<view class="self-text flex fw-w ai-c">{{item.text}}</view>
+						<image class="avatar" src="../../static/images/chat/self-avatar.png" mode=""></image>
+					</view>
 				</view>
 				<!-- <view class="chat-item-info">{{item.text}}</view> -->
 			</view>
 		</view>
 		<view class="footer-box flex jc-sb ai-c">
 			<view class="icon" @click="switchMode">
-				<image class="icon" src="../../static/images/chat/audio.png" mode=""></image>
+				<image class="icon" src="../../static/images/chat/audio-switch.png" mode=""></image>
 			</view>
 			<view class="flex-1 flex jc-sb ai-c" v-show="textMode">
 				<view class="input-box flex-1">
 					<input class="input flex ai-c" type="text" @input="onInput">
 				</view>
-				<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '160rpx' : 0}">发送</view>
+				<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '140rpx' : 0, marginLeft: textInput ? '24rpx' : 0}">发送</view>
 			</view>
 			<view v-show="!textMode" class="flex-1 flex jc-c ai-c">
 				<view v-if="recordInfo.isRecording" @click="stopRecord">点击结束说话</view>
@@ -141,6 +149,8 @@
 		padding: 20rpx;
 		box-sizing: border-box;
 		overflow-y: auto;
+		overflow-x: hidden;
+		background: #EFF1F5;
 		.chat-item {
 			width: 100%;
 			// border: 1px solid green;
@@ -150,12 +160,40 @@
 			width: 70%;
 		}
 		.chat-robot {
-			background: #00aa00;
+			// background: #00aa00;
+		}
+		.avatar {
+			width: 80rpx;
+			height: 80rpx;
+			flex-shrink: 0;
 		}
 		.chat-self {
 			// display: flex;
 			// justify-content: flex-end;
-			background: #c7c9c9;
+			.self-text {
+				min-width: 250rpx;
+				min-height: 30rpx;
+				max-width: 400rpx;
+				background: #58C898;
+				border-radius: 16rpx;
+				padding: 16rpx 24rpx;
+				margin-right: 16rpx;
+				word-break: break-word;
+				color: #ffffff;
+			}
+		}
+		.chat-robot {
+			.robot-text {
+				min-width: 250rpx;
+				min-height: 30rpx;
+				max-width: 400rpx;
+				background: #ffffff;
+				border-radius: 16rpx;
+				padding: 16rpx 24rpx;
+				margin-right: 16rpx;
+				word-break: break-word;
+				color: #202127
+			}
 		}
 	}
 	.footer-box {
@@ -165,15 +203,16 @@
 		.icon {
 			width: 52rpx;
 			height: 52rpx;
-			border: 1px solid red
+			margin-right: 24rpx;
 		}
 		.input-box {
 			width: 100%;
 			background: #ffffff;
-			margin: 0 20rpx;
 			height: 76rpx;
+			border-radius: 16rpx;
 			.input {
 				height: 76rpx;
+				padding: 0 24rpx;
 			}
 		}
 		.send-box {
