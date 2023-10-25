@@ -159,27 +159,28 @@
 		}
 	}
 	.footer-box {
-		height: 120rpx;
-		background: #c7c9c9;
-		padding: 0 40rpx;
+		height: 140rpx;
+		background: #f2f2f2;
+		padding: 0 24rpx;
 		.icon {
-			width: 60rpx;
-			height: 60rpx;
+			width: 52rpx;
+			height: 52rpx;
 			border: 1px solid red
 		}
 		.input-box {
 			width: 100%;
-			background: #fff;
+			background: #ffffff;
 			margin: 0 20rpx;
-			height: 60rpx;
+			height: 76rpx;
 			.input {
-				height: 60rpx;
+				height: 76rpx;
 			}
 		}
 		.send-box {
 			width: 0;
-			height: 60rpx;
-			background: #00aa00;
+			height: 76rpx;
+			background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
+			border-radius: 20rpx;
 			color: #fff;
 			border-radius: 16rpx;
 			overflow: hidden;
