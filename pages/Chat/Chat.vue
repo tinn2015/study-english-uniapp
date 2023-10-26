@@ -1,6 +1,6 @@
 <template>
 	<view class="chat flex fd-c">
-		<view class="chat-box flex-1">
+		<scroll-view class="chat-box flex-1" :scroll-y="true" :scroll-top="scrollTop">
 			<view v-for="item in dialogs" class="chat-item flex" :class="item.role === 0 ? 'fd-r' : 'fd-rr'">
 				<!-- robot -->
 				<view v-if="item.role === 0" class="flex ai-c jc-fs chat-robot chat-item-info">
@@ -18,14 +18,14 @@
 				</view>
 				<!-- <view class="chat-item-info">{{item.text}}</view> -->
 			</view>
-		</view>
+		</scroll-view>
 		<view class="footer-box flex jc-sb ai-c">
 			<view class="icon" @click="switchMode">
 				<image class="icon" src="../../static/images/chat/audio-switch.png" mode=""></image>
 			</view>
 			<view class="flex-1 flex jc-sb ai-c" v-show="textMode">
 				<view class="input-box flex-1">
-					<input class="input flex ai-c" type="text" @input="onInput">
+					<input ref="$input" class="input flex ai-c" type="text" v-model="textInput">
 				</view>
 				<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '140rpx' : 0, marginLeft: textInput ? '24rpx' : 0}">发送</view>
 			</view>
@@ -63,6 +63,7 @@
 			return {
 				dialogs: [],
 				textInput: '',
+				scrollTop: 0,
 				textMode: true,
 				recordInfo: {
 					isRecording: false,
@@ -73,6 +74,7 @@
 		async mounted() {
 			const dialogHistory = await getChatHistory(11)
 			this.dialogs.push(...dialogHistory.message)
+			this.scrollTop = 10000
 			console.log('dialogHistory', this.dialogs)
 			this.recordInfo.recorderManager= uni.getRecorderManager()
 			this.recordInfo.recorderManager.onStop((filePath) => {
@@ -90,9 +92,15 @@
 					},
 					success: async (res) => {
 						console.log('录音上传成功', res)
-						this.dialogs = []
-						const dialogHistory = await getChatHistory(11)
-						this.dialogs.push(...dialogHistory.message)
+						// const dialogHistory = await getChatHistory(11)
+						this.scrollTop = 0
+						this.dialogs.push(res.message)
+						this.$nextTick(() => {
+						})
+						setTimeout(() => {
+							this.scrollTop = 10001
+							console.log('this.scrollTop', this.scrollTop)
+						}, 200)
 						console.log('dialogHistory', this.dialogs)
 					},
 					fail: (err) => {
@@ -106,19 +114,31 @@
 			LoginPopup
 		},
 		methods: {
-			onInput (e) {
-				console.log('oninput', e.detail.value)
-				this.textInput = e.detail.value
-			},
+			// onInput (e) {
+			// 	console.log('oninput', e.detail.value)
+			// 	this.textInput = e.detail.value
+			// },
 			async textSend () {
-				await sendChatText({
+				this.dialogs.push({
+					text: this.textInput,
+					role: 1
+				})
+				const res = await sendChatText({
 					"lessonId": 11,
 					 "text": this.textInput,
 				})
-				this.dialogs = []
-				const dialogHistory = await getChatHistory(11)
-				this.dialogs.push(...dialogHistory.message)
-				console.log('dialogHistory', this.dialogs)
+				this.dialogs.push({
+					text: res.responseMsg,
+					role: 0
+				})
+				this.$nextTick(() => {
+					this.scrollTop += 100
+					this.textInput = ''
+				})
+				// setTimeout(() => {
+				// 	this.scrollTop += 10
+				// 	console.log('this.dialogs', this.dialogs)
+				// }, 200)
 			},
 			switchMode () {
 				this.textMode = !this.textMode
