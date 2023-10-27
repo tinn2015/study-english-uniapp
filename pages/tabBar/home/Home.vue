@@ -40,7 +40,7 @@
 					</view>
 				</view>
 				<view class="courses flex fw-w">
-					<view v-for="(item, index) in favorites" class="course-item" @click="routeToCourse(item.lessonId)" :class="{mr0: (index + 1) % 3 === 0}">
+					<view v-for="(item, index) in favorites" class="course-item" @click="routeToCourse(item.lessonId, item.mode)" :class="{mr0: (index + 1) % 3 === 0}">
 						<view class="poster-box">
 							<image class="poster" :src="item.img" mode=""></image>
 							<image v-show="item.mode === 2" class="vip" src="../../../static/images/vip.png" mode=""></image>
@@ -232,12 +232,18 @@ export default defineComponent({
 				url: '/pages/Chat/Chat'
 			});
 		},
-		routeToCourse(lessonId) {
+		routeToCourse(lessonId, mode) {
 			const lessonStore = useLessonStore()
 			lessonStore.getFavoriteLesson(lessonId)
-			uni.navigateTo({
-				url: '/pages/Course/Course'
-			});
+			if (mode === 2) {
+				uni.navigateTo({
+					url: '/pages/chatCourse/chatCourse'
+				});
+			} else {
+				uni.navigateTo({
+					url: '/pages/Course/Course'
+				});
+			}
 		},
 		routerToMore() {
 			uni.navigateTo({

@@ -6,7 +6,13 @@
 				<view v-if="item.role === 0" class="flex ai-c jc-fs chat-robot chat-item-info">
 					<view class="flex">
 						<image class="avatar" src="../../static/images/chat/self-avatar.png" mode=""></image>
-						<view class="robot-text flex fw-w ai-c">{{item.text}}</view>
+						<view class="flex ai-c">
+							<view>
+								<view class="robot-text flex fw-w ai-c">{{item.text}}</view>
+								<view class="robot-translation">{{item.translation}}</view>
+							</view>
+							<image class="audio-play" v-show="item.duration" src="../../static/images/chat/audio-play.png" mode=""></image>
+						</view>
 					</view>
 				</view>
 				<!-- self -->
@@ -187,6 +193,10 @@
 			height: 80rpx;
 			flex-shrink: 0;
 		}
+		.audio-play {
+			width: 44rpx;
+			height: 44rpx;
+		}
 		.chat-self {
 			// display: flex;
 			// justify-content: flex-end;
@@ -213,6 +223,21 @@
 				margin-right: 16rpx;
 				word-break: break-word;
 				color: #202127
+			}
+			.robot-translation {
+				margin-top: 8rpx; 
+				min-width: 150rpx;
+				min-height: 30rpx;
+				max-width: 400rpx;
+				background: #E5E4E9;
+				border-radius: 16rpx;
+				padding: 16rpx 24rpx;
+				margin-right: 16rpx;
+				word-break: break-word;
+				font-size: 28rpx;
+				font-family: PingFangSC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #999A9F;
 			}
 		}
 	}

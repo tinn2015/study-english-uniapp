@@ -74,7 +74,14 @@
 				"navigationBarTitleText": "闲聊"
 				// "navigationStyle": "custom"
 			}
-		}
+		},
+		{
+			"path": "pages/chatCourse/chatCourse",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
