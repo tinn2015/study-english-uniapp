@@ -35,16 +35,18 @@
 				</view>
 				<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '140rpx' : 0, marginLeft: textInput ? '24rpx' : 0}">发送</view>
 			</view>
-			<view v-show="!textMode" class="flex-1 flex jc-c ai-c">
-				<view v-if="recordInfo.isRecording" @click="stopRecord">点击结束说话</view>
-				<view v-else @click="startRecord">点击开始说话</view>
+			<view v-show="!textMode" class="flex-1 flex jc-c ai-c audio-btn">
+				<!-- <view v-if="recordInfo.isRecording" @click="stopRecord">松开 结束</view> -->
+				<view @touchstart="startRecord" @touchend="stopRecord">{{recordInfo.isRecording ? '松开 发送' : '按住 说话'}}</view>
 			</view>
 		</view>
+		<MusicWave v-if="recordInfo.isRecording"></MusicWave>
 	</view>
 </template>
 
 <script>
 	import Navigator from '@/components/Navigator/Navigator.vue'
+	import MusicWave from '../../components/MusicWave/MusicWave.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
 	import { getChatHistory, sendChatText } from "@/utils/request.js"
@@ -97,16 +99,22 @@
 						authorization: uni.getStorageSync('authorization')
 					},
 					success: async (res) => {
-						console.log('录音上传成功', res)
 						// const dialogHistory = await getChatHistory(11)
-						this.scrollTop = 0
-						this.dialogs.push(res.message)
-						this.$nextTick(() => {
+						// this.scrollTop = 0
+						const data = JSON.parse(res.data)
+						console.log('录音上传成功', data)
+						this.dialogs.push({
+							role: 1,
+							text: data.message,
+						}, {
+							role: 0,
+							text: data.responseMsg,
+							duration: data.messageDuration,
+							translation: data.responseTranslation
 						})
-						setTimeout(() => {
-							this.scrollTop = 10001
-							console.log('this.scrollTop', this.scrollTop)
-						}, 200)
+						this.$nextTick(() => {
+							this.scrollTop += 100
+						})
 						console.log('dialogHistory', this.dialogs)
 					},
 					fail: (err) => {
@@ -117,7 +125,8 @@
 		},
 		components: {
 			Navigator,
-			LoginPopup
+			LoginPopup,
+			MusicWave
 		},
 		methods: {
 			// onInput (e) {
@@ -127,7 +136,8 @@
 			async textSend () {
 				this.dialogs.push({
 					text: this.textInput,
-					role: 1
+					role: 1,
+					...res
 				})
 				const res = await sendChatText({
 					"lessonId": 11,
@@ -135,7 +145,8 @@
 				})
 				this.dialogs.push({
 					text: res.responseMsg,
-					role: 0
+					role: 0,
+					...res
 				})
 				this.$nextTick(() => {
 					this.scrollTop += 100
@@ -259,6 +270,15 @@
 				height: 76rpx;
 				padding: 0 24rpx;
 			}
+		}
+		.audio-btn {
+			background: #ffffff;
+			height: 76rpx;
+			border-radius: 16rpx;
+			font-size: 32rpx;
+			font-family: PingFangSC-Semibold, PingFang SC;
+			font-weight: 500;
+			color: #171717;
 		}
 		.send-box {
 			width: 0;
