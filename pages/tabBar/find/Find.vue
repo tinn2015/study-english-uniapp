@@ -29,7 +29,8 @@
 					<view v-for="course in currentCourse" class="course-item flex ai-c" @click="getCourseDetail(course)">
 						<view class="poster-box p-r">
 							<image :src="course.img" class="poster" mode="scaleToFill"></image>
-							<image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
+							<!-- <image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image> -->
+							<div class="vip-tag flex jc-c ai-c c-fff" v-show="course.mode === 2">VIP</div>
 						</view>
 						<view class="right-content">
 							<view class="title">{{course.title}}</view>
@@ -139,9 +140,15 @@
 				console.log('course', course)
 				const lessonStore = useLessonStore()
 				lessonStore.getFavoriteLesson(course.lessonId)
-				uni.navigateTo({
-					url: '/pages/Course/Course?courseId=1'
-				})
+				if (course.mode === 2) {
+					uni.navigateTo({
+						url: '/pages/chatCourse/chatCourse'
+					});
+				} else {
+					uni.navigateTo({
+						url: '/pages/Course/Course'
+					});
+				}
 			},
 			levelChange (val) {
 				console.log('lelevelChange')
@@ -252,6 +259,17 @@
 				left: -20rpx;
 				transform: rotate(-30deg);
 				z-index: 10000;
+			}
+			.vip-tag {
+				width: 54rpx;
+				height: 30rpx;
+				background: #FC0606;
+				border-radius: 16rpx 0rpx 16rpx 0rpx;
+				position: absolute;
+				top: 0;
+				left: 0;
+				color: #ffffff;
+				font-size: 20rpx;
 			}
 		}
 		.nav-item {

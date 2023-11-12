@@ -1,6 +1,6 @@
 <template>
 	<view class="box">
-		<view v-for="course in courses" class="flex course-item" @click="routeToCourse(course.lessonId)">
+		<view v-for="course in courses" class="flex course-item" @click="routeToCourse(course)">
 			<image class="poster" :src="course.img" mode=""></image>
 			<view class="right-content flex fd-c jc-sb">
 				<view>
@@ -44,12 +44,18 @@
 			})
 		},
 		methods: {
-			routeToCourse(id) {
-				uni.navigateTo({
-					url: '/pages/Course/Course'
-				});
+			routeToCourse(course) {
 				const lessonStore = useLessonStore()
-				lessonStore.getFavoriteLesson(id)
+				lessonStore.getFavoriteLesson(course.lessonId)
+				if (course.mode === 2) {
+					uni.navigateTo({
+						url: '/pages/chatCourse/chatCourse'
+					});
+				} else {
+					uni.navigateTo({
+						url: '/pages/Course/Course'
+					});
+				}
 			},
 		}
 	}

@@ -13,10 +13,11 @@
 				<view class="tip">你已打败了90%的同学</view>
 			</view> -->
 			<view class="record-courses">
-				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course.id)">
+				<view v-for="course in lessons" class="flex course-item" @click="routeToCourse(course)">
 					<view class="poster-box p-r">
 						<image class="poster" :src="course.img" mode=""></image>
-						<image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image>
+						<!-- <image v-show="course.mode === 2" class="vip p-a" src="../../../static/images/vip.png" mode=""></image> -->
+						<div class="vip-tag flex jc-c ai-c c-fff" v-show="course.mode === 2">VIP</div>
 					</view>
 					<view class="right-content flex fd-c jc-sb">
 						<view>
@@ -65,12 +66,18 @@
 			}
 		},
 		methods: {
-			routeToCourse(id) {
+			routeToCourse(course) {
 				const lessonStore = useLessonStore()
-				lessonStore.getFavoriteLesson(id)
-				uni.navigateTo({
-					url: '/pages/Course/Course'
-				});
+				lessonStore.getFavoriteLesson(course.lessonId)
+				if (course.mode === 2) {
+					uni.navigateTo({
+						url: '/pages/chatCourse/chatCourse'
+					});
+				} else {
+					uni.navigateTo({
+						url: '/pages/Course/Course'
+					});
+				}
 			},
 		}
 	}
@@ -133,6 +140,17 @@
 			top: -30rpx;
 			left: -20rpx;
 			transform: rotate(-30deg);
+		}
+		.vip-tag {
+			width: 54rpx;
+			height: 30rpx;
+			background: #FC0606;
+			border-radius: 16rpx 0rpx 16rpx 0rpx;
+			position: absolute;
+			top: 0;
+			left: 0;
+			color: #ffffff;
+			font-size: 20rpx;
 		}
 		.course-title {
 			font-size: 32rpx;

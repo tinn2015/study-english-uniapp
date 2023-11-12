@@ -34,7 +34,7 @@
 					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
 					<text class='add-label'>添加课程</text>
 				</view>
-				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
+				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始对话</view>
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>

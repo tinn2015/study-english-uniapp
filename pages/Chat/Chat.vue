@@ -5,20 +5,26 @@
 				<!-- robot -->
 				<view v-if="item.role === 0" class="flex ai-c jc-fs chat-robot chat-item-info">
 					<view class="flex">
-						<image class="avatar" src="../../static/images/chat/self-avatar.png" mode=""></image>
+						<image class="avatar mr8" :src="robotAvatar" mode=""></image>
 						<view class="flex ai-c">
 							<view>
-								<view class="robot-text flex fw-w ai-c">{{item.text}}</view>
-								<view class="robot-translation">{{item.translation}}</view>
+								<view class="robot-text flex fw-w ai-c" >
+									<ThreeBotLoading style="width: 100%;height: 100%" v-if="item.loading"></ThreeBotLoading>	
+									<view v-else>{{item.text}}</view>
+								</view>
+								<view class="robot-translation" v-show="item.translation">{{item.translation}}</view>
 							</view>
-							<image class="audio-play" v-show="item.duration" src="../../static/images/chat/audio-play.png" mode=""></image>
+							<image class="audio-play" @click="responsePlay(item.url)" v-show="item.url" src="../../static/images/chat/audio-play.png" mode=""></image>
 						</view>
 					</view>
 				</view>
 				<!-- self -->
 				<view v-else class="flex ai-c jc-fe chat-self chat-item-info">
 					<view class="flex">
-						<view class="self-text flex fw-w ai-c">{{item.text}}</view>
+						<view class="self-text flex fw-w ai-c">
+							<ThreeBotLoading style="width: 100%;height: 100%" :color="'#ffffff'" v-if="item.loading"></ThreeBotLoading>
+							<view v-else>{{item.text}}</view>
+						</view>
 						<image class="avatar" src="../../static/images/chat/self-avatar.png" mode=""></image>
 					</view>
 				</view>
@@ -35,9 +41,9 @@
 				</view>
 				<view class="send-box text-center flex jc-c ai-c" @click="textSend" :style="{width: textInput ? '140rpx' : 0, marginLeft: textInput ? '24rpx' : 0}">发送</view>
 			</view>
-			<view v-show="!textMode" class="flex-1 flex jc-c ai-c audio-btn">
+			<view v-show="!textMode" class="flex-1 flex jc-c ai-c audio-btn" @touchstart="startRecord" @touchend="stopRecord">
 				<!-- <view v-if="recordInfo.isRecording" @click="stopRecord">松开 结束</view> -->
-				<view @touchstart="startRecord" @touchend="stopRecord">{{recordInfo.isRecording ? '松开 发送' : '按住 说话'}}</view>
+				<view>{{recordInfo.isRecording ? '松开 发送' : '按住 说话'}}</view>
 			</view>
 		</view>
 		<MusicWave v-if="recordInfo.isRecording"></MusicWave>
@@ -49,8 +55,14 @@
 	import MusicWave from '../../components/MusicWave/MusicWave.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
+	import ThreeBotLoading  from '@/components/ThreeBotLoading/ThreeBotLoading.vue'
 	import { getChatHistory, sendChatText } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
+	
+	const responseAudioContext = uni.createInnerAudioContext({
+	  useWebAudioImplement: false // 是否使用 WebAudio 作为底层音频驱动，默认关闭。对于短音频、播放频繁的音频建议开启此选项，开启后将获得更优的性能表现。由于开启此选项后也会带来一定的内存增长，因此对于长音频建议关闭此选项
+	});
+	
 	export default {
 		onShareAppMessage(res) {
 			return {
@@ -76,13 +88,26 @@
 				recordInfo: {
 					isRecording: false,
 					recorderManager: null
-				}
+				},
+				responseAudioContext: null, // 返回的音频播放器
+				robotAvatar: '',
+				msgIndex: 0, // 用于定位loading中的消息
+				audioNeedStop: false, //用于判断是否播放audio
 			}
 		},
+		onUnload () {
+			console.log('onUnload')
+			this.audioNeedStop = true
+			responseAudioContext.stop()
+		},
 		async mounted() {
-			const dialogHistory = await getChatHistory(11)
-			this.dialogs.push(...dialogHistory.message)
-			this.scrollTop = 10000
+			const lessonStore = useLessonStore()
+			const { lessonInfo } = lessonStore
+			console.log('lessonInfo', lessonInfo)
+			this.robotAvatar = lessonInfo.headPic
+			const dialogHistory = await getChatHistory(lessonInfo.lessonId)
+			this.dialogs.push(...dialogHistory.message.reverse())
+			this.scrollTop = 100000
 			console.log('dialogHistory', this.dialogs)
 			this.recordInfo.recorderManager= uni.getRecorderManager()
 			this.recordInfo.recorderManager.onStop((filePath) => {
@@ -90,11 +115,19 @@
 				const miniProgram = uni.getAccountInfoSync().miniProgram
 				console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 				const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
+				this.dialogs.push({
+					role: 1,
+					loading: true,
+				})
+				const msgIndex = this.dialogs.length - 1
+				this.$nextTick(() => {
+					this.scrollTop += 100
+				})
 				uni.uploadFile({
-					url: `https://api.itso123.com/${envPrefix}/dialog/chat/voice/analyse/11`,
+					url: `https://api.itso123.com/${envPrefix}/dialog/chat/voice/analyse/${lessonInfo.lessonId}`,
 					filePath: filePath.tempFilePath,
 					name: 'recfile',
-					lid: 11,
+					lid: lessonInfo.lessonId,
 					header: {
 						authorization: uni.getStorageSync('authorization')
 					},
@@ -103,15 +136,29 @@
 						// this.scrollTop = 0
 						const data = JSON.parse(res.data)
 						console.log('录音上传成功', data)
-						this.dialogs.push({
+						this.dialogs.splice(msgIndex, 1, {
 							role: 1,
 							text: data.message,
 						}, {
 							role: 0,
 							text: data.responseMsg,
 							duration: data.messageDuration,
-							translation: data.responseTranslation
+							translation: data.responseTranslation,
+							url: data.responseUrl
 						})
+						if (data.responseUrl && !this.audioNeedStop) {
+							this.responsePlay(data.responseUrl)
+						}
+						// this.dialogs.push({
+						// 	role: 1,
+						// 	text: data.message,
+						// }, {
+						// 	role: 0,
+						// 	text: data.responseMsg,
+						// 	duration: data.messageDuration,
+						// 	translation: data.responseTranslation,
+						// 	url: data.responseUrl
+						// })
 						this.$nextTick(() => {
 							this.scrollTop += 100
 						})
@@ -126,7 +173,8 @@
 		components: {
 			Navigator,
 			LoginPopup,
-			MusicWave
+			MusicWave,
+			ThreeBotLoading
 		},
 		methods: {
 			// onInput (e) {
@@ -138,16 +186,34 @@
 					text: this.textInput,
 					role: 1,
 					...res
+				}, {
+					role: 0,
+					loading: true
 				})
+				const msgIndex = this.dialogs.length - 1
+				this.$nextTick(() => {
+					this.scrollTop += 100
+					this.textInput = ''
+				})
+				const lessonStore = useLessonStore()
+				const { lessonInfo } = lessonStore
 				const res = await sendChatText({
-					"lessonId": 11,
+					"lessonId": lessonInfo.lessonId,
 					 "text": this.textInput,
 				})
-				this.dialogs.push({
+				this.dialogs.splice(msgIndex, 1, {
 					text: res.responseMsg,
 					role: 0,
-					...res
+					duration: res.messageDuration,
+					translation: res.responseTranslation,
+					url: res.responseUrl,
+					// ...res
 				})
+				// this.dialogs.push({
+				// 	text: res.responseMsg,
+				// 	role: 0,
+				// 	...res
+				// })
 				this.$nextTick(() => {
 					this.scrollTop += 100
 					this.textInput = ''
@@ -161,6 +227,7 @@
 				this.textMode = !this.textMode
 			},
 			startRecord () {
+				uni.vibrateShort()
 				this.recordInfo.isRecording = true
 				this.recordInfo.recorderManager.start({
 					format: "wav",
@@ -170,6 +237,11 @@
 			stopRecord () {
 				this.recordInfo.isRecording = false
 				this.recordInfo.recorderManager.stop()
+			},
+			async responsePlay (url) {
+				responseAudioContext.stop()
+				responseAudioContext.src = url;
+				responseAudioContext.play()
 			}
 		}
 	}
@@ -203,10 +275,12 @@
 			width: 80rpx;
 			height: 80rpx;
 			flex-shrink: 0;
+			border-radius: 50%;
 		}
 		.audio-play {
-			width: 44rpx;
-			height: 44rpx;
+			width: 54rpx;
+			height: 54rpx;
+			flex-shrink: 0;
 		}
 		.chat-self {
 			// display: flex;
@@ -292,5 +366,8 @@
 			white-space: nowrap;
 			
 		}
+	}
+	.mr8 {
+		margin-right: 8rpx;
 	}
 </style>
