@@ -55,11 +55,18 @@
 			  console.log(res.target)
 			}
 			return {
-			  title: '一对一口语练习，就在“开口说”',
+			  title: '我的AI外教1对1，就在“开口说”',
 			  path: 'pages/tabBar/find/Find',
 			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
 		  },
+		onShareTimeline () {
+			return {
+			  title: '我的AI外教1对1，就在“开口说”',
+			  path: 'pages/tabBar/home/Home',
+			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			}
+		},
 		data () {
 			return {
 				navLists: [],

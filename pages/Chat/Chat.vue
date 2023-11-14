@@ -66,10 +66,17 @@
 	export default {
 		onShareAppMessage(res) {
 			return {
-			  title: '一对一口语练习，就在“开口说”',
+			  title: '我的AI外教1对1，就在“开口说”',
 			  path: 'pages/tabBar/home/Home',
 			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
+		  },
+		  onShareTimeline () {
+		  	return {
+		  	  title: '我的AI外教1对1，就在“开口说”',
+		  	  path: 'pages/tabBar/home/Home',
+		  	  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		  	}
 		  },
 		setup () {
 			shareMenu()
@@ -266,7 +273,7 @@
 			margin-top: 20rpx;
 		}
 		.chat-item-info {
-			width: 70%;
+			width: 90%;
 		}
 		.chat-robot {
 			// background: #00aa00;
