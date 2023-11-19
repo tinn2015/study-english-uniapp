@@ -1,5 +1,5 @@
 <template>
-	<view class="chat flex fd-c">
+	<view class="chat flex fd-c" @touchmove="recordTouchMove">
 		<scroll-view class="chat-box flex-1" :scroll-y="true" :scroll-top="scrollTop">
 			<view v-for="item in dialogs" class="chat-item flex" :class="item.role === 0 ? 'fd-r' : 'fd-rr'">
 				<!-- robot -->
@@ -46,7 +46,13 @@
 				<view>{{recordInfo.isRecording ? '松开 发送' : '按住 说话'}}</view>
 			</view>
 		</view>
+		<!-- v-if="recordInfo.isRecording" -->
 		<MusicWave v-if="recordInfo.isRecording"></MusicWave>
+		<!-- <view class="record-mask" v-if="recordInfo.isRecording">
+			<MusicWave class="music-wave"></MusicWave>
+			<view class="send-record flex jc-c ai-c" @touchend="stopRecord">发送</view>
+			<view class="cancle-record flex jc-c ai-c" @touchend="cancleRecord">取消</view>
+		</view> -->
 	</view>
 </template>
 
@@ -94,7 +100,12 @@
 				textMode: true,
 				recordInfo: {
 					isRecording: false,
-					recorderManager: null
+					recorderManager: null,
+					needCancle: false,
+					positionStart: {
+						x: 0,
+						y: 0
+					}
 				},
 				responseAudioContext: null, // 返回的音频播放器
 				robotAvatar: '',
@@ -118,6 +129,11 @@
 			console.log('dialogHistory', this.dialogs)
 			this.recordInfo.recorderManager= uni.getRecorderManager()
 			this.recordInfo.recorderManager.onStop((filePath) => {
+				if (this.recordInfo.needCancle) {
+					this.recordInfo.needCancle = false
+					return
+				}
+				
 				// 上传录音
 				const miniProgram = uni.getAccountInfoSync().miniProgram
 				console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
@@ -233,9 +249,14 @@
 			switchMode () {
 				this.textMode = !this.textMode
 			},
-			startRecord () {
+			startRecord (e) {
 				uni.vibrateShort()
+				this.recordInfo.positionStart = {
+					x: e.changedTouches[0].pageX,
+					y: e.changedTouches[0].pageY
+				}
 				this.recordInfo.isRecording = true
+				this.recordInfo.needCancle = false
 				this.recordInfo.recorderManager.start({
 					format: "wav",
 					sampleRate: 8000
@@ -243,7 +264,16 @@
 			},
 			stopRecord () {
 				this.recordInfo.isRecording = false
+				this.recordInfo.needCancle = false
 				this.recordInfo.recorderManager.stop()
+			},
+			cancleRecord () {
+				this.recordInfo.isRecording = false
+				this.recordInfo.needCancle = true
+				this.recordInfo.recorderManager.stop()
+			},
+			recordTouchMove (e) {
+				console.log('recordTouchMove', e)
 			},
 			async responsePlay (url) {
 				responseAudioContext.stop()
@@ -373,6 +403,61 @@
 			white-space: nowrap;
 			
 		}
+	}
+	.record-mask {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.6);
+		.music-wave {
+			position: absolute;
+			top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		.send-record {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+			height: 140rpx;
+			background: #59C47F;
+			border-radius: 100% 100% 0 0;
+		}
+		.cancle-record {
+			position: absolute;
+			bottom: 150rpx;
+			left: 50%;
+			transform: translateX(-50%);
+			width: 180rpx;
+			height: 80rpx;
+			// background: #999A9F;
+			background: #c42408;
+			color: #ffffff;
+			border-radius: 8rpx;
+			z-index: 1000;
+		}
+		// .send-record {
+		// 	position: absolute;
+		// 	left: 50%;
+		// 	transform: translateX(-50%);
+		// 	bottom: 0;
+		// 	width: 95%;
+		// 	height: 140rpx;
+		// 	background: #59C47F;
+		// 	border-radius: 16rpx;
+		// }
+		// .cancle-record {
+		// 	position: absolute;
+		// 	bottom: 150rpx;
+		// 	width: 95%;
+		// 	height: 140rpx;
+		// 	left: 50%;
+		// 	transform: translateX(-50%);
+		// 	// background: #999A9F;
+		// 	background: #c42408;
+		// 	color: #ffffff;
+		// 	border-radius: 16rpx;
+		// }
 	}
 	.mr8 {
 		margin-right: 8rpx;

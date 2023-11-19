@@ -24,7 +24,7 @@
 			</view>
 			<view class="part-1">
 				<!-- <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button> -->
-				<view class="title">热销</view>
+				<view class="title">精品课</view>
 				<swiper class="swiper" circular :autoplay="autoplay" :interval="interval" :duration="duration">
 					<swiper-item v-for="item in hotBanners" @click="bannerTap(item)">
 						<image class="swiper-item" :src="item.headPic" mode="scaleToFill"></image>
@@ -33,7 +33,7 @@
 			</view>
 			<view class="part-2">
 				<view class="header flex jc-sb ai-c">
-					<view class="title" @click="request1">轻松学</view>
+					<view class="title" @click="request1">我的收藏</view>
 					<view class="more flex jc-c ai-c" @click="routerToMore">
 						更多
 						<uni-icons type="forward" size="13" color="#999A9F"></uni-icons>

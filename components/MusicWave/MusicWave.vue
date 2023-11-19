@@ -18,7 +18,7 @@
 <style scoped lang="scss">
 	.music-wave {
 		position: fixed;
-		top: 50%;
+		top: 40%;
 		left: 50%;
 		transform: translate(-50%, -50%);
 		background: rgba(175,175,175, 0.5);

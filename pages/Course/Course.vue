@@ -7,7 +7,12 @@
 				<view class="course-overview flex fd-c jc-sb">
 					<view class="top">
 						<view class="title">{{lessonStore.lessonInfo.title}}</view>
-						<view class="desc">{{lessonStore.lessonInfo.descript}}</view>
+						<!-- <view class="desc">{{lessonStore.lessonInfo.descript}}</view> -->
+						<view class="desc">
+							<view v-for="desc in descs">
+								{{ desc }}
+							</view>
+						</view>
 					</view>
 					<view class="bottom flex">
 						<view>{{lessonStore.lessonInfo.level}}</view>
@@ -37,11 +42,11 @@
 			<view class="handles flex jc-sb ai-c">
 				<view class="flex fd-c ai-c" v-if="lessonStore.lessonInfo.isFavorite" @click="removeCourse">
 					<image class="add-icon" src="https://api.itso123.com/image/remove-course.png" mode=""></image>
-					<text class='add-label'>移除课程</text>
+					<text class='add-label'>取消收藏</text>
 				</view>
 				<view class="flex fd-c ai-c" v-else @click="addCourse">
 					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
-					<text class='add-label'>添加课程</text>
+					<text class='add-label'>加入收藏</text>
 				</view>
 				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
 			</view>
@@ -87,6 +92,12 @@
 		components: {
 			Navigator,
 			LoginPopup
+		},
+		computed: {
+			descs () {
+				const descs = this.lessonStore.lessonInfo.descript.split('#')
+				return descs
+			}
 		},
 		methods: {
 			async routeToLesson () {

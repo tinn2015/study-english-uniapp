@@ -104,7 +104,7 @@
 				"pagePath": "pages/tabBar/find/Find",
 				"iconPath": "static/images/tabbar/tab-find.png",
 				"selectedIconPath": "static/images/tabbar/tab-find-active.png",
-				"text": "发现"
+				"text": "课程"
 			}, {
 				"pagePath": "pages/tabBar/my/My",
 				"iconPath": "static/images/tabbar/tab-my.png",
