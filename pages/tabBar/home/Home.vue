@@ -270,7 +270,7 @@ export default defineComponent({
 		},
 		bannerTap (item) {
 			if (item.type && item.type === 'lesson') {
-				this.routeToCourse(item.lessonId)
+				this.routeToCourse(item.lessonId, item.mode)
 			} else {
 				uni.navigateTo({
 					url: `/pages/webview/webview?src=${item.advUrl}&title=${item.advTitle}`,
