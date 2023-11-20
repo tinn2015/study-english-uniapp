@@ -1,7 +1,12 @@
 <template>
 	<view class="box">
 		<view v-for="course in courses" class="flex course-item" @click="routeToCourse(course)">
-			<image class="poster" :src="course.img" mode=""></image>
+			<!-- <image class="poster" :src="course.img" mode=""></image> -->
+			<view class="poster-box">
+				<image class="poster" :src="course.img" mode=""></image>
+				<!-- <image v-show="item.mode === 2" class="vip" src="../../../static/images/vip.png" mode=""></image> -->
+				<div class="vip-tag flex jc-c ai-c c-fff" v-show="course.mode === 2">VIP</div>
+			</view>
 			<view class="right-content flex fd-c jc-sb">
 				<view>
 					<view class="course-title">{{course.title}}</view>
@@ -85,6 +90,42 @@
 		height: 236rpx;
 		background: #eeeeee;
 		border-radius: 12rpx;
+	}
+	.poster-box {
+		position: relative;
+	}
+	.poster {
+		width: 207rpx;
+		height: 276rpx;
+		background: #f4f5f7;
+		border-radius: 16rpx;
+		box-sizing: border-box;
+		.add-course-label {
+			font-size: 28rpx;
+			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
+			font-weight: 400;
+			color: #999a9f;
+			margin-top: 24rpx;
+		}
+	}
+	.vip {
+		width: 60rpx;
+		height: 60rpx;
+		position: absolute;
+		top: -30rpx;
+		left: -20rpx;
+		transform: rotate(-30deg);
+	}
+	.vip-tag {
+		width: 54rpx;
+		height: 30rpx;
+		background: #FC0606;
+		border-radius: 16rpx 0rpx 16rpx 0rpx;
+		position: absolute;
+		top: 0;
+		left: 0;
+		color: #ffffff;
+		font-size: 20rpx;
 	}
 	.course-title {
 		font-size: 32rpx;
