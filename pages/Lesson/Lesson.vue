@@ -146,6 +146,7 @@
 		console.log('onUnload')
 		stopAudio()
 		stopSelfAudioContext()
+		stopRecord()
 	})
 	
 	// 是否显示获取报告按钮
@@ -187,10 +188,11 @@
 				authorization: uni.getStorageSync('authorization')
 			},
 			success: (res) => {
+				// setTimeout(() => {}, 2000)
 				console.log('录音上传成功', res)
 				if (res.statusCode === 200) {
 					const data = res.data && JSON.parse(res.data)
-					isRecording.value = false
+					// isRecording.value = false
 					interruptRecording.value = false
 					const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
 					console.log('句子上下文 序号 sectionIndex', sectionIndex)
@@ -224,11 +226,16 @@
 	}
 
 	const stopRecord = () => {
-		if (isRecording.value) {
-			recorderManager.stop()
-			playPromptAudio('endPrompt')
-			isRecording.value = false
-		}
+		// if (isRecording.value) {
+		// 	recorderManager.stop()
+		// 	playPromptAudio('endPrompt')
+		// 	isRecording.value = false
+		// }
+		recorderManager.stop()
+		playPromptAudio('endPrompt')
+		isRecording.value = false
+		// interruptRecording.value = false
+		// isRecording.value = false
 	}
 	
 	/**
@@ -246,6 +253,7 @@
 	}
 	
 	promptAudioContext.onEnded(() => {
+		console.log('promptAudioContext isRecording.value', isRecording.value)
 		if (promptType.value === 'startPrompt') {
 			recorderManager.start({
 				format: "wav",
