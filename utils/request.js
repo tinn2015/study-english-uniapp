@@ -270,3 +270,13 @@ export const getChatAudio = (lid, data) => {
 		data
 	})
 }
+
+/**
+ * 支付页获取商品列表
+ */
+export const getSales = () => {
+	return request({
+		url: `/order/sales/query`,
+		method: 'POST'
+	})
+}

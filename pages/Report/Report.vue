@@ -217,7 +217,7 @@
 		ranking.result = Ranking.tipsAction
 		
 		/* 句子问题 */
-		words.forEach(i => {
+		words && words.forEach(i => {
 			sentenceProblems.push(i)
 		})
 		

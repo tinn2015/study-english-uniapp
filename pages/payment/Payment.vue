@@ -5,13 +5,15 @@
 		</view>
 		<view class="content">
 			<view class="vip flex jc-sb ai-c" v-for="item in vipList">
-				<view class="tip">{{item.tip}}</view>
+				<view class="tip">{{item.tips}}</view>
 				<view>
 					<view class="title">{{ item.title }}</view>
-					<view class="f-gray mt26">{{ item.subTitle }}</view>
-					<view class="f-gray">{{ item.desc }}</view>
+					<view class="f-orange mt26">{{ item.description[0] }}</view>
+					<view class="f-gray">{{ item.description[1] }}</view>
 				</view>
-				<view class="price-box flex ai-c"><view class="symbol">￥</view><view class="price">{{item.price}}</view></view>
+				<view class="price-box flex ai-c">
+					<!-- <view class="symbol">￥</view> -->
+					<view class="price">{{item.tsUnit}}</view></view>
 			</view>
 		</view>
 		<view class="footer flex-1">
@@ -40,30 +42,54 @@
 		createApp,
 		onMounted,
 	} from 'vue'
+	import { getSales } from '@/utils/request.js'
 	
 	const vipList = reactive([
 		{
-			title: '包月会员',
-			subTitle: '不限场景、话题',
-			desc: '地道口语发音，随时随地练习英语口语',
-			price: '39',
-			tip: '免费600分钟/月'
+		  "SaleNo": "m001",
+		  "title": "包月会员",
+		  "description": [
+			"不限场景，话题，每天仅需2.19元",
+			"地道口语发音，随时随地练英语口语"
+		  ],
+		  "tips": "免费600分钟/月",
+		  "amount": 6800,
+		  "months": 1,
+		  "tsUnit": "￥68/月"
 		},
 		{
-			title: '季度会员',
-			subTitle: '不限场景、话题',
-			desc: '地道口语发音，随时随地练习英语口语',
-			price: '39',
-			tip: '免费600分钟/月'
+		  "SaleNo": "m003",
+		  "title": "季度会员",
+		  "description": [
+			"不限场景，话题，每天仅需2元",
+			"地道口语发音，随时随地练英语口语"
+		  ],
+		  "tips": "免费1800分钟/季",
+		  "amount": 18000,
+		  "months": 3,
+		  "tsUnit": "￥180/季"
 		},
 		{
-			title: '年度会员',
-			subTitle: '不限场景、话题',
-			desc: '地道口语发音，随时随地练习英语口语',
-			price: '299',
-			tip: '享受升级AI课程'
+		  "SaleNo": "m012",
+		  "title": "年度会员",
+		  "description": [
+			"不限场景，话题，每天仅需1.91元",
+			"地道口语发音，随时随地练英语口语"
+		  ],
+		  "tips": "全年免费用",
+		  "amount": 69800,
+		  "months": 12,
+		  "tsUnit": "￥698/年"
 		}
 	])
+	onMounted(() => {
+		getSales().then(res => {
+			console.log('getSales', res)
+			if (sales.length) {
+				vipList = res.sales
+			}
+		})
+	})
 </script>
 
 <style scoped lang="scss">
@@ -118,6 +144,12 @@
 				font-weight: 400;
 				color: #999A9F;
 			}
+			.f-orange {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #E97F41;
+			}
 			.symbol {
 				font-size: 32rpx;
 				font-family: DINPro, DINPro;
@@ -125,7 +157,7 @@
 				color: #E97F41;
 			}
 			.price {
-				font-size: 60rpx;
+				font-size: 50rpx;
 				font-family: DINPro, DINPro;
 				font-weight: bold;
 				color: #E97F41;
