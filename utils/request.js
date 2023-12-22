@@ -280,3 +280,14 @@ export const getSales = () => {
 		method: 'POST'
 	})
 }
+
+/**
+ * 创建订单
+ */
+export const genOrder = (saleNo) => {
+	return request({
+		url: `/order/pay/create`,
+		method: 'POST',
+		data: {saleNo}
+	})
+}

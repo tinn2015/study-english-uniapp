@@ -2,29 +2,43 @@
 	<view class="container flex fd-c ai-c jc-sb">
 		<view class="header">
 			<Navigator></Navigator>
+			<view class="header-label">
+				<view class="slogan">开通“开口说英语”会员</view>
+				<view class="sub-slogan">每天低至¥0.8，专属口语教练，真实语境</view>
+			</view>
+			<image class="banner" mode="scaleToFill" src="../../static/images/payment/payment-bg.png"></image>
 		</view>
 		<view class="content">
-			<view class="vip flex jc-sb ai-c" v-for="item in vipList">
+			<view class="vip flex jc-sb ai-c" :class="{'vip-select': index === selectIndex}" v-for="(item, index) in vipList" @click="selectVip(index)">
 				<view class="tip">{{item.tips}}</view>
 				<view>
-					<view class="title">{{ item.title }}</view>
+					<view class="flex ai-c">
+						<image class='diamon2' src="../../static/images/payment/diamond2.png" mode=""></image>
+						<view class="title">{{ item.title }}</view>
+					</view>
 					<view class="f-orange mt26">{{ item.description[0] }}</view>
 					<view class="f-gray">{{ item.description[1] }}</view>
 				</view>
 				<view class="price-box flex ai-c">
-					<!-- <view class="symbol">￥</view> -->
 					<view class="price">{{item.tsUnit}}</view></view>
 			</view>
 		</view>
 		<view class="footer flex-1">
-			<view class="btn flex jc-c ai-c">
+			<view class="btn flex jc-c ai-c" @click="createOrder">
 				<image class="icon-diamond" src="../../static/images/payment/diamond.png" mode=""></image>
 				<view>立即开通</view>
 			</view>
-			<view class="protocol flex ai-c jc-c">
-				<label class="radio">
-					<radio color="#58C898" value="" />
-				</label>
+			<view class="protocol flex ai-c jc-c" :class="{shake: needShake}">
+				<!-- <radio-group name="" @change="radioChange">
+					<label class="radio">
+						<radio color="#58C898" :checked="protocolChecked" />
+					</label>
+				</radio-group> -->
+				<checkbox-group name="" @change="radioChange">
+					<label>
+						<checkbox class="radio" value="protocolChecked" color="#58C898" />
+					</label>
+				</checkbox-group>
 				我已阅读并同意
 				<view class="mlr8 link">会员协议</view>
 				和
@@ -42,51 +56,86 @@
 		createApp,
 		onMounted,
 	} from 'vue'
-	import { getSales } from '@/utils/request.js'
+	import { getSales, genOrder } from '@/utils/request.js'
 	
 	const vipList = reactive([
-		{
-		  "SaleNo": "m001",
-		  "title": "包月会员",
-		  "description": [
-			"不限场景，话题，每天仅需2.19元",
-			"地道口语发音，随时随地练英语口语"
-		  ],
-		  "tips": "免费600分钟/月",
-		  "amount": 6800,
-		  "months": 1,
-		  "tsUnit": "￥68/月"
-		},
-		{
-		  "SaleNo": "m003",
-		  "title": "季度会员",
-		  "description": [
-			"不限场景，话题，每天仅需2元",
-			"地道口语发音，随时随地练英语口语"
-		  ],
-		  "tips": "免费1800分钟/季",
-		  "amount": 18000,
-		  "months": 3,
-		  "tsUnit": "￥180/季"
-		},
-		{
-		  "SaleNo": "m012",
-		  "title": "年度会员",
-		  "description": [
-			"不限场景，话题，每天仅需1.91元",
-			"地道口语发音，随时随地练英语口语"
-		  ],
-		  "tips": "全年免费用",
-		  "amount": 69800,
-		  "months": 12,
-		  "tsUnit": "￥698/年"
-		}
+		// {
+		//   "SaleNo": "m001",
+		//   "title": "包月会员",
+		//   "description": [
+		// 	"不限场景，话题，每天仅需2.19元",
+		// 	"地道口语发音，随时随地练英语口语"
+		//   ],
+		//   "tips": "免费600分钟/月",
+		//   "amount": 6800,
+		//   "months": 1,
+		//   "tsUnit": "￥68/月"
+		// },
+		// {
+		//   "SaleNo": "m003",
+		//   "title": "季度会员",
+		//   "description": [
+		// 	"不限场景，话题，每天仅需2元",
+		// 	"地道口语发音，随时随地练英语口语"
+		//   ],
+		//   "tips": "免费1800分钟/季",
+		//   "amount": 18000,
+		//   "months": 3,
+		//   "tsUnit": "￥180/季"
+		// },
+		// {
+		//   "SaleNo": "m012",
+		//   "title": "年度会员",
+		//   "description": [
+		// 	"不限场景，话题，每天仅需1.91元",
+		// 	"地道口语发音，随时随地练英语口语"
+		//   ],
+		//   "tips": "全年免费用",
+		//   "amount": 69800,
+		//   "months": 12,
+		//   "tsUnit": "￥698/年"
+		// }
 	])
+	
+	const selectIndex = ref(0)
+	const protocolChecked = ref(false)
+	const needShake = ref(false)
+	
+	const selectVip = (index) => {
+		selectIndex.value = index
+	}
+	
+	const createOrder = () => {
+		console.log('protocolChecked', protocolChecked.value)
+		if (!protocolChecked.value) {
+			needShake.value = true
+			setTimeout(() => {
+				needShake.value = false
+			}, 600)
+			return
+		}
+		const sale = vipList[selectIndex.value]
+		console.log('sale', sale, selectIndex.value)
+		genOrder(sale.SaleNo).then(res => {
+			console.log('genOrder', res)
+		})
+	}
+	
+	const radioChange = (e) => {
+		console.log('radioChange', e)
+		const checkedList = e.detail.value
+		if (checkedList[0] === "protocolChecked") {
+			protocolChecked.value = true
+		} else {
+			protocolChecked.value = false
+		}
+	}
+	
 	onMounted(() => {
 		getSales().then(res => {
 			console.log('getSales', res)
-			if (sales.length) {
-				vipList = res.sales
+			if (res.sales.length) {
+				vipList.push(...res.sales)
 			}
 		})
 	})
@@ -98,9 +147,37 @@
 		width: 100vw;
 	}
 	.header {
-		background: #65DBA4;
+		// background: #65DBA4;
+		position: relative;
 		min-height: 419rpx;
-		width: 100%
+		width: 100%;
+		// background-image: url('../../static/images/payment/payment-bg.png');
+		// background-size: cover;
+		.banner {
+			width: 100%;
+			height: 100%;
+			position: relative;
+			z-index: 10;
+			// top: 40rpx;
+		}
+		.header-label {
+			position: absolute;
+			top: 100rpx;
+			z-index: 1000;
+			font-size: 34rpx;
+			width: 100%;
+			color: #fff;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			text-align: center;
+			.sub-slogan {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #DAF4E6;
+			}
+		}
 	}
 	.content {
 		padding: 0 32rpx;
@@ -108,7 +185,12 @@
 		height: 100%;
 		width: 100%;
 		margin-top: -120rpx;
+		z-index: 100;
 		box-sizing: border-box;
+		.vip-select {
+			background: #F7EAD9!important;
+			border: 2rpx solid #E97F41
+		}
 		.vip {
 			// width: 100%;
 			position: relative;
@@ -116,6 +198,7 @@
 			background: #FFFFFF;
 			box-shadow: 0rpx 0rpx 24rpx 0rpx rgba(3,59,8,0.12);
 			border-radius: 24rpx;
+			box-sizing: border-box;
 			&:not(:first-child) {
 				margin-top: 32rpx
 			}
@@ -131,9 +214,17 @@
 				font-weight: 400;
 				color: #FFFFFF;
 			}
+			.diamon2 {
+				width: 38rpx;
+				height: 32rpx;
+				margin-right: 8rpx;
+			}
 			.title {
 				// color: linear-gradient(90deg, #FCA877 0%, #C3AB13 100%)
-				color: #FCA877
+				font-size: 32rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				color: #EAAA57;
 			}
 			.mt26 {
 				margin-top: 26rpx
@@ -206,5 +297,15 @@
 		.mlr8 {
 			margin: 0 8rpx;
 		}
+	}
+	.shake {
+	  animation: shake 0.6s ease-in-out infinite; /* 0.6s 表示动画持续时间，infinite 表示无限循环 */
+	}
+	@keyframes shake {
+	  0% { transform: translateX(0); }
+	  20% { transform: translateX(-10rpx) }
+	  40% { transform: translateX(10rpx) }
+	  60% { transform: translateX(-10rpx) }
+	  100% { transform: translateX(0); }
 	}
 </style>
