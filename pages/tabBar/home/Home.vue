@@ -67,6 +67,7 @@
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>
+		<!-- <VipPayPopup></VipPayPopup> -->
 		<!-- <GetUserProfilePopup></GetUserProfilePopup> -->
 	</view>
 </template>
@@ -80,6 +81,7 @@ import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
+import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
 import { shareMenu } from '@/utils/share.js'
 // import GetUserProfilePopup from '@/components/GetUserProfilePopup/GetUserProfilePopup.vue'
 export default defineComponent({
@@ -203,6 +205,7 @@ export default defineComponent({
 		Swiper,
 		ToolTip,
 		LoginPopup,
+		VipPayPopup
 		// GetUserProfilePopup
 	},
 	onLoad() {

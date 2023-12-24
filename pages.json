@@ -89,6 +89,13 @@
 				"navigationStyle": "custom"
 			}
 		}
+		// {
+		// 	"path": "pages/payment/Payment",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

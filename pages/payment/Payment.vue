@@ -118,6 +118,14 @@
 		console.log('sale', sale, selectIndex.value)
 		genOrder(sale.SaleNo).then(res => {
 			console.log('genOrder', res)
+			uni.requestPayment({
+				nonceStr: res.nonceStr,
+				paySign: res.paySign,
+				signType: res.signType,
+				// provider: 'wxpay',
+				timeStamp: res.timeStamp,
+				package: res.package
+			})
 		})
 	}
 	
@@ -252,6 +260,8 @@
 				font-family: DINPro, DINPro;
 				font-weight: bold;
 				color: #E97F41;
+				// min-width: 260rpx;
+				text-align: right;
 			}
 		}
 	}

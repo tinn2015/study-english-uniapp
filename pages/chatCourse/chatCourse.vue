@@ -42,6 +42,7 @@
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>
+		<VipPayPopup></VipPayPopup>
 	</view>
 </template>
 
@@ -49,6 +50,7 @@
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
+	import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
 	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
 	export default {
@@ -81,7 +83,8 @@
 		},
 		components: {
 			Navigator,
-			LoginPopup
+			LoginPopup,
+			VipPayPopup
 		},
 		computed: {
 			descs () {
