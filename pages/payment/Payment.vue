@@ -40,9 +40,9 @@
 					</label>
 				</checkbox-group>
 				我已阅读并同意
-				<view class="mlr8 link">会员协议</view>
-				和
-				<view class="link ml8">续费规则</view>
+				<view class="mlr8 link" @click="routeToWebview('会员协议', 'https://api.itso123.com/static/huiyuan.v1.html')">会员协议</view>
+				<view class="link ml8" @click="routeToWebview('续费规则', 'https://api.itso123.com/static/xufei.v1.html')">续费规则</view>
+				<view class="link ml8" @click="routeToWebview('隐私协议', 'https://api.itso123.com/static/yinsi.v1.html')">隐私协议</view>
 			</view>
 		</view>
 	</view>
@@ -137,6 +137,12 @@
 		} else {
 			protocolChecked.value = false
 		}
+	}
+	
+	const routeToWebview = (title, url) => {
+		uni.navigateTo({
+			url: `/pages/webview/webview?src=${url}&title=${title}`
+		})
 	}
 	
 	onMounted(() => {

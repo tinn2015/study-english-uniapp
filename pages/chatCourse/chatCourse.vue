@@ -42,7 +42,7 @@
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>
-		<VipPayPopup></VipPayPopup>
+		<VipPayPopup v-show="lessonStore.lessonInfo.displaySeller !== 0"></VipPayPopup>
 	</view>
 </template>
 

@@ -6,13 +6,13 @@
 		// 		"navigationBarTitleText": "echart"
 		// 	}
 		// },
-		{
-			"path": "pages/payment/Payment",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationStyle": "custom"
-			}
-		},
+		// {
+		// 	"path": "pages/payment/Payment",
+		// 	"style": {
+		// 		"navigationBarTitleText": "",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 		{
 			"path": "pages/tabBar/home/Home",
 			"style": {
@@ -88,14 +88,21 @@
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/webview/webview",
+			"style": {
+				"navigationBarTitleText": ""
+				// "navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/payment/Payment",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
 		}
-		// {
-		// 	"path": "pages/payment/Payment",
-		// 	"style": {
-		// 		"navigationBarTitleText": "",
-		// 		"navigationStyle": "custom"
-		// 	}
-		// }
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

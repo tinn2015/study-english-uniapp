@@ -51,7 +51,7 @@
 				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
 			</view>
 		</view>
-		<LoginPopup></LoginPopup>
+		<LoginPopup v-show="lessonStore.lessonInfo.displaySeller !== 0"></LoginPopup>
 	</view>
 </template>
 
