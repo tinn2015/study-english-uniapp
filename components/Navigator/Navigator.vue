@@ -1,9 +1,13 @@
 <template>
-	<view class="custom-navigator flex ai-c" :style="{top: top + 'px', height: height + 'px'}" @click="navigatorBack">
-		<view>
-			<uni-icons type="back"></uni-icons>
+	<view class="custom-navigator flex ai-c jc-sb" :style="{top: top + 'px', height: height + 'px', width: `calc(100% - ${menuButtonWidth - 20}px)`}">
+		<view class="flex ai-c" @click="navigatorBack">
+			<view>
+				<uni-icons type="back"></uni-icons>
+			</view>
+			<view>返回</view>
 		</view>
-		<view>返回</view>
+		<slot></slot>
+		<view></view>
 	</view>
 </template>
 
@@ -16,7 +20,8 @@
 		data () {
 			return {
 				top: 0,
-				height: 0
+				height: 0,
+				menuButtonWidth: 0
 			}
 		},
 		mounted () {
@@ -29,6 +34,7 @@
 			console.log('custom-navigator', menuButtonInfo)
 			this.top = menuButtonInfo.top
 			this.height = menuButtonInfo.height
+			this.menuButtonWidth = menuButtonInfo.width
 		},
 		methods: {
 			navigatorBack () {

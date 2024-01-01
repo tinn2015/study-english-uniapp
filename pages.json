@@ -65,7 +65,8 @@
 		{
 			"path": "pages/Lesson/Lesson",
 			"style": {
-				"navigationBarTitleText": "章节"
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
 			}
 		},
 		{

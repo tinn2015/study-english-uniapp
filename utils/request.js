@@ -291,3 +291,26 @@ export const genOrder = (saleNo) => {
 		data: {saleNo}
 	})
 }
+
+/**
+ * 获取课程类型
+ * 课程类型[0:跟读，1:对话，2:聊天课程] 
+ */
+export const getLessonType = (lessonId, sectionId) => {
+	return request({
+		url: `/lesson/section/detail/${lessonId}/${sectionId}`,
+		method: 'POST',
+		// data: {saleNo}
+	})
+}
+
+/**
+ * 设置课程类型
+ */
+export const setLessonMode = (lessonId, mode) => {
+	return request({
+		url: `/lesson/mode/set/${lessonId}/${mode}`,
+		method: 'POST',
+		// data: {saleNo}
+	})
+}
