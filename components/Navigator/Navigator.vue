@@ -1,13 +1,15 @@
 <template>
-	<view class="custom-navigator flex ai-c jc-sb" :style="{top: top + 'px', height: height + 'px', width: `calc(100% - ${menuButtonWidth - 20}px)`}">
-		<view class="flex ai-c" @click="navigatorBack">
-			<view>
-				<uni-icons type="back"></uni-icons>
+	<view class="custom-navigator" :style="{top: top + 'px', height: height + 5 + 'px'}">
+		<view class="flex ai-c jc-sb" :style="{height: height + 'px', width: `calc(100% - ${menuButtonWidth - 20}px)`}">
+			<view class="flex ai-c" @click="navigatorBack">
+				<view>
+					<uni-icons type="back"></uni-icons>
+				</view>
+				<view>返回</view>
 			</view>
-			<view>返回</view>
+			<slot></slot>
+			<view></view>
 		</view>
-		<slot></slot>
-		<view></view>
 	</view>
 </template>
 
@@ -48,7 +50,10 @@
 	.custom-navigator {
 		position: fixed;
 		top: 0;
-		left: 20rpx;
+		left: 0rpx;
 		z-index: 2023;
+		padding: 10rpx 0 10rpx 20rpx;
+		width: 100%;
+		box-sizing: border-box;
 	}
 </style>
