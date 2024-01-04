@@ -351,10 +351,10 @@
 	// const audioContext = uni.createWebAudioContext();
 	// const analyser = audioContext.createAnalyser();
 	
-	// // // 将 AnalyserNode 连接到录音管理器
+	// // // // 将 AnalyserNode 连接到录音管理器
 	// dialogRecorderManager.connectTo(analyser);
 	
-	// // 设置 AnalyserNode 参数
+	// // // 设置 AnalyserNode 参数
 	// analyser.fftSize = 32; // 调整 fftSize 可以影响分辨率，需要根据实际情况进行调整
 	// const dataArray = new Uint8Array(analyser.frequencyBinCount);
 	
@@ -381,34 +381,22 @@
 		
 		// // soundDetection(frame.frameBuffer)
 		
-		// const { frameBuffer } = frame;
-		//   const audioData = new Int16Array(frameBuffer);
+		const { frameBuffer } = frame;
+		  const audioData = new Int16Array(frameBuffer);
 		
-		//   let sumSquares = 0;
-		//   for (let i = 0; i < audioData.length; i++) {
-		// 	sumSquares += audioData[i] ** 2;
-		//   }
+		  let sumSquares = 0;
+		  for (let i = 0; i < audioData.length; i++) {
+			sumSquares += audioData[i] ** 2;
+		  }
 		
-		//   const rms = Math.sqrt(sumSquares / audioData.length);
-		//   const volumeDb = 20 * Math.log10(rms / 1); // 将RMS转换为分贝
-		// 	console.log('volumeDb', volumeDb - 30)
-		//   // 在这里处理音量大小（volumeDb）
+		  const rms = Math.sqrt(sumSquares / audioData.length);
+		  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
+			console.log('volumeDb', volumeDb - 30)
+		  // 在这里处理音量大小（volumeDb）
+		  if (volumeDb < 20) {
+			  console.log('断句')
+		  }
 		
-		
-		// const { frameBuffer } = frame;
-		//   const audioData = new Int16Array(frameBuffer);
-		
-		//   let sumAmplitude = 0;
-		//   for (let i = 0; i < audioData.length; i++) {
-		//     sumAmplitude += Math.abs(audioData[i]);
-		//   }
-		
-		//   const averageAmplitude = sumAmplitude / audioData.length;
-		//   // 对于16位PCM数据，最大振幅为32768
-		//   const volumeDb = 20 * Math.log10(averageAmplitude / 32768);
-		
-		//   // 在这里处理音量大小（volumeDb）
-		//   console.log('volumeDb', volumeDb)
 	})
 	dialogRecorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
