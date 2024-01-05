@@ -1,5 +1,5 @@
 <template>
-	<view class="custom-navigator" :style="{top: top + 'px', height: height + 5 + 'px'}">
+	<view class="custom-navigator" :style="{top: top + 'px'}">
 		<view class="flex ai-c jc-sb" :style="{height: height + 'px', width: `calc(100% - ${menuButtonWidth - 20}px)`}">
 			<view class="flex ai-c" @click="navigatorBack">
 				<view>
@@ -52,7 +52,8 @@
 		top: 0;
 		left: 0rpx;
 		z-index: 2023;
-		padding: 10rpx 0 10rpx 20rpx;
+		// padding: 10rpx 0 10rpx 20rpx;
+		padding: 10rpx 0 0 20rpx;
 		width: 100%;
 		box-sizing: border-box;
 	}

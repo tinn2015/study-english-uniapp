@@ -156,7 +156,7 @@
 		overflow: hidden;
 	}
 	.header {
-		height: 514rpx;
+		height: 560rpx;
 		width: 100%;
 		background: #abcbd9;
 		box-sizing: border-box;
@@ -167,7 +167,7 @@
 			height: 100%
 		}
 		.box {
-			margin-top: 150rpx;
+			margin-top: 170rpx;
 			box-sizing: border-box;
 			padding: 0 32rpx;
 			.course-overview {
@@ -207,7 +207,7 @@
 	.find-content {
 		position: relative;
 		top: -54rpx;
-		height: calc(100% - 514rpx + 54rpx);
+		height: calc(100% - 560rpx + 54rpx);
 		box-sizing: border-box;
 		border-radius: 32rpx 32rpx 0 0;
 		background: #ffffff;

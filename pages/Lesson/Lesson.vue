@@ -358,6 +358,9 @@
 	// analyser.fftSize = 32; // 调整 fftSize 可以影响分辨率，需要根据实际情况进行调整
 	// const dataArray = new Uint8Array(analyser.frequencyBinCount);
 	
+	// 对话模式判断中断定时器
+	const dialogRecordTimer = ref(0)
+	const usefulFrameIndex= ref(0)
 	dialogRecorderManager.onFrameRecorded((frame) => {
 		// console.log('frame', frame)
 		
@@ -391,10 +394,19 @@
 		
 		  const rms = Math.sqrt(sumSquares / audioData.length);
 		  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
-			console.log('volumeDb', volumeDb - 30)
-		  // 在这里处理音量大小（volumeDb）
-		  if (volumeDb < 20) {
-			  console.log('断句')
+			console.log('volumeDb', volumeDb)
+		  // 判断为没有声音输入
+		  if (volumeDb < 20 && usefulFrameIndex.value > 20) {
+			  if (!dialogRecordTimer.value) {
+				dialogRecordTimer.value = setTimeout(() => {
+					console.log('断句,开始上传语音')
+					stopDialogRecord()
+				}, 1000)
+			  }
+		  } else {
+			  usefulFrameIndex.value++
+			  dialogRecordTimer.value && clearTimeout(dialogRecordTimer.value)
+			  dialogRecordTimer.value = 0
 		  }
 		
 	})
@@ -410,39 +422,42 @@
 		const miniProgram = uni.getAccountInfoSync().miniProgram
 		console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 		const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
-		// uni.uploadFile({
-		// 	url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
-		// 	filePath: filePath.tempFilePath,
-		// 	name: 'recfile',
-		// 	cid: currentParagraph.id,
-		// 	header: {
-		// 		authorization: uni.getStorageSync('authorization')
-		// 	},
-		// 	success: (res) => {
-		// 		// setTimeout(() => {}, 2000)
-		// 		console.log('录音上传成功', res)
-		// 		if (res.statusCode === 200) {
-		// 			const data = res.data && JSON.parse(res.data)
-		// 			// isRecording.value = false
-		// 			interruptRecording.value = false
-		// 			const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
-		// 			console.log('句子上下文 序号 sectionIndex', sectionIndex)
-		// 			if (sectionIndex > -1) {
-		// 				sectionInfo[sectionIndex].result = data
-		// 				sectionInfo[sectionIndex].score = data.emo
-		// 				sectionInfo[sectionIndex].recUrl = data.recUrl
-		// 				sectionInfo[sectionIndex].tipShow = true
-		// 			}
-		// 			// sectionInfo[currentParagraph.index]['result'] = data
-		// 			// sectionInfo[currentParagraph.index]['tipShow'] = true
-		// 			reportBtnVisible.value = data.displayGetReport
-		// 		}
-		// 		console.log('sectionInfo', currentParagraph.index, sectionInfo)
-		// 	},
-		// 	fail: (err) => {
-		// 		console.log('录音上传失败', err)
-		// 	}
-		// })
+		uni.uploadFile({
+			url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
+			filePath: filePath.tempFilePath,
+			name: 'recfile',
+			cid: currentParagraph.id,
+			header: {
+				authorization: uni.getStorageSync('authorization')
+			},
+			success: (res) => {
+				// setTimeout(() => {}, 2000)
+				console.log('录音上传成功', res)
+				if (res.statusCode === 200) {
+					const data = res.data && JSON.parse(res.data)
+					// isRecording.value = false
+					interruptRecording.value = false
+					const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
+					console.log('句子上下文 序号 sectionIndex', sectionIndex)
+					if (sectionIndex > -1) {
+						sectionInfo[sectionIndex].result = data
+						sectionInfo[sectionIndex].score = data.emo
+						sectionInfo[sectionIndex].recUrl = data.recUrl
+						sectionInfo[sectionIndex].tipShow = true
+					}
+					if (data.emo > 20) {
+						changeToNextParagraph()
+					}
+					// sectionInfo[currentParagraph.index]['result'] = data
+					// sectionInfo[currentParagraph.index]['tipShow'] = true
+					reportBtnVisible.value = data.displayGetReport
+				}
+				console.log('sectionInfo', currentParagraph.index, sectionInfo)
+			},
+			fail: (err) => {
+				console.log('录音上传失败', err)
+			}
+		})
 	})
 	dialogRecorderManager.onError((err) => {
 		console.log('record error', err)
@@ -453,6 +468,7 @@
 		stopSelfAudioContext()
 		stopAudio()
 		isRecording.value = true
+		dialogRecordTimer.value = 0
 		// 【bugfix】点击录音后直接录制，播放提示音会导致开头1s多录不到
 		// playPromptAudio('startPrompt')
 		dialogRecorderManager.start({
@@ -577,15 +593,16 @@
 <style scoped lang="scss">
 	.lesson-container {
 		.header {
-			height: 140rpx;
+			height: 150rpx;
 			background: #fff;
 			position: relative;
 			z-index: 1000;
 			border-bottom: 1px solid #eeeeee;
+			box-sizing: border-box;
 		}
 	}
 	.lesson {
-		height: calc(100vh - 140rpx);
+		height: calc(100vh - 150rpx);
 		box-sizing: border-box;
 	}
 	.paragraph {
