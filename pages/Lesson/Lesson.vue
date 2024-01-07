@@ -25,17 +25,17 @@
 								<view class="wave"></view>
 							</view>
 							<view v-else class="flex jc-c ai-c">
-								<view class="btn">
+								<!-- <view class="btn">
 									<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
 										src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
 									<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
 										src="http://api.itso123.com/image/audio-player.png" mode=""></image>
-								</view>
+								</view> -->
 								<view class="btn btn-mid" v-show="index > 0" @click="record">
 									<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 								</view>
 								<!-- 有结果按钮 -->
-								<view v-if="parseInt(paragraph.score) && index > 0" class="btn result">
+								<!-- <view v-if="parseInt(paragraph.score) && index > 0" class="btn result">
 									<ToolTip  :content="paragraph.result ? paragraph.result.tips : ''" :show="paragraph.tipShow || false" @close="toolTipClose">
 											<view class="emoji-box" @click="playSelfAudio(paragraph.result || paragraph)">
 												<view class="result-good result-label flex jc-c ai-c" v-if="parseInt(paragraph.score) && parseInt(paragraph.score) >= 80">{{parseInt(paragraph.score)}}</view>
@@ -49,11 +49,11 @@
 										<image class="result-icon-mini default-icon" src="http://api.itso123.com/image/smile-face.png" mode="">
 										</image>
 									</view>
-								</view>
+								</view> -->
 								<!-- 默认时按钮 -->
-								<view v-else-if="index > 0" class="result-default flex jc-c ai-c">
+								<!-- <view v-else-if="index > 0" class="result-default flex jc-c ai-c">
 									<image class="result-icon-mini" src="http://api.itso123.com/image/i.png" mode=""></image>
-								</view>
+								</view> -->
 							</view>
 						</view>
 					</view>
@@ -262,7 +262,11 @@
 			stopSelfAudioContext()
 			// playAudio(currentParagraph.info.sentenceUrl)
 			// dialogRecord()
-			record()
+			if (currentParagraph.index % 2 !== 0) {
+				record()
+			} else {
+				playAudio(currentParagraph.info.sentenceUrl)
+			}
 		}
 	}
 
@@ -292,7 +296,7 @@
 					console.log('断句,开始上传语音')
 					// stopDialogRecord()
 					stopRecord()
-				}, 1000)
+				}, 500)
 			  }
 		  } else {
 			  usefulFrameIndex.value++
@@ -304,13 +308,6 @@
 	
 	recorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
-		// uni.downloadFile({
-		// 	url: filePath.tempFilePath,
-		// 	success: (e) => {console.log('downloadfile', e)},
-		// 	fail(err) {
-		// 		console.log('downloadfile err', err)
-		// 	}
-		// })
 		console.log('interruptRecording', interruptRecording.value)
 		if (interruptRecording.value) {
 			console.log('[中断录音上传]')
@@ -344,7 +341,7 @@
 						sectionInfo[sectionIndex].recUrl = data.recUrl
 						sectionInfo[sectionIndex].tipShow = true
 					}
-					if (lessonMode.value) {
+					if (lessonMode.value && data.emo > 20) {
 						changeToNextParagraph()
 					}
 					// sectionInfo[currentParagraph.index]['result'] = data
