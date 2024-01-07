@@ -10,10 +10,10 @@
 				</view>
 			</Navigator>
 		</view>
-		<scroll-view class="lesson" scroll-y>
+		<scroll-view class="lesson" scroll-y :scroll-into-view="scrollId">
 			<!-- 对话模式 -->
 			<view v-if="lessonMode">
-				<view v-for="(paragraph, index) in sectionInfo">
+				<view v-for="(paragraph, index) in sectionInfo" :id="`scrollId${index}`"  :scroll-with-animation="true" scroll-into-view-alignment="center">
 					<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentParagraph.id)">
 						<image class="paragraph-avatar" :src="paragraph.headPic" mode=""></image>
 						<view class="sentence text-center">{{paragraph.sentence}}</view>
@@ -25,12 +25,12 @@
 								<view class="wave"></view>
 							</view>
 							<view v-else class="flex jc-c ai-c">
-								<!-- <view class="btn">
+								<view class="btn" v-if="index === 0">
 									<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
 										src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
 									<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
 										src="http://api.itso123.com/image/audio-player.png" mode=""></image>
-								</view> -->
+								</view>
 								<view class="btn btn-mid" v-show="index > 0" @click="record">
 									<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 								</view>
@@ -184,6 +184,9 @@
 		info: {},
 		index: 0
 	})
+	
+	// 显示区id
+	const scrollId = ref('')
 	// 是否在录音中， 用于控制录音动画
 	const isRecording = ref(false)
 	/**
@@ -255,6 +258,7 @@
 			currentParagraph.id = nextParagraph.id
 			currentParagraph.info = nextParagraph
 			currentParagraph.index = nextIndex
+			scrollId.value = `scrollId${currentParagraph.index}`
 			if (isRecording.value) {
 				interruptRecording.value = true
 				stopRecord()
@@ -290,7 +294,7 @@
 		  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
 			console.log('volumeDb', volumeDb)
 		  // 判断为没有声音输入
-		  if (volumeDb < 30 && usefulFrameIndex.value > 20) {
+		  if (volumeDb < 30 && usefulFrameIndex.value > 5) {
 			  if (!dialogRecordTimer.value) {
 				dialogRecordTimer.value = setTimeout(() => {
 					console.log('断句,开始上传语音')
