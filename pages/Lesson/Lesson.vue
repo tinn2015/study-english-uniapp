@@ -4,9 +4,9 @@
 			<Navigator>
 				<!-- <view>切换模式</view> -->
 				<view class="flex ai-c">
-					<view class="ft26">跟读</view>
+					<view class="ft26" :style="{color: !lessonMode ? '#000000' : '#8d8d8d'}">跟读</view>
 					<switch style="transform:scale(0.6)" color="#59c47f" :checked="lessonMode" @change="lessonModeChange" />
-					<view class="ft26">对话</view>
+					<view class="ft26" :style="{color: lessonMode ? '#000000' : '#8d8d8d'}">对话</view>
 				</view>
 			</Navigator>
 		</view>
@@ -214,10 +214,11 @@
 	})
 	onMounted(() => {
 		console.log('playAudio', playAudio)
-		playAudio(currentParagraph.info.sentenceUrl)
 		getLessonType(lessonInfo.lessonId, currentSection.id).then(res => {
-			console.log('getLessonType', res)
 			lessonMode.value = res.mode === 1
+			console.log('getLessonType', res)
+			console.log('lessonMode', lessonMode.value)
+			playAudio(currentParagraph.info.sentenceUrl)
 		})
 	})
 	
@@ -260,14 +261,56 @@
 			}
 			stopSelfAudioContext()
 			// playAudio(currentParagraph.info.sentenceUrl)
-			dialogRecord()
+			// dialogRecord()
+			record()
 		}
 	}
 
 	// 录音
 	const recorderManager = uni.getRecorderManager()
+	
+	// 对话模式判断中断定时器
+	const dialogRecordTimer = ref(0)
+	const usefulFrameIndex= ref(0)
+	recorderManager.onFrameRecorded((frame) => {
+		
+		const { frameBuffer } = frame;
+		  const audioData = new Int16Array(frameBuffer);
+		
+		  let sumSquares = 0;
+		  for (let i = 0; i < audioData.length; i++) {
+			sumSquares += audioData[i] ** 2;
+		  }
+		
+		  const rms = Math.sqrt(sumSquares / audioData.length);
+		  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
+			console.log('volumeDb', volumeDb)
+		  // 判断为没有声音输入
+		  if (volumeDb < 30 && usefulFrameIndex.value > 20) {
+			  if (!dialogRecordTimer.value) {
+				dialogRecordTimer.value = setTimeout(() => {
+					console.log('断句,开始上传语音')
+					// stopDialogRecord()
+					stopRecord()
+				}, 1000)
+			  }
+		  } else {
+			  usefulFrameIndex.value++
+			  dialogRecordTimer.value && clearTimeout(dialogRecordTimer.value)
+			  dialogRecordTimer.value = 0
+		  }
+		
+	})
+	
 	recorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
+		// uni.downloadFile({
+		// 	url: filePath.tempFilePath,
+		// 	success: (e) => {console.log('downloadfile', e)},
+		// 	fail(err) {
+		// 		console.log('downloadfile err', err)
+		// 	}
+		// })
 		console.log('interruptRecording', interruptRecording.value)
 		if (interruptRecording.value) {
 			console.log('[中断录音上传]')
@@ -281,7 +324,7 @@
 		uni.uploadFile({
 			url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
 			filePath: filePath.tempFilePath,
-			name: 'recfile',
+			name: lessonMode.value ? 'pcmfile' : 'recfile',
 			cid: currentParagraph.id,
 			header: {
 				authorization: uni.getStorageSync('authorization')
@@ -300,6 +343,9 @@
 						sectionInfo[sectionIndex].score = data.emo
 						sectionInfo[sectionIndex].recUrl = data.recUrl
 						sectionInfo[sectionIndex].tipShow = true
+					}
+					if (lessonMode.value) {
+						changeToNextParagraph()
 					}
 					// sectionInfo[currentParagraph.index]['result'] = data
 					// sectionInfo[currentParagraph.index]['tipShow'] = true
@@ -324,8 +370,9 @@
 		// 【bugfix】点击录音后直接录制，播放提示音会导致开头1s多录不到
 		// playPromptAudio('startPrompt')
 		recorderManager.start({
-			format: "wav",
-			sampleRate: 8000
+			format: lessonMode.value ? "pcm" : "wav",
+			sampleRate: 8000,
+			frameSize: 10
 		})
 	}
 
@@ -345,151 +392,119 @@
 	/**
 	 * 对话模式录音
 	 */
-	const dialogRecorderManager = uni.getRecorderManager()
+	// const dialogRecordManager = uni.getRecorderManager()
 	
-	// // 创建 AudioContext
-	// const audioContext = uni.createWebAudioContext();
-	// const analyser = audioContext.createAnalyser();
+	// // 对话模式判断中断定时器
+	// const dialogRecordTimer = ref(0)
+	// const usefulFrameIndex= ref(0)
+	// dialogRecordManager.onFrameRecorded((frame) => {
+		
+	// 	const { frameBuffer } = frame;
+	// 	  const audioData = new Int16Array(frameBuffer);
+		
+	// 	  let sumSquares = 0;
+	// 	  for (let i = 0; i < audioData.length; i++) {
+	// 		sumSquares += audioData[i] ** 2;
+	// 	  }
+		
+	// 	  const rms = Math.sqrt(sumSquares / audioData.length);
+	// 	  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
+	// 		console.log('volumeDb', volumeDb)
+	// 	  // 判断为没有声音输入
+	// 	  if (volumeDb < 20 && usefulFrameIndex.value > 20) {
+	// 		  if (!dialogRecordTimer.value) {
+	// 			dialogRecordTimer.value = setTimeout(() => {
+	// 				console.log('断句,开始上传语音')
+	// 				stopDialogRecord()
+	// 			}, 1000)
+	// 		  }
+	// 	  } else {
+	// 		  usefulFrameIndex.value++
+	// 		  dialogRecordTimer.value && clearTimeout(dialogRecordTimer.value)
+	// 		  dialogRecordTimer.value = 0
+	// 	  }
+		
+	// })
+	// dialogRecordManager.onStop((filePath) => {
+	// 	console.log('dialogRecorderManager filePath', filePath)
+	// 	console.log('dialogRecorderManager interruptRecording', interruptRecording.value)
+	// 	if (interruptRecording.value) {
+	// 		console.log('[中断录音上传]')
+	// 		interruptRecording.value = false
+	// 		return
+	// 	}
+	// 	// 上传录音
+	// 	const miniProgram = uni.getAccountInfoSync().miniProgram
+	// 	console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
+	// 	const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
+	// 	uni.uploadFile({
+	// 		url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
+	// 		filePath: filePath.tempFilePath,
+	// 		name: 'pcmfile',
+	// 		cid: currentParagraph.id,
+	// 		header: {
+	// 			authorization: uni.getStorageSync('authorization')
+	// 		},
+	// 		success: (res) => {
+	// 			// setTimeout(() => {}, 2000)
+	// 			console.log('录音上传成功', res)
+	// 			if (res.statusCode === 200) {
+	// 				const data = res.data && JSON.parse(res.data)
+	// 				// isRecording.value = false
+	// 				interruptRecording.value = false
+	// 				const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
+	// 				console.log('句子上下文 序号 sectionIndex', sectionIndex)
+	// 				if (sectionIndex > -1) {
+	// 					sectionInfo[sectionIndex].result = data
+	// 					sectionInfo[sectionIndex].score = data.emo
+	// 					sectionInfo[sectionIndex].recUrl = data.recUrl
+	// 					sectionInfo[sectionIndex].tipShow = true
+	// 				}
+	// 				if (data.emo > 20) {
+	// 					changeToNextParagraph()
+	// 				}
+	// 				// sectionInfo[currentParagraph.index]['result'] = data
+	// 				// sectionInfo[currentParagraph.index]['tipShow'] = true
+	// 				reportBtnVisible.value = data.displayGetReport
+	// 			}
+	// 			console.log('sectionInfo', currentParagraph.index, sectionInfo)
+	// 		},
+	// 		fail: (err) => {
+	// 			console.log('录音上传失败', err)
+	// 		}
+	// 	})
+	// })
+	// dialogRecordManager.onError((err) => {
+	// 	console.log('record error', err)
+	// 	playPromptAudio('endPrompt')
+	// 	isRecording.value = false
+	// })
+	// const dialogRecord = () => {
+	// 	stopSelfAudioContext()
+	// 	stopAudio()
+	// 	isRecording.value = true
+	// 	dialogRecordTimer.value = 0
+	// 	// 【bugfix】点击录音后直接录制，播放提示音会导致开头1s多录不到
+	// 	// playPromptAudio('startPrompt')
+	// 	dialogRecordManager.start({
+	// 		format: "pcm",
+	// 		sampleRate: 8000,
+	// 		frameSize: 10
+	// 	})
+	// }
 	
-	// // // // 将 AnalyserNode 连接到录音管理器
-	// dialogRecorderManager.connectTo(analyser);
-	
-	// // // 设置 AnalyserNode 参数
-	// analyser.fftSize = 32; // 调整 fftSize 可以影响分辨率，需要根据实际情况进行调整
-	// const dataArray = new Uint8Array(analyser.frequencyBinCount);
-	
-	// 对话模式判断中断定时器
-	const dialogRecordTimer = ref(0)
-	const usefulFrameIndex= ref(0)
-	dialogRecorderManager.onFrameRecorded((frame) => {
-		// console.log('frame', frame)
-		
-		// const audioData = frame.frameBuffer;
-		
-		//   // 将录音数据传递给 AnalyserNode
-		//   const audioBuffer = audioContext.createBuffer(1, audioData.length, audioContext.sampleRate);
-		//   audioBuffer.getChannelData(0).set(new Float32Array(audioData));
-		
-		//   const source = audioContext.createBufferSource();
-		//   source.buffer = audioBuffer;
-		//   source.connect(analyser);
-		//   analyser.connect(audioContext.destination);
-		
-		//   // 获取音频数据
-		//   analyser.getByteFrequencyData(dataArray);
-		
-		//   // 计算音量大小
-		//   const volume = dataArray.reduce((acc, value) => acc + value, 0) / dataArray.length;
-
-		
-		// // soundDetection(frame.frameBuffer)
-		
-		const { frameBuffer } = frame;
-		  const audioData = new Int16Array(frameBuffer);
-		
-		  let sumSquares = 0;
-		  for (let i = 0; i < audioData.length; i++) {
-			sumSquares += audioData[i] ** 2;
-		  }
-		
-		  const rms = Math.sqrt(sumSquares / audioData.length);
-		  const volumeDb = 20 * Math.log10(rms / 1) - 30; // 将RMS转换为分贝
-			console.log('volumeDb', volumeDb)
-		  // 判断为没有声音输入
-		  if (volumeDb < 20 && usefulFrameIndex.value > 20) {
-			  if (!dialogRecordTimer.value) {
-				dialogRecordTimer.value = setTimeout(() => {
-					console.log('断句,开始上传语音')
-					stopDialogRecord()
-				}, 1000)
-			  }
-		  } else {
-			  usefulFrameIndex.value++
-			  dialogRecordTimer.value && clearTimeout(dialogRecordTimer.value)
-			  dialogRecordTimer.value = 0
-		  }
-		
-	})
-	dialogRecorderManager.onStop((filePath) => {
-		console.log('filePath', filePath)
-		console.log('interruptRecording', interruptRecording.value)
-		if (interruptRecording.value) {
-			console.log('[中断录音上传]')
-			interruptRecording.value = false
-			return
-		}
-		// 上传录音
-		const miniProgram = uni.getAccountInfoSync().miniProgram
-		console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
-		const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
-		uni.uploadFile({
-			url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
-			filePath: filePath.tempFilePath,
-			name: 'recfile',
-			cid: currentParagraph.id,
-			header: {
-				authorization: uni.getStorageSync('authorization')
-			},
-			success: (res) => {
-				// setTimeout(() => {}, 2000)
-				console.log('录音上传成功', res)
-				if (res.statusCode === 200) {
-					const data = res.data && JSON.parse(res.data)
-					// isRecording.value = false
-					interruptRecording.value = false
-					const sectionIndex = sectionInfo.findIndex(section => section.id === data.contextId)
-					console.log('句子上下文 序号 sectionIndex', sectionIndex)
-					if (sectionIndex > -1) {
-						sectionInfo[sectionIndex].result = data
-						sectionInfo[sectionIndex].score = data.emo
-						sectionInfo[sectionIndex].recUrl = data.recUrl
-						sectionInfo[sectionIndex].tipShow = true
-					}
-					if (data.emo > 20) {
-						changeToNextParagraph()
-					}
-					// sectionInfo[currentParagraph.index]['result'] = data
-					// sectionInfo[currentParagraph.index]['tipShow'] = true
-					reportBtnVisible.value = data.displayGetReport
-				}
-				console.log('sectionInfo', currentParagraph.index, sectionInfo)
-			},
-			fail: (err) => {
-				console.log('录音上传失败', err)
-			}
-		})
-	})
-	dialogRecorderManager.onError((err) => {
-		console.log('record error', err)
-		playPromptAudio('endPrompt')
-		isRecording.value = false
-	})
-	const dialogRecord = () => {
-		stopSelfAudioContext()
-		stopAudio()
-		isRecording.value = true
-		dialogRecordTimer.value = 0
-		// 【bugfix】点击录音后直接录制，播放提示音会导致开头1s多录不到
-		// playPromptAudio('startPrompt')
-		dialogRecorderManager.start({
-			format: "pcm",
-			sampleRate: 8000,
-			frameSize: 10
-		})
-	}
-	
-	const stopDialogRecord = () => {
-		// if (isRecording.value) {
-		// 	recorderManager.stop()
-		// 	playPromptAudio('endPrompt')
-		// 	isRecording.value = false
-		// }
-		dialogRecorderManager.stop()
-		playPromptAudio('endPrompt')
-		isRecording.value = false
-		// interruptRecording.value = false
-		// isRecording.value = false
-	}
+	// const stopDialogRecord = () => {
+	// 	// if (isRecording.value) {
+	// 	// 	recorderManager.stop()
+	// 	// 	playPromptAudio('endPrompt')
+	// 	// 	isRecording.value = false
+	// 	// }
+	// 	dialogRecordManager.stop()
+	// 	playPromptAudio('endPrompt')
+	// 	isRecording.value = false
+	// 	// interruptRecording.value = false
+	// 	// isRecording.value = false
+	// }
 	
 	/**
 	 * 播放叮的一声
@@ -549,7 +564,7 @@
 	innerAudioContext.onEnded(() => {
 		audioPlaying.value = false
 		// 对话模式
-		if (lessonMode) {
+		if (lessonMode.value) {
 			changeToNextParagraph()
 		}
 	})
@@ -575,6 +590,7 @@
 		const mode = switchFlag ? 1 : 0
 		setLessonMode(lessonInfo.lessonId, mode).then((res) => {
 			console.log('setLessonMode', res)
+			lessonMode.value = switchFlag
 		})
 	} 
 
