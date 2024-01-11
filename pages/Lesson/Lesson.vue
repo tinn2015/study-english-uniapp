@@ -10,10 +10,11 @@
 				</view>
 			</Navigator>
 		</view>
-		<scroll-view class="lesson" scroll-y :scroll-into-view="scrollId">
+		<!-- :scroll-into-view="scrollId" -->
+		<scroll-view class="lesson" scroll-y :scroll-top="scrollTop"  :scroll-with-animation="true" >
 			<!-- 对话模式 -->
 			<view v-if="lessonMode">
-				<view v-for="(paragraph, index) in sectionInfo" :id="`scrollId${index}`"  :scroll-with-animation="true" scroll-into-view-alignment="center">
+				<view v-for="(paragraph, index) in sectionInfo" :id="`scrollId${index}`">
 					<view class="paragraph-active flex fd-c jc-sb ai-c" v-if="(paragraph.id === currentParagraph.id)">
 						<image class="paragraph-avatar" :src="paragraph.headPic" mode=""></image>
 						<view class="sentence text-center">{{paragraph.sentence}}</view>
@@ -187,6 +188,7 @@
 	
 	// 显示区id
 	const scrollId = ref('')
+	const scrollTop = ref(0)
 	// 是否在录音中， 用于控制录音动画
 	const isRecording = ref(false)
 	/**
@@ -259,6 +261,26 @@
 			currentParagraph.info = nextParagraph
 			currentParagraph.index = nextIndex
 			scrollId.value = `scrollId${currentParagraph.index}`
+			const query = wx.createSelectorQuery()
+			query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
+			query.selectViewport().scrollOffset()
+			query.exec(function(res){
+				console.log('createSelectorQuery', res)
+			  const top = res[0].top       // #the-id节点的上边界坐标
+			  const height = res[0].height       // #the-id节点的上边界坐标
+			  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
+			  if (top > scrollHeight / 2) {
+				  scrollTop.value += top - scrollHeight / 2 + height / 2
+			  }
+			})
+			// const query = uni.createSelectorQuery()
+			// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect(function(res){
+			//   // res.top // #the-id 节点的上边界坐标（相对于显示区域）
+			//   console.log('boundingClientRect', res)
+			//   scrollTop.value = res.top - res.height // 显示区域的竖直滚动位置
+			//   console.log('scrollTop.value', scrollTop.value)
+			// })
+			query.exec()
 			if (isRecording.value) {
 				interruptRecording.value = true
 				stopRecord()
