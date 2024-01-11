@@ -26,13 +26,15 @@
 								<view class="wave"></view>
 							</view>
 							<view v-else class="flex jc-c ai-c">
-								<view class="btn" v-if="index === 0">
+								<!-- 播放按钮 -->
+								<view class="btn" v-if="index % 2 === 0">
 									<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
 										src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
 									<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
 										src="http://api.itso123.com/image/audio-player.png" mode=""></image>
 								</view>
-								<view class="btn btn-mid" v-show="index > 0" @click="record">
+								<!-- 录音按钮 -->
+								<view class="btn btn-mid" v-else @click="record">
 									<image class="icon" src="http://api.itso123.com/image/mic.png" mode=""></image>
 								</view>
 								<!-- 有结果按钮 -->
@@ -185,7 +187,8 @@
 		info: {},
 		index: 0
 	})
-	
+	// 页面是否关闭
+	const pageIsClose = ref(false)
 	// 显示区id
 	const scrollId = ref('')
 	const scrollTop = ref(0)
@@ -232,6 +235,7 @@
 		stopAudio()
 		stopSelfAudioContext()
 		stopRecord()
+		pageIsClose.value = true
 	})
 	
 	// 是否显示获取报告按钮
@@ -322,7 +326,7 @@
 					console.log('断句,开始上传语音')
 					// stopDialogRecord()
 					stopRecord()
-				}, 500)
+				}, 2500)
 			  }
 		  } else {
 			  usefulFrameIndex.value++
@@ -354,7 +358,8 @@
 			},
 			success: (res) => {
 				// setTimeout(() => {}, 2000)
-				console.log('录音上传成功', res)
+				console.log('录音上传成功', res, pageIsClose.value)
+				if (pageIsClose.value) return
 				if (res.statusCode === 200) {
 					const data = res.data && JSON.parse(res.data)
 					// isRecording.value = false
@@ -614,6 +619,8 @@
 		setLessonMode(lessonInfo.lessonId, mode).then((res) => {
 			console.log('setLessonMode', res)
 			lessonMode.value = switchFlag
+			// 每次切换后都结束当前录制
+			stopRecord()
 		})
 	} 
 
