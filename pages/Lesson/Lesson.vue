@@ -27,7 +27,7 @@
 							</view>
 							<view v-else class="flex jc-c ai-c">
 								<!-- 播放按钮 -->
-								<view class="btn" v-if="index % 2 === 0">
+								<view class="btn" v-if="index % 2 == 0">
 									<image @click="stopAudio()" v-if="audioPlaying" class="icon-mini"
 										src="http://api.itso123.com/image/audio-stop.png" mode=""></image>
 									<image @click="playAudio(paragraph.sentenceUrl)" v-else class="icon-mini"
@@ -234,8 +234,9 @@
 		console.log('onUnload')
 		stopAudio()
 		stopSelfAudioContext()
-		stopRecord()
 		pageIsClose.value = true
+		stopRecord()
+		clearTimeout(dialogRecordTimer.value)
 	})
 	
 	// 是否显示获取报告按钮
@@ -251,7 +252,34 @@
 			stopRecord()
 		}
 		stopSelfAudioContext()
-		playAudio(currentParagraph.info.sentenceUrl)
+		// 对讲模式
+		if (lessonMode.value) {
+			if (currentParagraph.index % 2 !== 0) {
+				record()
+			} else {
+				playAudio(currentParagraph.info.sentenceUrl)
+			}
+		} else {
+			playAudio(currentParagraph.info.sentenceUrl)
+		}
+		const query = wx.createSelectorQuery()
+		query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
+		query.selectViewport().scrollOffset()
+		query.exec(function(res){
+		  console.log('createSelectorQuery', res)
+		  const top = res[0].top       // #the-id节点的上边界坐标
+		  const height = res[0].height       // #the-id节点的上边界坐标
+		  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
+		  console.log('滚动条位置', top, scrollHeight / 2)
+		  if (top > scrollHeight / 2) {
+			  scrollTop.value =  top - scrollHeight + height / 2
+		  } else {
+			  scrollTop.value = 0
+		  }
+		  // else if (top <= scrollHeight / 2) {
+			 //  scrollTop.value = top
+		  // }
+		})
 	}
 	
 	/**
@@ -265,17 +293,22 @@
 			currentParagraph.info = nextParagraph
 			currentParagraph.index = nextIndex
 			scrollId.value = `scrollId${currentParagraph.index}`
+			console.log('scrollId', scrollId.value)
 			const query = wx.createSelectorQuery()
 			query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
 			query.selectViewport().scrollOffset()
 			query.exec(function(res){
-				console.log('createSelectorQuery', res)
+			  console.log('createSelectorQuery', res)
 			  const top = res[0].top       // #the-id节点的上边界坐标
 			  const height = res[0].height       // #the-id节点的上边界坐标
 			  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
+			  console.log('滚动条位置', top, scrollHeight / 2)
 			  if (top > scrollHeight / 2) {
 				  scrollTop.value += top - scrollHeight / 2 + height / 2
 			  }
+			  // else if (top <= scrollHeight / 2) {
+				 //  scrollTop.value = top
+			  // }
 			})
 			// const query = uni.createSelectorQuery()
 			// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect(function(res){
@@ -339,6 +372,10 @@
 	recorderManager.onStop((filePath) => {
 		console.log('filePath', filePath)
 		console.log('interruptRecording', interruptRecording.value)
+		if (pageIsClose.value) {
+			console.log('页面已经推出，停止录音')
+			return
+		}
 		if (interruptRecording.value) {
 			console.log('[中断录音上传]')
 			interruptRecording.value = false
