@@ -252,33 +252,45 @@
 			stopRecord()
 		}
 		stopSelfAudioContext()
-		// 对讲模式
-		if (lessonMode.value) {
-			if (currentParagraph.index % 2 !== 0) {
-				record()
-			} else {
-				playAudio(currentParagraph.info.sentenceUrl)
-			}
-		} else {
-			playAudio(currentParagraph.info.sentenceUrl)
-		}
+		// // 对讲模式
+		// if (lessonMode.value) {
+		// 	if (currentParagraph.index % 2 !== 0) {
+		// 		record()
+		// 	} else {
+		// 		playAudio(currentParagraph.info.sentenceUrl)
+		// 	}
+		// } else {
+		// 	playAudio(currentParagraph.info.sentenceUrl)
+		// }
 		const query = wx.createSelectorQuery()
 		query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
 		query.selectViewport().scrollOffset()
+		scrollTop.value = 0
 		query.exec(function(res){
 		  console.log('createSelectorQuery', res)
 		  const top = res[0].top       // #the-id节点的上边界坐标
 		  const height = res[0].height       // #the-id节点的上边界坐标
 		  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
-		  console.log('滚动条位置', top, scrollHeight / 2)
+		  console.log('滚动条位置changeParagraph', top, scrollHeight / 2, scrollTop.value)
 		  if (top > scrollHeight / 2) {
-			  scrollTop.value =  top - scrollHeight + height / 2
+			  scrollTop.value = top - scrollHeight / 2 + height /2
+			  console.log('scrollTop.value', scrollTop.value)
 		  } else {
-			  scrollTop.value = 0
+			  // scrollTop.value = top
 		  }
 		  // else if (top <= scrollHeight / 2) {
 			 //  scrollTop.value = top
 		  // }
+		  // 对讲模式
+		  if (lessonMode.value) {
+		  	if (currentParagraph.index % 2 !== 0) {
+		  		record()
+		  	} else {
+		  		playAudio(currentParagraph.info.sentenceUrl)
+		  	}
+		  } else {
+		  	playAudio(currentParagraph.info.sentenceUrl)
+		  }
 		})
 	}
 	
@@ -302,12 +314,9 @@
 			  const top = res[0].top       // #the-id节点的上边界坐标
 			  const height = res[0].height       // #the-id节点的上边界坐标
 			  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
-			  console.log('滚动条位置', top, scrollHeight / 2)
-			  if (top > scrollHeight / 2) {
-				  scrollTop.value += top - scrollHeight / 2 + height / 2
-			  }
-			  // else if (top <= scrollHeight / 2) {
-				 //  scrollTop.value = top
+			  console.log('滚动条位置changeToNextParagraph', top, scrollHeight / 2)
+			  // if (top > scrollHeight / 2) {
+				 //  scrollTop.value += top - scrollHeight / 2 + height / 2
 			  // }
 			})
 			// const query = uni.createSelectorQuery()
