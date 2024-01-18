@@ -11,7 +11,7 @@
 			</Navigator>
 		</view>
 		<!-- :scroll-into-view="scrollId" -->
-		<scroll-view class="lesson" scroll-y :scroll-top="scrollTop"  :scroll-with-animation="true" >
+		<scroll-view class="lesson" id="scrollView" scroll-y :scroll-top="scrollTop"  :scroll-with-animation="true" >
 			<!-- 对话模式 -->
 			<view v-if="lessonMode">
 				<view v-for="(paragraph, index) in sectionInfo" :id="`scrollId${index}`">
@@ -159,14 +159,14 @@
 		return {
 		  title: '我的AI外教1对1，就在“开口说”',
 		  path: 'pages/tabBar/home/Home',
-		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 		}
 	  }
 	const onShareTimeline = (res) => {
 		return {
 		  title: '我的AI外教1对1，就在“开口说”',
 		  path: 'pages/tabBar/home/Home',
-		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 		}
 	  }
 
@@ -262,24 +262,28 @@
 		} else {
 			playAudio(currentParagraph.info.sentenceUrl)
 		}
-		const query = wx.createSelectorQuery()
-		query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
-		query.selectViewport().scrollOffset()
-		query.exec(function(res){
-		  console.log('createSelectorQuery', res)
-		  const top = res[0].top       // #the-id节点的上边界坐标
-		  const height = res[0].height       // #the-id节点的上边界坐标
-		  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
-		  console.log('滚动条位置', top, scrollHeight / 2)
-		  if (top > scrollHeight / 2) {
-			  scrollTop.value =  top - scrollHeight + height / 2
-		  } else {
-			  scrollTop.value = 0
-		  }
-		  // else if (top <= scrollHeight / 2) {
-			 //  scrollTop.value = top
-		  // }
-		})
+		// const query = wx.createSelectorQuery()
+		// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
+		// query.selectViewport().scrollOffset()
+		// query.exec(function(res){
+		//   console.log('createSelectorQuery', res)
+		//   const top = res[0].top       // #the-id节点的上边界坐标
+		//   const height = res[0].height       // #the-id节点的上边界坐标
+		//   const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
+		//   console.log('滚动条位置', top, scrollHeight / 2)
+		//   if (top > scrollHeight / 2) {
+		// 	  scrollTop.value =  top - scrollHeight + height / 2
+		//   } else {
+		// 	  scrollTop.value = 0
+		//   }
+		//   // else if (top <= scrollHeight / 2) {
+		// 	 //  scrollTop.value = top
+		//   // }
+		// })
+		wx.createSelectorQuery().select('#scrollView').scrollOffset((res) => {
+			const scrollViewTop = res.scrollTop
+			scrollTop.value = scrollViewTop
+		}).exec();
 	}
 	
 	/**
