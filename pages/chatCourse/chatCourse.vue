@@ -42,7 +42,7 @@
 			</view>
 		</view>
 		<LoginPopup></LoginPopup>
-		<VipPayPopup v-show="lessonStore.lessonInfo.displaySeller !== 0"></VipPayPopup>
+		<VipPayPopup v-if="vipPopVisible" @close="vipPopVisible = false"></VipPayPopup>
 	</view>
 </template>
 
@@ -58,14 +58,14 @@
 			return {
 			  title: '我的AI外教1对1，就在“开口说”',
 			  path: 'pages/tabBar/home/Home',
-			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
 		  },
 		onShareTimeline () {
 			return {
 			  title: '我的AI外教1对1，就在“开口说”',
 			  path: 'pages/tabBar/home/Home',
-			  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+			//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
 		},
 		setup () {
@@ -79,6 +79,7 @@
 		data () {
 			return {
 				courses: [],
+				vipPopVisible: false
 			}
 		},
 		components: {
@@ -92,9 +93,19 @@
 				return descs
 			}
 		},
+		mounted () {
+			const lessonStore = useLessonStore()
+			if (lessonStore.lessonInfo.displaySeller !== 0) {
+				this.vipPopVisible = true
+			}
+		},
 		methods: {
 			async routeToLesson () {
 				const lessonStore = useLessonStore()
+				if (lessonStore.lessonInfo.displaySeller !== 0) {
+					this.vipPopVisible = true
+					return
+				}
 				const section = lessonStore.lessonInfo.sections[0]
 				await lessonStore.getSectionInfo(section, 0)
 				uni.navigateTo({

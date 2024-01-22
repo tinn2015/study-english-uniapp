@@ -11,7 +11,7 @@
 			</Navigator>
 		</view>
 		<!-- :scroll-into-view="scrollId" -->
-		<scroll-view class="lesson" scroll-y :scroll-top="scrollTop"  :scroll-with-animation="true" >
+		<scroll-view class="lesson" id="scrollView" scroll-y :scroll-top="scrollTop"  :scroll-with-animation="true" >
 			<!-- 对话模式 -->
 			<view v-if="lessonMode">
 				<view v-for="(paragraph, index) in sectionInfo" :id="`scrollId${index}`">
@@ -127,6 +127,7 @@
 				<view class="report flex jc-c ai-c" v-else @click="routeToReport('get')">查看报告</view>
 			</view>
 		</scroll-view>
+		<VipPayPopup v-if="vipPopVisible" @close="vipPopClose"></VipPayPopup>
 	</view>
 </template>
 
@@ -150,6 +151,7 @@
 	} from '@/components/ToolTip/ToolTip.vue'
 	
 	import Navigator from '@/components/Navigator/Navigator.vue'
+	import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
 	import { shareMenu } from '@/utils/share.js'
 	import { getLessonType, setLessonMode } from '@/utils/request.js'
 	import { soundDetection } from '@/pages/Lesson/sound-detection.js'
@@ -159,14 +161,14 @@
 		return {
 		  title: '我的AI外教1对1，就在“开口说”',
 		  path: 'pages/tabBar/home/Home',
-		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 		}
 	  }
 	const onShareTimeline = (res) => {
 		return {
 		  title: '我的AI外教1对1，就在“开口说”',
 		  path: 'pages/tabBar/home/Home',
-		  imageUrl: 'https://api.itso123.com/image/share-poster.png'
+		//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 		}
 	  }
 
@@ -201,6 +203,11 @@
 	const interruptRecording = ref(false)
 	
 	/**
+	 * 付费弹框
+	 */
+	const vipPopVisible = ref(false)
+	
+	/**
 	 * 课程模式
 	 */
 	const lessonMode = ref(false)
@@ -226,7 +233,11 @@
 			lessonMode.value = res.mode === 1
 			console.log('getLessonType', res)
 			console.log('lessonMode', lessonMode.value)
-			playAudio(currentParagraph.info.sentenceUrl)
+			if (lessonMode.value && currentSection.displaySeller !== 0) {
+				vipPopVisible.value = true
+			} else {
+				playAudio(currentParagraph.info.sentenceUrl)
+			}
 		})
 	})
 	
@@ -252,46 +263,38 @@
 			stopRecord()
 		}
 		stopSelfAudioContext()
-		// // 对讲模式
-		// if (lessonMode.value) {
-		// 	if (currentParagraph.index % 2 !== 0) {
-		// 		record()
-		// 	} else {
-		// 		playAudio(currentParagraph.info.sentenceUrl)
-		// 	}
-		// } else {
-		// 	playAudio(currentParagraph.info.sentenceUrl)
-		// }
-		const query = wx.createSelectorQuery()
-		query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
-		query.selectViewport().scrollOffset()
-		scrollTop.value = 0
-		query.exec(function(res){
-		  console.log('createSelectorQuery', res)
-		  const top = res[0].top       // #the-id节点的上边界坐标
-		  const height = res[0].height       // #the-id节点的上边界坐标
-		  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
-		  console.log('滚动条位置changeParagraph', top, scrollHeight / 2, scrollTop.value)
-		  if (top > scrollHeight / 2) {
-			  scrollTop.value = top - scrollHeight / 2 + height /2
-			  console.log('scrollTop.value', scrollTop.value)
-		  } else {
-			  // scrollTop.value = top
-		  }
-		  // else if (top <= scrollHeight / 2) {
-			 //  scrollTop.value = top
-		  // }
-		  // 对讲模式
-		  if (lessonMode.value) {
-		  	if (currentParagraph.index % 2 !== 0) {
-		  		record()
-		  	} else {
-		  		playAudio(currentParagraph.info.sentenceUrl)
-		  	}
-		  } else {
-		  	playAudio(currentParagraph.info.sentenceUrl)
-		  }
-		})
+		// 对讲模式
+		if (lessonMode.value) {
+			if (currentParagraph.index % 2 !== 0) {
+				record()
+			} else {
+				playAudio(currentParagraph.info.sentenceUrl)
+			}
+		} else {
+			playAudio(currentParagraph.info.sentenceUrl)
+		}
+		// const query = wx.createSelectorQuery()
+		// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
+		// query.selectViewport().scrollOffset()
+		// query.exec(function(res){
+		//   console.log('createSelectorQuery', res)
+		//   const top = res[0].top       // #the-id节点的上边界坐标
+		//   const height = res[0].height       // #the-id节点的上边界坐标
+		//   const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
+		//   console.log('滚动条位置', top, scrollHeight / 2)
+		//   if (top > scrollHeight / 2) {
+		// 	  scrollTop.value =  top - scrollHeight + height / 2
+		//   } else {
+		// 	  scrollTop.value = 0
+		//   }
+		//   // else if (top <= scrollHeight / 2) {
+		// 	 //  scrollTop.value = top
+		//   // }
+		// })
+		wx.createSelectorQuery().select('#scrollView').scrollOffset((res) => {
+			const scrollViewTop = res.scrollTop
+			scrollTop.value = scrollViewTop
+		}).exec();
 	}
 	
 	/**
@@ -665,9 +668,19 @@
 		setLessonMode(lessonInfo.lessonId, mode).then((res) => {
 			console.log('setLessonMode', res)
 			lessonMode.value = switchFlag
+			if (lessonMode.value && res.displaySeller !== 0) {
+				vipPopVisible.value = true
+			} else {
+				vipPopVisible.value = false
+			}
 			// 每次切换后都结束当前录制
 			stopRecord()
 		})
+	} 
+	
+	// 付费弹框关闭
+	const vipPopClose = () => {
+		uni.navigateBack()
 	} 
 
 	// 注册局部组件

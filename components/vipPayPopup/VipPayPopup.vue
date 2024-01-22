@@ -20,6 +20,7 @@
 					<view>立即开通</view>
 				</view>
 			</view>
+			<uni-icons @click="popupClose" class="close-icon" type="closeempty" size="25" color="#ffffff"></uni-icons>
 		</uni-popup>
 	</view>
 </template>
@@ -58,6 +59,15 @@
 				uni.navigateTo({
 					url: '/pages/payment/Payment'
 				});
+			},
+			change (e) {
+				console.log('vippaypop', e)
+				if (!e.show) {
+					this.$emit('close', e.show)
+				}
+			},
+			popupClose () {
+				this.$refs.vipPayPopup.close()
 			}
 		}
 	})
@@ -69,6 +79,12 @@
 		border-radius: 16rpx 16rpx 0 0;
 		overflow: hidden;
 		background: linear-gradient(180deg, #49BC69 0%, #ffffff 100%);
+		position: relative;
+	}
+	.close-icon {
+		position: absolute;
+		right: 20rpx;
+		top: 20rpx;
 	}
 	.vip-expire-pic {
 		width: 478rpx;
