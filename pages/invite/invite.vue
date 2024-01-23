@@ -1,39 +1,64 @@
 <template>
-	<view class="find">
+	<view class="invite">
 		<view class="header">
 			<Navigator></Navigator>
+			<view class="header-title">
+				<view>邀请好友</view>
+				<view>获取“开口说AI”口语练习时长</view>
+			</view>
 			<image class="bg" src="../../static/invite/bg.png" mode="scaleToFill"></image>
+			<image class="icon-gift" src="../../static/invite/gift.png" mode="scaleToFill"></image>
 		</view>
-		<view class="find-content">
-			<view class="tip flex jc-sb ai-c" v-if="lessonStore.lessonInfo.advUrl">
-				<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
-				<text class="tip-text">{{lessonStore.lessonInfo.advTitle}}</text>
-				<uni-icons type="forward"></uni-icons>
-			</view>
-			<view class="process-box">
-				<view class="process-label">完成进度 {{lessonStore.lessonInfo.speed}}</view>
-				<view @click="sectionGotoStudy(section, index)" v-for="(section, index) in lessonStore.lessonInfo.sections" class="flex jc-sb ai-c course-box">
-					<image class="course-img" src="https://api.itso123.com/image/section-icon.png" mode=""></image>
-					<view class="course-info">
-						<view class="course-title">{{section.title}}</view>
-						<view class="course-desc">{{section.descript}}</view>
+		<view class="invite-content flex fd-c jc-sb">
+			<view>
+				<view class="box flex jc-c ai-c">
+					<view class="left w-half flex fd-c ai-c">
+						<image class="tip-icon" src="../../static/invite/msg.png" mode=""></image>
+						<view class="tip-label">每邀请一名好友+30分钟智能对话</view>
 					</view>
-					<uni-icons type="forward"></uni-icons>
+					<view class="right w-half flex fd-c ai-c">
+						<view class="invite-num">8</view>
+						<view class="invite-num-tip">已邀请人数</view>
+					</view>
+				</view>
+				<view class="box">
+					<view class="sub-title">参与步骤</view>
+					<view class="flex jc-sb ai-fs mt28">
+						<view class="step-item flex fd-c ai-c">
+							<view class="step-num flex jc-c ai-c">1</view>
+							<view class="step-label">复制邀请码</view>
+						</view>
+						<view class="line"></view>
+						<view class="step-item flex fd-c ai-c">
+							<view class="step-num flex jc-c ai-c">2</view>
+							<view class="step-label">发送邀请码给好友</view>
+						</view>
+						<view class="line"></view>
+						<view class="step-item flex fd-c ai-c">
+							<view class="step-num flex jc-c ai-c">3</view>
+							<view class="step-label">好友打开小程序</view>
+						</view>
+						<view class="line"></view>
+						<view class="step-item flex fd-c ai-c">
+							<view class="step-num flex jc-c ai-c">4</view>
+							<view class="step-label">填写邀请码</view>
+						</view>
+					</view>
 				</view>
 			</view>
-			<view class="handles flex jc-sb ai-c">
-				<view class="flex fd-c ai-c" v-if="lessonStore.lessonInfo.isFavorite" @click="removeCourse">
-					<image class="add-icon" src="https://api.itso123.com/image/remove-course.png" mode=""></image>
-					<text class='add-label'>取消收藏</text>
+			<view class="footer flex fd-c jc-c ai-c">
+				<view class="invite-code-box flex jc-c ai-c">
+					<view class="code">我的邀请码：daiit</view>
+					<image class="copy" src="../../static/invite/copy.png" mode=""></image>
 				</view>
-				<view class="flex fd-c ai-c" v-else @click="addCourse">
-					<image class="add-icon" src="https://api.itso123.com/image/add-course.png" mode=""></image>
-					<text class='add-label'>加入收藏</text>
+				<view class="invite-box flex jc-c ai-c">
+					去邀请
 				</view>
-				<view class="get-study flex jc-c ai-c" @click="routeToLesson">开始学习</view>
+				<view class="invite-input flex jc-c ai-c">
+					输入邀请码
+				</view>
 			</view>
 		</view>
-		<LoginPopup v-show="lessonStore.lessonInfo.displaySeller !== 0"></LoginPopup>
 	</view>
 </template>
 
@@ -89,205 +114,164 @@
 				uni.navigateTo({
 					url:"/pages/Lesson/Lesson"
 				})
-			},
-			/**
-			 * 移除课程
-			 */
-			removeCourse () {
-				const {lessonId} = this.lessonStore.lessonInfo
-				removeFavoriteCourse(lessonId).then(res => {
-					console.log('removeFavoriteCourse', res)
-					this.lessonStore.getFavoriteLesson(lessonId)
-				})
-			},
-			
-			/**
-			 * 添加课程
-			 */
-			addCourse () {
-				const {img, lessonId, level, title} = this.lessonStore.lessonInfo
-				addFavoriteCourse({
-				  img,
-				  lessonId,
-				  level,
-				  title
-				}).then(() => {
-					this.lessonStore.getFavoriteLesson(lessonId)
-				})
-			},
-			
-			/**
-			 * 去学习页
-			 */
-			async sectionGotoStudy (section, index) {
-				console.log('sectionGotoStudy', index)
-				const lessonStore = useLessonStore()
-				await lessonStore.getSectionInfo(section, index)
-				console.log('sectionGotoStudy')
-				uni.navigateTo({
-					url: "/pages/Lesson/Lesson"
-				})
 			}
 		}
 	}
 </script>
 
 <style scoped lang="scss">
-	.find {
+	.invite {
 		height: 100vh;
 		overflow: hidden;
 	}
 	.header {
-		height: 560rpx;
+		height: 522rpx;
 		width: 100%;
 		// background: #abcbd9;
 		box-sizing: border-box;
 		overflow: hidden;
-		// background: linear-gradient(180deg, #59C47F 0%, #6BE7B7 100%);
-		// background-image: url(@/static/invite/bg.png);
-		// background-size: 100%;
+		position: relative;
 		.bg {
 			width: 100%;
 			height: 100%
 		}
-		.banner {
-			width: 100%;
-			height: 100%
+		.icon-gift {
+			width: 390rpx;
+			height: 290rpx;
+			position: absolute;
+			z-index: 100;
+			top: 92rpx;
+			right: -68rpx
 		}
-		.box {
-			margin-top: 170rpx;
-			box-sizing: border-box;
-			padding: 0 32rpx;
-			.course-overview {
-				margin-left: 32rpx;
-				.title {
-					font-size: 32rpx;
-					font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
-					font-weight: 500;
-					color: #FFFFFF;
-				}
-				.desc {
-					font-size: 24rpx;
-					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
-					font-weight: 400;
-					color: #D6F1E1;
-					margin-top: 8rpx;
-				}
-				.bottom {
-					font-size: 24rpx;
-					font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
-					font-weight: 400;
-					color: #D6F1E1
-				}
-				.line {
-					margin: 0 20rpx;
-				}
-			}
-		}
-		.poster {
-			min-width: 200rpx;
-			width: 200rpx;
-			height: 266rpx;
-			border-radius: 16rpx;
-			border: 4rpx solid #FFFFFF;
-		}
-	}
-	.find-content {
-		position: relative;
-		top: -54rpx;
-		height: calc(100% - 560rpx + 54rpx);
-		box-sizing: border-box;
-		border-radius: 32rpx 32rpx 0 0;
-		background: #ffffff;
-		padding: 32rpx 0;
-		.tip {
-			height: 72rpx;
-			background: #F4F5F7;
-			border-radius: 16rpx;
-			padding: 0 22rpx;
-			margin: 0 32rpx;
-			box-sizing: border-box;
-		}
-		.tip-text {
-			font-size: 28rpx;
-			font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
-			font-weight: 400;
+		.header-title {
+			position: absolute;
+			top: 188rpx;
+			left: 32rpx;
+			font-size: 32rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 600;
 			color: #202127;
 		}
-		.horn {
-			width: 32rpx;
-			height: 32rpx
-		}
-		.process-box {
-			margin: 32rpx 32rpx 0;
-			padding-right: 32rpx;
-			height: calc(100% - 260rpx);
-			overflow-y: scroll;
-			.process-label {
+	}
+	.invite-content {
+		position: relative;
+		top: -120rpx;
+		height: calc(100% - 522rpx + 120rpx);
+		box-sizing: border-box;
+		border-radius: 32rpx 32rpx 0 0;
+		background: linear-gradient(360deg, #00DEA5 0%, #F5FFF8 100%);
+		padding: 0 22rpx 60rpx 22rpx;
+		overflow: hidden;
+		.box {
+			width: 100%;
+			margin-top: 32rpx;
+			background: #FFFFFF;
+			border-radius: 24rpx;
+			padding: 32rpx;
+			box-sizing: border-box;
+			.tip-icon {
+				width: 104rpx;
+				height: 68rpx
+			}
+			.tip-label {
+				width: 200rpx;
 				font-size: 24rpx;
-				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
-				font-weight: 400;
-				color: #696B6C;
-			}
-			.course-box {
-				margin-top: 48rpx;
-			}
-			.course-info {
-				width: 100%;
-				margin-left: 24rpx;
-			}
-			.course-title {
-				font-size: 32rpx;
-				font-family: AlibabaPuHuiTi-Medium, AlibabaPuHuiTi;
-				font-weight: 500;
-				color: #202127;
-			}
-			.course-desc {
-				font-size: 28rpx;
-				font-family: Roboto-Regular, Roboto;
+				font-family: PingFangSC, PingFang SC;
 				font-weight: 400;
 				color: #999A9F;
+				margin-top: 12rpx
 			}
-			.course-img {
-				width: 80rpx;
-				min-width: 80rpx;
-				height: 80rpx;
-				background: #58C898;
-				border-radius: 50%;
+			.invite-num {
+				font-size: 72rpx;
+				font-family: DINPro, DINPro;
+				font-weight: 500;
+				color: #58C898;
+			}
+			.invite-num-tip {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #999A9F;
+				margin-top: 18rpx;
 			}
 		}
-		.handles {
-			box-sizing: border-box;
-			border-top: 1px solid #dcd9d9;
-			// position: relative;
-			// z-index: 100;
-			// bottom: 84rpx;
-			height: 196rpx;
-			left: 0;
-			padding: 16rpx 24rpx;
-			// padding-top: 16rpx;
-			.add-label {
-				font-size: 24rpx;
-				font-family: AlibabaPuHuiTi-Regular, AlibabaPuHuiTi;
-				font-weight: 400;
-				color: #202127;
-			}
-			.add-icon {
-				width: 60rpx;
-				height: 60rpx;
+		.left {
+			border-right: 1px solid #E5E4E9;
+		}
+		.sub-title {
+			font-size: 32rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 600;
+			color: #202127;
+		}
+		.step-item {
+			.step-num {
+				width: 48rpx;
+				height: 48rpx;
+				border: 2rpx solid #58C898;
 				border-radius: 50%;
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #58C898;
 			}
-			.get-study {
-				background: linear-gradient(90deg, #59C47F 0%, #6BE7B7 100%);
-				border-radius: 60rpx;
+			.step-label {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				color: #999A9F;
+				margin-top: 20rpx;
+				width: 120rpx;
+				text-align: center;
+			}
+		}
+		.line {
+			width: 60rpx;
+			border-top: 1rpx solid #E5E4E9;
+			margin-top: 24rpx;
+		}
+		.footer {
+			width: 100%;
+			.code {
 				font-size: 32rpx;
-				font-family: PingFangSC-Semibold, PingFang SC;
+				font-family: PingFangSC, PingFang SC;
 				font-weight: 600;
 				color: #FFFFFF;
-				width: 574rpx;
-				height: 96rpx;
-				margin-left: 24rpx;
+			}
+			.copy {
+				width: 32rpx;
+				height: 32rpx;
+				margin-left: 16rpx;
+			}
+			.invite-box {
+				width: 100%;
+				background: #ffffff;
+				border-radius: 60rpx;
+				font-size: 32rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				color: #58C898;
+				margin-top: 32rpx;
+				padding: 24rpx 0;
+			}
+			.invite-input {
+				width: 100%;
+				font-size: 32rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				color: #FFFFFF;
+				border-radius: 60rpx;
+				border: 2rpx solid #FFFFFF;
+				margin-top: 32rpx;
+				padding: 24rpx 0;
 			}
 		}
+		
+	}
+	.w-half {
+		width: 50%;
+	}
+	.mt28 {
+		margin-top: 28rpx;
 	}
 </style>
