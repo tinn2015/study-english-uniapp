@@ -79,6 +79,7 @@ import Swiper from './Swiper/Swiper.vue';
 import { onReady, onInit, onShow } from '@dcloudio/uni-app';
 import { useLoginStore } from '@/stores/login';
 import { useLessonStore } from '@/stores/lessons.js'
+import { useInviteStore } from '@/stores/invite.js'
 import { ToolTip } from '@/components/ToolTip/ToolTip.vue'
 import { LoginPopup } from '@/components/LoginPopup/LoginPopup.vue'
 import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
@@ -200,6 +201,9 @@ export default defineComponent({
 	},
 	mounted() {
 		console.log('mounted');
+		// uni.getShareInfo(res => {
+		// 	console.log('getShareInfo', res)
+		// })
 	},
 	components: {
 		Swiper,
@@ -208,8 +212,10 @@ export default defineComponent({
 		VipPayPopup
 		// GetUserProfilePopup
 	},
-	onLoad() {
-		console.log('load');
+	onLoad(options) {
+		console.log('home load', options);
+		const inviteStore = useInviteStore()
+		inviteStore.setInvitedCode(options.inviteCode)
 	},
 	onInit() {
 		console.log('init');

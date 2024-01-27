@@ -1,4 +1,5 @@
 <script>
+	import { useInviteStore } from '@/stores/invite.js';
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
@@ -6,6 +7,9 @@
 			  withShareTicket: true,
 			  menus: ['shareAppMessage', 'shareTimeline']
 			})
+			
+			const inviteStore = useInviteStore()
+			inviteStore.getInviteCode()
 			
 			// uni.onShareAppMessage(res) {
 			// 	// if (res.from === 'button') {// 来自页面内分享按钮

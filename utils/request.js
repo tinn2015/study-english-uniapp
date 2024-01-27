@@ -35,11 +35,12 @@ const request = ({method = 'GET', url, data}) => {
 	return 
 }
 
-export const login = async (code) => {
+export const login = async (code, inviteCode) => {
 	const loginResult = await request({
 		url: '/user/login',
 		data: {
-			code
+			code,
+			inviteCode
 		}
 	})
 	if (loginResult.result === '0') {
@@ -312,5 +313,29 @@ export const setLessonMode = (lessonId, mode) => {
 		url: `/lesson/mode/set/${lessonId}/${mode}`,
 		method: 'POST',
 		// data: {saleNo}
+	})
+}
+
+// ================================ 邀请 ===========================
+/**
+ * 获取邀请码
+ */
+export const getInviteCode = () => {
+	return request({
+		url: `/user/invite/info/query`,
+		method: 'POST',
+	})
+}
+
+/**
+ * 效验邀请码
+ */
+export const checkInviteCode = (code) => {
+	return request({
+		url: `/user/invite/code/check`,
+		method: 'POST',
+		data: {
+			"inviteCode":code
+		}
 	})
 }

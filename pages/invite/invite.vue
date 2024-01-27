@@ -17,7 +17,7 @@
 						<view class="tip-label">每邀请一名好友+30分钟智能对话</view>
 					</view>
 					<view class="right w-half flex fd-c ai-c">
-						<view class="invite-num">8</view>
+						<view class="invite-num">{{inviteStore.inviteNum}}</view>
 						<view class="invite-num-tip">已邀请人数</view>
 					</view>
 				</view>
@@ -48,38 +48,46 @@
 			</view>
 			<view class="footer flex fd-c jc-c ai-c">
 				<view class="invite-code-box flex jc-c ai-c">
-					<view class="code">我的邀请码：daiit</view>
+					<view class="code">我的邀请码：{{inviteStore.inviteCode}}</view>
 					<image class="copy" src="../../static/invite/copy.png" mode=""></image>
 				</view>
-				<view class="invite-box flex jc-c ai-c">
+				<button class="invite-box flex jc-c ai-c" type="default" open-type="share">
 					去邀请
-				</view>
-				<view class="invite-input flex jc-c ai-c">
+				</button>
+				<view class="invite-input flex jc-c ai-c" @click="openPopup">
 					输入邀请码
 				</view>
 			</view>
 		</view>
+		<uni-popup ref="inputPopup" @change="change">
+			<view class="input-popup-content flex fd-c jc-c ai-c">
+				<input class="input" type="text" v-model="inviteCodeInput"/>
+				<view class="input-btn flex jc-c ai-c" @click="checkCode">确定</view>
+			</view>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import {useLessonStore} from '@/stores/lessons.js'
+	import {useInviteStore} from '@/stores/invite.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
-	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
+	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse, checkInviteCode } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
 	export default {
 		onShareAppMessage(res) {
+			const inviteStore = useInviteStore()
 			return {
 			  title: '我的AI外教1对1，就在“开口说”',
-			  path: 'pages/tabBar/home/Home',
+			  path: `pages/tabBar/home/Home?inviteCode=${inviteStore.inviteCode}`,
 			//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
 		  },
 		onShareTimeline () {
 			return {
 			  title: '我的AI外教1对1，就在“开口说”',
-			  path: 'pages/tabBar/home/Home',
+			  path: `pages/tabBar/home/Home?inviteCode=${inviteStore.inviteCode}`,
 			//   imageUrl: 'https://api.itso123.com/image/share-poster.png'
 			}
 		},
@@ -87,13 +95,16 @@
 			shareMenu()
 			const lessonStore = useLessonStore()
 			console.log('lessonStore', lessonStore)
+			const inviteStore = useInviteStore()
 			return {
-				lessonStore
+				lessonStore,
+				inviteStore
 			}
 		},
 		data () {
 			return {
 				courses: [],
+				inviteCodeInput: ''
 			}
 		},
 		components: {
@@ -113,6 +124,16 @@
 				await lessonStore.getSectionInfo(section, 0)
 				uni.navigateTo({
 					url:"/pages/Lesson/Lesson"
+				})
+			},
+			openPopup () {
+				this.$refs.inputPopup.open('center')
+			},
+			checkCode () {
+				console.log('inviteCodeInput', this.inviteCodeInput)
+				checkInviteCode(this.inviteCodeInput).then(res => {
+					console.log('checkInviteCode', res)
+					this.$refs.inputPopup.close()
 				})
 			}
 		}
@@ -139,7 +160,7 @@
 			width: 390rpx;
 			height: 290rpx;
 			position: absolute;
-			z-index: 100;
+			z-index: 10;
 			top: 92rpx;
 			right: -68rpx
 		}
@@ -266,7 +287,25 @@
 				padding: 24rpx 0;
 			}
 		}
-		
+	}
+	.input-popup-content {
+		background: #ffffff;
+		padding: 32rpx;
+		border-radius: 16rpx;
+		.input {
+			width: 460rpx;
+			border: 1px solid #dddddd;
+			height: 60rpx;
+			padding: 20rpx 50rpx;
+			border-radius: 16rpx;
+		}
+		.input-btn {
+			background: #58C898;
+			padding: 20rpx;
+			border-radius: 30rpx;
+			margin-top: 30rpx;
+			width: 300rpx;
+		}
 	}
 	.w-half {
 		width: 50%;
