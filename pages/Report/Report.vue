@@ -41,7 +41,9 @@
 					<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
 						<view class="tag flex jc-c ai-c">单词问题</view>
 						<view class="sentence-item flex fw-w ai-c">
-							<text class="mark">{{item.desc}}</text>
+							<view class="mark">
+								<view style="margin-top: 20rpx" v-for="i in item.desc">{{i}}</view>
+							</view>
 							<view class="horn-box flex jc-c ai-c" @click="playAudio(item.audioUrl)">
 								<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
 							</view>

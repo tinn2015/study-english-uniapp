@@ -67,7 +67,7 @@
 					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
 				<view class="item flex ai-c" @click="routerToInvite">
-					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
+					<image src="@/static/images/gift.png" mode="" class="icon"></image>
 					<view class="label">邀请有奖</view>
 				</view>
 				<!-- <view class="item flex ai-c">

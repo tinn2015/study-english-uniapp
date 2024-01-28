@@ -4,7 +4,7 @@
 			<Navigator></Navigator>
 			<view class="header-title">
 				<view>邀请好友</view>
-				<view>获取“开口说AI”口语练习时长</view>
+				<view>获取“开口说英语”口语练习时长</view>
 			</view>
 			<image class="bg" src="../../static/invite/bg.png" mode="scaleToFill"></image>
 			<image class="icon-gift" src="../../static/invite/gift.png" mode="scaleToFill"></image>
@@ -14,7 +14,7 @@
 				<view class="box flex jc-c ai-c">
 					<view class="left w-half flex fd-c ai-c">
 						<image class="tip-icon" src="../../static/invite/msg.png" mode=""></image>
-						<view class="tip-label">每邀请一名好友+30分钟智能对话</view>
+						<view class="tip-label">每邀请一名好友+30次智能对话</view>
 					</view>
 					<view class="right w-half flex fd-c ai-c">
 						<view class="invite-num">{{inviteStore.inviteNum}}</view>
@@ -22,7 +22,10 @@
 					</view>
 				</view>
 				<view class="box">
-					<view class="sub-title">参与步骤</view>
+					<view class="sub-title flex ai-c">
+						<view>参与步骤 </view>
+						<view class="sub-title-tip"> ( 最多可邀请6人 )</view>
+					</view>
 					<view class="flex jc-sb ai-fs mt28">
 						<view class="step-item flex fd-c ai-c">
 							<view class="step-num flex jc-c ai-c">1</view>
@@ -49,7 +52,7 @@
 			<view class="footer flex fd-c jc-c ai-c">
 				<view class="invite-code-box flex jc-c ai-c">
 					<view class="code">我的邀请码：{{inviteStore.inviteCode}}</view>
-					<image class="copy" src="../../static/invite/copy.png" mode=""></image>
+					<image class="copy" src="../../static/invite/copy.png" mode="" @click="copy(inviteStore.inviteCode)"></image>
 				</view>
 				<button class="invite-box flex jc-c ai-c" type="default" open-type="share">
 					去邀请
@@ -59,10 +62,14 @@
 				</view>
 			</view>
 		</view>
-		<uni-popup ref="inputPopup" @change="change">
+		<uni-popup ref="inputPopup" @change="change" :is-mask-click="false">
 			<view class="input-popup-content flex fd-c jc-c ai-c">
+				<view class="input-popup-title">输入邀请码</view>
 				<input class="input" type="text" v-model="inviteCodeInput"/>
-				<view class="input-btn flex jc-c ai-c" @click="checkCode">确定</view>
+				<view class="flex jc-sb ai-c handles-box">
+					<view class="input-btn input-btn-left flex jc-c ai-c" @click="closePopup">取消</view>
+					<view class="input-btn input-btn-right flex jc-c ai-c" @click="checkCode">确定</view>
+				</view>
 			</view>
 		</uni-popup>
 	</view>
@@ -129,11 +136,34 @@
 			openPopup () {
 				this.$refs.inputPopup.open('center')
 			},
+			closePopup () {
+				this.$refs.inputPopup.close('center')
+				this.inviteCodeInput = ''
+			},
+			copy (code) {
+				uni.setClipboardData({
+					data: code
+				})
+			},
 			checkCode () {
 				console.log('inviteCodeInput', this.inviteCodeInput)
+				if (!this.inviteCodeInput) {
+					uni.showToast({
+						title: '请输入邀请码',
+						icon: 'none'
+					})
+					return
+				}
 				checkInviteCode(this.inviteCodeInput).then(res => {
 					console.log('checkInviteCode', res)
-					this.$refs.inputPopup.close()
+					if (res.result === '0') {
+						this.$refs.inputPopup.close()
+					} else {
+						uni.showToast({
+							title: res.reason,
+							icon: 'none'
+						})
+					}
 				})
 			}
 		}
@@ -224,6 +254,13 @@
 			font-family: PingFangSC, PingFang SC;
 			font-weight: 600;
 			color: #202127;
+			.sub-title-tip {
+				font-size: 24rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				color: #999A9F;
+				padding-left: 20rpx;
+			}
 		}
 		.step-item {
 			.step-num {
@@ -274,6 +311,8 @@
 				color: #58C898;
 				margin-top: 32rpx;
 				padding: 24rpx 0;
+				height: 96rpx;
+				box-sizing: border-box;
 			}
 			.invite-input {
 				width: 100%;
@@ -285,6 +324,8 @@
 				border: 2rpx solid #FFFFFF;
 				margin-top: 32rpx;
 				padding: 24rpx 0;
+				height: 96rpx;
+				box-sizing: border-box;
 			}
 		}
 	}
@@ -292,19 +333,35 @@
 		background: #ffffff;
 		padding: 32rpx;
 		border-radius: 16rpx;
+		.input-popup-title {
+			font-size: 30rpx;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 600;
+			margin-bottom: 32rpx;
+		};
 		.input {
 			width: 460rpx;
 			border: 1px solid #dddddd;
-			height: 60rpx;
+			height: 50rpx;
 			padding: 20rpx 50rpx;
 			border-radius: 16rpx;
 		}
+		.handles-box {
+			width: 100%;
+			padding: 0 20rpx;
+			box-sizing: border-box;
+		}
 		.input-btn {
-			background: #58C898;
 			padding: 20rpx;
-			border-radius: 30rpx;
+			border-radius: 60rpx;
 			margin-top: 30rpx;
-			width: 300rpx;
+			width: 200rpx;
+		}
+		.input-btn-right {
+			background: #58C898;
+		}
+		.input-btn-left {
+			border: 1rpx solid #948f8f
 		}
 	}
 	.w-half {
