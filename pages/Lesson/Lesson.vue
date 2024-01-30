@@ -233,9 +233,10 @@
 			lessonMode.value = res.mode === 1
 			console.log('getLessonType', res)
 			console.log('lessonMode', lessonMode.value)
-			if (lessonMode.value && currentSection.displaySeller !== 0) {
+			if (lessonMode.value && res.displaySeller !== 0) {
 				vipPopVisible.value = true
 			} else {
+				vipPopVisible.value = false
 				playAudio(currentParagraph.info.sentenceUrl)
 			}
 		})
