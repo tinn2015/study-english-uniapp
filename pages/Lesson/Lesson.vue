@@ -274,24 +274,6 @@
 		} else {
 			playAudio(currentParagraph.info.sentenceUrl)
 		}
-		// const query = wx.createSelectorQuery()
-		// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect()
-		// query.selectViewport().scrollOffset()
-		// query.exec(function(res){
-		//   console.log('createSelectorQuery', res)
-		//   const top = res[0].top       // #the-id节点的上边界坐标
-		//   const height = res[0].height       // #the-id节点的上边界坐标
-		//   const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
-		//   console.log('滚动条位置', top, scrollHeight / 2)
-		//   if (top > scrollHeight / 2) {
-		// 	  scrollTop.value =  top - scrollHeight + height / 2
-		//   } else {
-		// 	  scrollTop.value = 0
-		//   }
-		//   // else if (top <= scrollHeight / 2) {
-		// 	 //  scrollTop.value = top
-		//   // }
-		// })
 		wx.createSelectorQuery().select('#scrollView').scrollOffset((res) => {
 			const scrollViewTop = res.scrollTop
 			scrollTop.value = scrollViewTop
@@ -319,9 +301,9 @@
 			  const height = res[0].height       // #the-id节点的上边界坐标
 			  const scrollHeight = res[1].scrollHeight // 显示区域的竖直滚动位置
 			  console.log('滚动条位置changeToNextParagraph', top, scrollHeight / 2)
-			  // if (top > scrollHeight / 2) {
-				 //  scrollTop.value += top - scrollHeight / 2 + height / 2
-			  // }
+			  if (top > scrollHeight / 2) {
+				  scrollTop.value += top - scrollHeight / 2 + height / 2
+			  }
 			})
 			// const query = uni.createSelectorQuery()
 			// query.select(`#scrollId${currentParagraph.index}`).boundingClientRect(function(res){

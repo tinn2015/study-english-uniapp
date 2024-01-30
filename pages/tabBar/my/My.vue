@@ -66,6 +66,10 @@
 					<!-- <view class="label">帮助与反馈</view> -->
 					<button class="label contact-btn" open-type="contact" @contact="handleContact">帮助与反馈</button>
 				</view>
+				<view class="item flex ai-c" @click="routerToInvite">
+					<image src="@/static/images/gift.png" mode="" class="icon"></image>
+					<view class="label">邀请有奖</view>
+				</view>
 				<!-- <view class="item flex ai-c">
 					<image src="http://api.itso123.com/image/help.png" mode="" class="icon"></image>
 					<view class="label">英语水平测试</view>
@@ -188,6 +192,11 @@
 			routerToRecord () {
 				uni.navigateTo({
 					url: '/pages/StudyRecord/StudyRecord'
+				})
+			},
+			routerToInvite () {
+				uni.navigateTo({
+					url: '/pages/invite/invite'
 				})
 			},
 			routerToToday () {

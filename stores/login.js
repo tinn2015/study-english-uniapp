@@ -1,13 +1,14 @@
 // stores/counter.js
 import { defineStore } from 'pinia';
-import { login } from '@/utils/request.js';
+import { login, getInviteCode } from '@/utils/request.js';
 import {ref} from 'vue'
+import { useInviteStore } from '@/stores/invite.js'
 export const useLoginStore = defineStore('loginStore', {
 	state: () => {
 		return { 
 			isLogin: false,
 			showLoginBtn: false, // 重新登录弹框
-			getUserProfileBtnVisible: true // 获取
+			getUserProfileBtnVisible: true ,// 获取
 		};
 	},
 	// 也可以这样定义
@@ -61,7 +62,8 @@ export const useLoginStore = defineStore('loginStore', {
 				console.log('用户昵称为：' + infoRes.userInfo.nickName);
 			  }
 			});
-			const loginRes = await login(result.code)
+			const inviteStore =  useInviteStore()
+			const loginRes = await login(result.code, inviteStore.invitedCode)
 			this.setLoginStatus(true)
 			console.log('login result', result, loginRes)
 			return false

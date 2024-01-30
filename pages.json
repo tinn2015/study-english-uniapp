@@ -13,13 +13,13 @@
 		// 		"navigationStyle": "custom"
 		// 	}
 		// },
-		{
-			"path": "pages/invite/invite",
-			"style": {
-				"navigationBarTitleText": "首页",
-				"navigationStyle": "custom"
-			}
-		},
+		// {
+		// 	"path": "pages/invite/invite",
+		// 	"style": {
+		// 		"navigationBarTitleText": "首页",
+		// 		"navigationStyle": "custom"
+		// 	}
+		// },
 		{
 			"path": "pages/tabBar/home/Home",
 			"style": {
@@ -108,6 +108,13 @@
 			"path": "pages/payment/Payment",
 			"style": {
 				"navigationBarTitleText": "",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/invite/invite",
+			"style": {
+				"navigationBarTitleText": "首页",
 				"navigationStyle": "custom"
 			}
 		}
