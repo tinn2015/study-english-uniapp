@@ -124,7 +124,11 @@
 				signType: res.signType,
 				// provider: 'wxpay',
 				timeStamp: res.timeStamp,
-				package: res.package
+				package: res.package,
+				success: () => {
+					console.log('pay success')
+					uni.navigateBack()
+				}
 			})
 		})
 	}
