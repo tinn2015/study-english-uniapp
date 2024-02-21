@@ -141,7 +141,8 @@
 	} from 'vue'
 	import {
 		onReady,
-		onUnload
+		onUnload,
+		onShow,
 	} from '@dcloudio/uni-app'
 	import {
 		useLessonStore
@@ -228,7 +229,12 @@
 		console.log('currentParagraph', currentParagraph, sectionInfo)
 	})
 	onMounted(() => {
-		console.log('playAudio', playAudio)
+		// console.log('playAudio', playAudio)
+		
+	})
+	
+	onShow(() => {
+		console.log('lesson show')
 		getLessonType(lessonInfo.lessonId, currentSection.id).then(res => {
 			lessonMode.value = res.mode === 1
 			console.log('getLessonType', res)

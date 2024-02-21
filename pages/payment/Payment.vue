@@ -56,7 +56,10 @@
 		createApp,
 		onMounted,
 	} from 'vue'
-	import { getSales, genOrder } from '@/utils/request.js'
+	import {
+		useLessonStore
+	} from '@/stores/lessons.js'
+	import { getSales, genOrder, getLessonType } from '@/utils/request.js'
 	
 	const vipList = reactive([
 		// {
@@ -126,8 +129,30 @@
 				timeStamp: res.timeStamp,
 				package: res.package,
 				success: () => {
-					console.log('pay success')
-					uni.navigateBack()
+				},
+				complete() {
+					// const pages = getCurrentPages()
+					// console.log('pages', pages)
+					// const len = pages.length
+					// const lastPage = pages[len - 2]
+					// if (lastPage) {
+					// 	const route = pages[lastPage].route
+					// 	uni.redirectTo({
+					// 		url: route
+					// 	})
+					// }
+					console.log('pay complete')
+					const lessonStore = useLessonStore()
+					const {
+						sectionInfo,
+						currentSection,
+						lessonInfo,
+						currentSectionFinished
+					} = lessonStore
+					lessonStore.getFavoriteLesson(lessonInfo.lessonId).then((res2) => {
+						console.log('update lessonInfo', res2)
+						uni.navigateBack()
+					})
 				}
 			})
 		})
