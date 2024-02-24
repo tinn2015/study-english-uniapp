@@ -25,12 +25,14 @@
 			</view>
 			<view class="activity-tip flex jc-sb">
 				<view class="left flex jc-c ai-c">
-					<image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image>
+					<!-- <image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image> -->
 					<!-- <view class="tip">限时领取高效学习计划</view>-->
-					<view class="tip">快速提升你的口语能力</view>
+					<!-- <view class="tip">快速提升你的口语能力</view> -->
+					<view class="tip">会员到期：{{vipExpireTime}}</view>
 				</view>
 				<!-- <view class="btn">立即领取</view> -->
-				<view class="btn">立即行动</view>
+				<!-- <view class="btn">立即行动</view> -->
+				<view class="btn" @click="routeToPayment">立即续费</view>
 			</view>
 			<view class="part-3">
 				<view class="header flex jc-sb">
@@ -82,7 +84,7 @@
 <script>
 	import {onMounted, defineComponent, reactive, ref} from 'vue'
 	import { onReady, onInit, onShow } from '@dcloudio/uni-app'
-	import { getMe, setSpeechRate, getPhoneCode } from '@/utils/request.js'
+	import { getMe, setSpeechRate, getPhoneCode, getVipExpiretime } from '@/utils/request.js'
 	import { shareMenu } from '@/utils/share.js'
 	export default defineComponent({
 		onShareAppMessage(res) {
@@ -159,13 +161,19 @@
 				  {value: 1,text: '正常'},
 				  {value: 2,text: '快速'}
 				],
-				phoneNumber: ''
+				phoneNumber: '',
+				vipExpireTime: ''
 			}
 		},
 		mounted () {
 			console.log('mounted')
 			const userPhoneNumber = uni.getStorageSync('userPhoneNumber')
 			this.phoneNumber = userPhoneNumber
+			
+			getVipExpiretime().then(res => {
+				console.log('getVipExpiretime', res)
+				this.vipExpireTime = res.vipExpire
+			})
 		},
 		onLoad () {
 			console.log('load')
@@ -208,6 +216,11 @@
 				console.log('speechRateChange', e)
 				const speechRate = e.detail.value
 				setSpeechRate(speechRate)
+			},
+			routeToPayment () {
+				uni.navigateTo({
+					url: '/pages/payment/Payment'
+				})
 			}
 		}
 	})

@@ -339,3 +339,13 @@ export const checkInviteCode = (code) => {
 		}
 	})
 }
+
+/**
+ * 获取会员过期时间
+ */
+export const getVipExpiretime = (code) => {
+	return request({
+		url: `/user/vip/expire/query`,
+		method: 'POST'
+	})
+}

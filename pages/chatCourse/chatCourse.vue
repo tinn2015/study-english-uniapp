@@ -53,6 +53,7 @@
 	import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
 	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
+	import { onShow } from '@dcloudio/uni-app'
 	export default {
 		onShareAppMessage(res) {
 			return {
@@ -93,7 +94,14 @@
 				return descs
 			}
 		},
-		mounted () {
+		// mounted () {
+		// 	const lessonStore = useLessonStore()
+		// 	if (lessonStore.lessonInfo.displaySeller !== 0) {
+		// 		this.vipPopVisible = true
+		// 	}
+		// },
+		onShow () {
+			console.log('chatcourse onshow')
 			const lessonStore = useLessonStore()
 			if (lessonStore.lessonInfo.displaySeller !== 0) {
 				this.vipPopVisible = true
@@ -109,7 +117,10 @@
 				const section = lessonStore.lessonInfo.sections[0]
 				await lessonStore.getSectionInfo(section, 0)
 				uni.navigateTo({
-					url:"/pages/Chat/Chat"
+					url:"/pages/Chat/Chat",
+					success: () => {
+						this.vipPopVisible = false
+					}
 				})
 			},
 			/**
