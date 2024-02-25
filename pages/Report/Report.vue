@@ -34,19 +34,27 @@
 				<view class="box">
 					<view class="example-text">{{phoneticSymbolProblem.data.text}}</view>
 					<view class="item item-box mt62">
-						<view class="tag flex jc-c ai-c">发音问题</view>
+						<view class="tag flex jc-c ai-c">口语评测</view>
 						<view class="problem-mark">{{phoneticSymbolProblem.data.pronunciDesc}}</view>
 						<!-- <view class="more">你的音标还有这些问题</view> -->
 					</view>
 					<view class="sentence-problems-box item-box mt62" v-for="item in sentenceProblems">
-						<view class="tag flex jc-c ai-c">单词问题</view>
+						<view class="tag flex jc-c ai-c">重点单词</view>
 						<view class="sentence-item flex fw-w ai-c">
 							<view class="mark">
-								<view style="margin-top: 20rpx" v-for="i in item.desc">{{i}}</view>
+								<view style="margin-top: 20rpx" v-for="(i, index) in item.desc">
+									<view v-if="index == 0" class="flex">
+										<view>{{i}}</view>
+										<view class="horn-box flex jc-c ai-c" @click="playAudio(item.audioUrl)">
+											<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
+										</view>
+									</view>
+									<view v-else>{{i}}</view>
+								</view>
 							</view>
-							<view class="horn-box flex jc-c ai-c" @click="playAudio(item.audioUrl)">
+							<!-- <view class="horn-box flex jc-c ai-c" @click="playAudio(item.audioUrl)">
 								<image class="horn" src="https://api.itso123.com/image/horn-green.png" mode=""></image>
-							</view>
+							</view> -->
 						</view>
 					</view>
 					<view class="handle flex jc-sb ai-c">

@@ -292,6 +292,7 @@
 	const changeToNextParagraph = () => {
 		const nextIndex = currentParagraph.index + 1
 		const nextParagraph = sectionInfo[nextIndex]
+		console.log('changeToNextParagraph', nextIndex, nextParagraph)
 		if (nextParagraph) {
 			currentParagraph.id = nextParagraph.id
 			currentParagraph.info = nextParagraph
