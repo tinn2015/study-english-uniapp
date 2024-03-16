@@ -8,9 +8,6 @@
 			  menus: ['shareAppMessage', 'shareTimeline']
 			})
 			
-			const inviteStore = useInviteStore()
-			inviteStore.getInviteCode()
-			
 			// uni.onShareAppMessage(res) {
 			// 	// if (res.from === 'button') {// 来自页面内分享按钮
 			// 	//   console.log(res.target)
@@ -24,6 +21,8 @@
 		},
 		onShow: function() {
 			console.log('App Show')
+			// const inviteStore = useInviteStore()
+			// inviteStore.getInviteCode()
 		},
 		onHide: function() {
 			console.log('App Hide')

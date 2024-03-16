@@ -103,6 +103,7 @@
 			const lessonStore = useLessonStore()
 			console.log('lessonStore', lessonStore)
 			const inviteStore = useInviteStore()
+			inviteStore.getInviteCode()
 			return {
 				lessonStore,
 				inviteStore
