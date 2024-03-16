@@ -81,11 +81,12 @@
 			left: 50%;
 			transform: translateX(-50%) translateY(calc(-100% - 10rpx));
 			background: rgba(0,0,0,0.8);
-			padding: 10rpx 20rpx;
+			padding: 15rpx 20rpx;
 			box-sizing: border-box;
-			min-width: 200rpx;
+			min-width: 100rpx;
 			word-wrap: break-word;
 			display: none;
+			white-space: nowrap;
 		}
 		.mask {
 			position: fixed;
