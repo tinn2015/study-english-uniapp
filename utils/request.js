@@ -1,4 +1,5 @@
 import { useLoginStore } from '@/stores/login.js'
+import { filterFreeLessons } from '@/utils/index.js'
 const miniProgram = uni.getAccountInfoSync().miniProgram
 console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 const baseUrl = miniProgram.envVersion === 'release' ? 'https://api.itso123.com/v1' : 'https://api.itso123.com/v2'
@@ -55,20 +56,24 @@ export const login = async (code, inviteCode) => {
  * 历史课程（累计学习）列表查询
  */
 export const getHistory = async (code) => {
-	return request({
+	const result = await request({
 		url: '/lesson/history/query',
 		method: 'POST'
 	})
+	result.lessons = filterFreeLessons(result.lessons)
+	return result
 }
 
 /**
  * 今日学习列表查询
  */
 export const getTodayLessons = async (code) => {
-	return request({
+	const result = await request({
 		url: '/lesson/study/today/query',
 		method: 'POST'
 	})
+	result.lessons = filterFreeLessons(result.lessons)
+	return result
 }
 
 
@@ -76,11 +81,13 @@ export const getTodayLessons = async (code) => {
 /**
  * 首页，轻松学
  */
-export const getFavorite = () => {
-	return request({
+export const getFavorite = async () => {
+	const result = await request({
 		url: '/lesson/favorite/query',
 		method: 'POST'
 	})
+	result.lessons = filterFreeLessons(result.lessons)
+	return result
 }
 
 /**
@@ -127,20 +134,22 @@ export const getSectionDetail = (id, lessonId) => {
 /**
  * 发现课程列表查询（全部课程查询）
  */
-export const getFindLessons = (key) => {
-	return request({
+export const getFindLessons = async (key) => {
+	const result = await request({
 		url: '/lesson/search/query',
 		method: 'POST',
 		data: {
 			class: key
 		}
 	})
+	result.lessons = filterFreeLessons(result.lessons)
+	return result
 }
 
 /**
  * 发现课程分类查询（全部课程分类查询）
  */
-export const getFindClass = (key) => {
+export const getFindClass = async (key) => {
 	return request({
 		url: '/lesson/search/class/query',
 		method: 'POST'

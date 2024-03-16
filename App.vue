@@ -1,13 +1,14 @@
 <script>
-	import { useInviteStore } from '@/stores/invite.js';
+	import { useLoginStore } from '@/stores/login.js';
 	export default {
-		onLaunch: function() {
+		onLaunch: async function() {
 			console.log('App Launch')
 			uni.showShareMenu({
 			  withShareTicket: true,
 			  menus: ['shareAppMessage', 'shareTimeline']
 			})
-			
+			const loginStore = useLoginStore()
+			loginStore.getSystemInfo()
 			// uni.onShareAppMessage(res) {
 			// 	// if (res.from === 'button') {// 来自页面内分享按钮
 			// 	//   console.log(res.target)

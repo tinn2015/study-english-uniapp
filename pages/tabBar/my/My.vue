@@ -23,7 +23,7 @@
 					<view class="panel-info"><text class="ft64">{{learned.words}}</text> 个</view>
 				</view>
 			</view>
-			<view class="activity-tip flex jc-sb">
+			<view class="activity-tip flex jc-sb" v-if="!loginStore.isIos">
 				<view class="left flex jc-c ai-c">
 					<!-- <image src="https://api.itso123.com/image/horn.png" class="horn" mode=""></image> -->
 					<!-- <view class="tip">限时领取高效学习计划</view>-->
@@ -86,6 +86,7 @@
 	import { onReady, onInit, onShow } from '@dcloudio/uni-app'
 	import { getMe, setSpeechRate, getPhoneCode, getVipExpiretime } from '@/utils/request.js'
 	import { shareMenu } from '@/utils/share.js'
+	import { useLoginStore } from '@/stores/login.js'
 	export default defineComponent({
 		onShareAppMessage(res) {
 			if (res.from === 'button') {// 来自页面内分享按钮
@@ -134,11 +135,15 @@
 					speechRate.value = res.speechRate
 				})
 			})
+			
+			const loginStore = useLoginStore()
+			
 			return {
 				menuButtonInfo,
 				learned,
 				oneSentencePerDay,
-				speechRate
+				speechRate,
+				loginStore
 			}
 		},
 		data () {

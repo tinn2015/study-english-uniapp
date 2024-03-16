@@ -3,7 +3,7 @@
 		<view class="header">
 			<Navigator>
 				<!-- <view>切换模式</view> -->
-				<view class="flex ai-c">
+				<view class="flex ai-c" v-if="!loginStore.isIos">
 					<view class="ft26" :style="{color: !lessonMode ? '#000000' : '#8d8d8d'}">跟读</view>
 					<switch style="transform:scale(0.6)" color="#59c47f" :checked="lessonMode" @change="lessonModeChange" />
 					<view class="ft26" :style="{color: lessonMode ? '#000000' : '#8d8d8d'}">对话</view>
@@ -147,6 +147,7 @@
 	import {
 		useLessonStore
 	} from '@/stores/lessons.js'
+	import { useLoginStore } from '@/stores/login.js'
 	import {
 		ToolTip
 	} from '@/components/ToolTip/ToolTip.vue'
@@ -190,6 +191,7 @@
 		info: {},
 		index: 0
 	})
+	const loginStore = useLoginStore()
 	// 页面是否关闭
 	const pageIsClose = ref(false)
 	// 显示区id
@@ -235,17 +237,19 @@
 	
 	onShow(() => {
 		console.log('lesson show')
-		getLessonType(lessonInfo.lessonId, currentSection.id).then(res => {
-			lessonMode.value = res.mode === 1
-			console.log('getLessonType', res)
-			console.log('lessonMode', lessonMode.value)
-			if (lessonMode.value && res.displaySeller !== 0) {
-				vipPopVisible.value = true
-			} else {
-				vipPopVisible.value = false
-				playAudio(currentParagraph.info.sentenceUrl)
-			}
-		})
+		if (!loginStore.isIos) {
+			getLessonType(lessonInfo.lessonId, currentSection.id).then(res => {
+				lessonMode.value = res.mode === 1
+				console.log('getLessonType', res)
+				console.log('lessonMode', lessonMode.value)
+				if (lessonMode.value && res.displaySeller !== 0) {
+					vipPopVisible.value = true
+				} else {
+					vipPopVisible.value = false
+					playAudio(currentParagraph.info.sentenceUrl)
+				}
+			})
+		}
 	})
 	
 	onUnload(() => {
