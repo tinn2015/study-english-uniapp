@@ -46,6 +46,9 @@
 
 <script>
 	import { getFindLessons, getFindClass } from '@/utils/request.js'
+	import {
+		onShow,
+	} from '@dcloudio/uni-app'
 	import Navigator from '@/components/Navigator/Navigator.vue'
 	import { useLessonStore } from '@/stores/lessons.js'
 	import { shareMenu } from '@/utils/share.js'
@@ -125,7 +128,7 @@
 				]
 			}
 		},
-		async mounted () {
+		async onShow () {
 			shareMenu()
 			const {classList} = await getFindClass()
 			if (classList) {
