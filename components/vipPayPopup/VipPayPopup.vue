@@ -46,7 +46,10 @@
 		// },
 		mounted () {
 			// console.log('monuted dom', this.$refs.loginPopup)
-			this.$refs.vipPayPopup.open('bottom')
+			const loginStore = useLoginStore()
+			if (!loginStore.isIos) {
+				this.$refs.vipPayPopup.open('bottom')
+			}
 		},
 		setup() {
 			const loginStore = useLoginStore()

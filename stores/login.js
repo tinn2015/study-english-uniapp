@@ -9,6 +9,7 @@ export const useLoginStore = defineStore('loginStore', {
 			isLogin: false,
 			showLoginBtn: false, // 重新登录弹框
 			getUserProfileBtnVisible: true ,// 获取
+			isIos: false //手机系统 iOS android
 		};
 	},
 	// 也可以这样定义
@@ -114,6 +115,14 @@ export const useLoginStore = defineStore('loginStore', {
 				}
 			})
 			console.log('userProfile', userProfile)
+		},
+		async getSystemInfo () {
+			const systemInfo = await uni.getSystemInfoAsync()
+			console.log('systemInfo', systemInfo)
+			// this.systemInfo = systemInfo
+			if (systemInfo.platform === 'ios') {
+				this.isIos = true
+			}
 		}
 	},
 });
