@@ -224,11 +224,11 @@
 	} = lessonStore
 	console.log('lessonInfo', lessonInfo)
 	onBeforeMount(() => {
-		if (!sectionInfo.length) return
-		currentParagraph.id = sectionInfo[0].id
-		currentParagraph.info = sectionInfo[0]
-		currentParagraph.index = 0
-		console.log('currentParagraph', currentParagraph, sectionInfo)
+		// if (!sectionInfo.length) return
+		// currentParagraph.id = sectionInfo[0].id
+		// currentParagraph.info = sectionInfo[0]
+		// currentParagraph.index = 0
+		// console.log('currentParagraph', currentParagraph, sectionInfo)
 	})
 	onMounted(() => {
 		// console.log('playAudio', playAudio)
@@ -237,6 +237,11 @@
 	
 	onShow(() => {
 		console.log('lesson show')
+		if (!sectionInfo.length) return
+		currentParagraph.id = sectionInfo[0].id
+		currentParagraph.info = sectionInfo[0]
+		currentParagraph.index = 0
+		console.log('currentParagraph', currentParagraph, sectionInfo)
 		if (!loginStore.isIos) {
 			getLessonType(lessonInfo.lessonId, currentSection.id).then(res => {
 				lessonMode.value = res.mode === 1
@@ -246,6 +251,7 @@
 					vipPopVisible.value = true
 				} else {
 					vipPopVisible.value = false
+					console.log('playAudio-currentParagraph.info.sentenceUrl', currentParagraph.info.sentenceUrl)
 					playAudio(currentParagraph.info.sentenceUrl)
 				}
 			})

@@ -104,6 +104,7 @@
 				const lessonStore = useLessonStore()
 				const section = lessonStore.lessonInfo.sections[0]
 				await lessonStore.getSectionInfo(section, 0)
+				console.log('routeToLesson 开始学习')
 				uni.navigateTo({
 					url:"/pages/Lesson/Lesson"
 				})
