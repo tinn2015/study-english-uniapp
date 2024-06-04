@@ -33,6 +33,7 @@ export const useLessonStore = defineStore('lesson', {
 			const result = await getFavoriteDetail(id)
 			console.log('getFavoriteLesson', result)
 			this.lessonInfo = result
+			return result
 		},
 		async getSectionInfo (section, index) {
 			const result = await getSectionDetail(section.id, this.lessonInfo.lessonId)

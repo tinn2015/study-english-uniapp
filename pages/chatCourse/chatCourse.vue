@@ -51,7 +51,7 @@
 	import {useLessonStore} from '@/stores/lessons.js'
 	import LoginPopup from '@/components/LoginPopup/LoginPopup.vue'
 	import VipPayPopup from '@/components/vipPayPopup/VipPayPopup.vue'
-	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse } from "@/utils/request.js"
+	import { removeFavoriteCourse, getSectionDetail, addFavoriteCourse, getLessonType } from "@/utils/request.js"
 	import { shareMenu } from '@/utils/share.js'
 	import { onShow } from '@dcloudio/uni-app'
 	export default {
@@ -101,15 +101,26 @@
 		// 	}
 		// },
 		onShow () {
-			console.log('chatcourse onshow')
 			const lessonStore = useLessonStore()
-			if (lessonStore.lessonInfo.displaySeller !== 0) {
-				this.vipPopVisible = true
-			}
+			const {
+				lessonInfo
+			} = lessonStore
+			lessonStore.getFavoriteLesson(lessonInfo.lessonId).then(res => {
+				console.log('getFavoriteLesson-onshow', res)
+				if (res.displaySeller !== 0) {
+					this.vipPopVisible = true
+				} else {
+					this.vipPopVisible = false
+				}
+			})
 		},
 		methods: {
 			async routeToLesson () {
 				const lessonStore = useLessonStore()
+				const {
+					lessonInfo
+				} = lessonStore
+				await lessonStore.getFavoriteLesson(lessonInfo.lessonId)
 				if (lessonStore.lessonInfo.displaySeller !== 0) {
 					this.vipPopVisible = true
 					return
