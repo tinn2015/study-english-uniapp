@@ -653,7 +653,13 @@
 		stopSelfAudioContext()
 		innerAudioContext.stop()
 		innerAudioContext.src = url;
-		innerAudioContext.play()
+		/**
+		 * [bugfix] 偶现音频无法播放，改为在oncanplay回调中播放
+		 */
+		innerAudioContext.onCanplay(() => {
+			console.log('audio can play')
+			innerAudioContext.play()
+		})
 	}
 
 	const stopAudio = () => {
