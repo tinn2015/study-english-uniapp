@@ -135,7 +135,7 @@ export default defineComponent({
 			// }
 		})
 		
-		onMounted(async () => {
+		onMounted(() => {
 			checkLoginAndGetData()
 		})
 		
