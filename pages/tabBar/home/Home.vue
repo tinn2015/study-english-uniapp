@@ -129,11 +129,24 @@ export default defineComponent({
 		
 		onBeforeMount(async () => {
 			// loginStore.getUserProfile()
-			const loginFlag = await loginStore.login();
-			if (!loginFlag) {	
-				getHomeData()
-			}
+			// const loginFlag = await loginStore.login();
+			// if (!loginFlag) {	
+			// 	getHomeData()
+			// }
 		})
+		
+		onMounted(async () => {
+			checkLoginAndGetData()
+		})
+		
+		const checkLoginAndGetData = async () => {
+			const needLogin = loginStore.checkNeedLogin()
+			console.log('needLogin', needLogin)
+			if (needLogin) {
+				await loginStore.login()
+			}
+			getHomeData()
+		}
 		
 		const getHomeData = () => {
 			// 获取轻松学
@@ -199,12 +212,12 @@ export default defineComponent({
 			]
 		};
 	},
-	mounted() {
-		console.log('mounted');
+	// mounted() {
+		// console.log('mounted');
 		// uni.getShareInfo(res => {
 		// 	console.log('getShareInfo', res)
 		// })
-	},
+	// },
 	components: {
 		Swiper,
 		ToolTip,
