@@ -135,18 +135,24 @@ export default defineComponent({
 			// }
 		})
 		
-		onMounted(() => {
-			checkLoginAndGetData()
-		})
-		
-		const checkLoginAndGetData = async () => {
-			const needLogin = loginStore.checkNeedLogin()
+		onMounted(async () => {
+			const needLogin = await loginStore.checkNeedLogin()
+			await loginStore.login()
 			console.log('needLogin', needLogin)
 			if (needLogin) {
-				await loginStore.login()
+				loginStore.setLoginStatus(false, true)
 			}
 			getHomeData()
-		}
+		})
+		
+		// const checkLoginAndGetData = async () => {
+		// 	const needLogin = loginStore.checkNeedLogin()
+		// 	console.log('needLogin', needLogin)
+		// 	if (needLogin) {
+		// 		await loginStore.login()
+		// 	}
+		// 	getHomeData()
+		// }
 		
 		const getHomeData = () => {
 			// 获取轻松学
