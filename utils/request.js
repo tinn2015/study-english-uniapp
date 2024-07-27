@@ -3,6 +3,7 @@ import { filterFreeLessons } from '@/utils/index.js'
 const miniProgram = uni.getAccountInfoSync().miniProgram
 console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 const baseUrl = miniProgram.envVersion === 'release' ? 'https://api.itso123.com/v1' : 'https://api.itso123.com/v2'
+// const baseUrl = 'https://api.itso123.com/v1'
 console.log('====baseUrl====', baseUrl)
 
 
@@ -45,6 +46,7 @@ export const login = async (code, inviteCode) => {
 		}
 	})
 	if (loginResult.result === '0') {
+		console.log('authorization', loginResult.authorization)
 		uni.setStorageSync('authorization', loginResult.authorization)
 		uni.setStorageSync('expireTime', new Date().getTime() + (loginResult.expireSec * 1000))
 		return true

@@ -397,6 +397,7 @@
 		const miniProgram = uni.getAccountInfoSync().miniProgram
 		console.log('====envVersion====', miniProgram.envVersion, uni.getAccountInfoSync())
 		const envPrefix = miniProgram.envVersion === 'release' ? 'v1' : 'v2'
+		// const envPrefix = 'v1'
 		uni.uploadFile({
 			url: `https://api.itso123.com/${envPrefix}/dialog/speak/analyse/${lessonInfo.lessonId}/${currentParagraph.id}`,
 			filePath: filePath.tempFilePath,

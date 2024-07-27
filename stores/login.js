@@ -50,10 +50,10 @@ export const useLoginStore = defineStore('loginStore', {
 		},
 		
 		async login () {
-			console.log('login', this)
-			const needLogin = this.checkNeedLogin()
-			console.log('needLogin', needLogin)
-			if (!needLogin) return true
+			// console.log('login', this)
+			// const needLogin = this.checkNeedLogin()
+			// console.log('needLogin', needLogin)
+			// if (!needLogin) return true
 			const result = await uni.login()
 			 // 获取用户信息
 			uni.getUserInfo({

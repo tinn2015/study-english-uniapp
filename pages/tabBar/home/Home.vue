@@ -140,7 +140,7 @@ export default defineComponent({
 			await loginStore.login()
 			console.log('needLogin', needLogin)
 			if (needLogin) {
-				loginStore.setLoginStatus(false, true)
+				loginStore.setLoginStatus(true, true)
 			}
 			getHomeData()
 		})

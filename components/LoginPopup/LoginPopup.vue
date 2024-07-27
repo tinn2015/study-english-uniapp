@@ -53,11 +53,10 @@
 			getPhoneNumber (e) {
 				getPhoneCode(e.detail.code).then(res => {
 					console.log('登录页获取手机号', res)
-					// this.phoneNumber = res.phone
-					// uni.setStorage({
-					// 	key: 'userPhoneNumber',
-					// 	data: res.phone
-					// })
+					uni.setStorage({
+						key: 'userPhoneNumber',
+						data: res.phone
+					})
 					uni.showTabBar()
 					this.$refs.loginPopup.close()
 				})
