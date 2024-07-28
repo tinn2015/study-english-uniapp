@@ -105,6 +105,13 @@
 			}
 		},
 		{
+			"path": "pages/Dict/Dict",
+			"style": {
+				"navigationBarTitleText": "查询"
+				// "navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/payment/Payment",
 			"style": {
 				"navigationBarTitleText": "",

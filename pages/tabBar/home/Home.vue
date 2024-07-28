@@ -22,6 +22,9 @@
 					<view class="panel-info">{{todayStatistic}}</view>
 				</view>
 			</view>
+			<view class="part-dict">
+				<view class="query-btn" @click="routeToDict">输入要翻译的单词或者句子</view>
+			</view>
 			<view class="part-1">
 				<!-- <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">手机号测试</button> -->
 				<view class="title">精品课</view>
@@ -291,6 +294,11 @@ export default defineComponent({
 				url: '/pages/StudyToday/StudyToday'
 			});
 		},
+		routeToDict() {
+			uni.navigateTo({
+				url: '/pages/Dict/Dict'
+			});
+		},
 		routeToFind () {
 			uni.switchTab({
 				url: "/pages/tabBar/find/Find"
@@ -368,8 +376,23 @@ export default defineComponent({
 		font-weight: 500;
 		color: #202127;
 	}
+	.part-dict {
+		margin-top: 120rpx;
+		padding: 40rpx 32rpx;
+		.query-btn {
+			width: 100%;
+			color: #808080;
+			height: 80rpx;
+			border-radius: 40rpx;
+			border: 1rpx solid #eeeeee;
+			background: #dddddd;
+			padding: 0 30rpx;
+			line-height: 80rpx;
+			box-sizing: border-box;
+		}
+	}
 	.part-1 {
-		margin-top: 166rpx;
+		// margin-top: 166rpx;
 		padding: 0 32rpx;
 		.swiper {
 			overflow: hidden;

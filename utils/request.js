@@ -360,3 +360,18 @@ export const getVipExpiretime = (code) => {
 		method: 'POST'
 	})
 }
+
+// ================================ 字典 ===========================
+
+/**
+ * 查询提示词
+ */
+export const getTips = (word) => {
+	return request({
+		url: `/dict/search/fuzzy`,
+		method: 'POST',
+		data: {
+			word
+		}
+	})
+}
