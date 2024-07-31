@@ -15,7 +15,7 @@
 			</view>
 			<view class="search-history" v-else-if="blockVisible === blockVisibleConfig.history">
 				<view class="flex fw-w">
-					<view class="history-item" @click="searchByHistory(item.word)" v-for="item in queryHistory">
+					<view class="history-item" @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
 						{{ item.word }}
 					</view>
 				</view>
@@ -28,19 +28,19 @@
 					<view>搜藏</view>
 				</view>
 				<view class="translate">
-					<view v-for="item in queryResult.trans">
+					<view v-for="item in queryResult.list.trans">
 						{{item}}
 					</view>
 				</view>
 				<view class="phrases">
-					<view v-for="item in queryResult.phrases">
+					<view v-for="item in queryResult.list.phrases">
 						<view>{{item.content}}</view>
 						<view>{{item.cn}}</view>
 					</view>
 				</view>
 				<view class="synos"></view>
 				<view class="sentences">
-					<view v-for="item in queryResult.sentences">
+					<view v-for="item in queryResult.list.sentences">
 						<view>{{item.content}}</view>
 						<view>{{item.cn}}</view>
 					</view>
@@ -77,65 +77,31 @@
 		result: 3,
 	}
 	
-	const queryHistory = [
-		{word: 'click', desc: 'v.(在计算机屏幕上用鼠标)点击；豁然开朗；使咔嗒(或咔嚓)响；配合默契；被突然明白；（与某人）顷刻成为朋友'},
-		{word: 'clock', desc: 'n.时钟；钟'},
-		{word: 'good', desc: 'n.时钟；钟'},
-		{word: 'much', desc: 'n.时钟；钟'},
-		{word: 'positive', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
-		{word: 'active', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
-	]
+	// const queryHistory = [
+	// 	{word: 'click', desc: 'v.(在计算机屏幕上用鼠标)点击；豁然开朗；使咔嗒(或咔嚓)响；配合默契；被突然明白；（与某人）顷刻成为朋友'},
+	// 	{word: 'clock', desc: 'n.时钟；钟'},
+	// 	{word: 'good', desc: 'n.时钟；钟'},
+	// 	{word: 'much', desc: 'n.时钟；钟'},
+	// 	{word: 'positive', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
+	// 	{word: 'active', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
+	// ]
 	
-	const queryResult = {
-		"result": "0",
-		"reason": "success",
-		"word": "knock",
-		"usRecUrl": "https://api.itso123.com/upload/words/k/knock.wav",
-		"ukRecUrl": "https://api.itso123.com/upload/words/k/knock.wav",
-		"trans": [
-			"n. 敲；敲打；爆震声",
-			"v. 敲；打；敲击"
-		],
-		"phrases": [
-			{
-				"content": "knock on",
-				"cn": "撞击撞出；敲击（门、窗）"
-			},
-			{
-				"content": "knock out",
-				"cn": "敲空；击倒；打破；使筋疲力竭"
-			}
-		],
-		"synos": [
-			{
-				"words": [
-					"strike",
-					"hit"
-				],
-				"cn": "vi. 敲；打；[动力]敲击"
-			},
-			{
-				"words": [
-					"strike",
-					"stroke",
-					"dong"
-				],
-				"cn": "vt. 敲；打；[动力]敲击；批评"
-			},
-			{
-				"words": [
-					"beating"
-				],
-				"cn": "n. 敲；敲打；[力]爆震声"
-			}
-		],
-		"sentences": [
-			{
-				"content": "I knocked and knocked but nobody answered.",
-				"cn": "我把门敲了又敲，但无人回应。"
-			}
-		]
-	}
+	// 搜索结果
+	const queryResult = reactive({
+		list: {}
+	})
+	
+	// 历史记录
+	const queryHistory = reactive({
+		list: []
+	})
+	
+	onMounted(() => {
+		queryWordHistory().then(res => {
+			console.log('==历史记录==', res)
+			queryHistory.list = res.words
+		})
+	})
 	
 	/**
 	 * 清除搜索框
@@ -160,7 +126,7 @@
 			inputTimer.value = 0
 		}
 		inputTimer.value = setTimeout(() => {
-			dictQuery(words)
+			dictTipsQuery(words)
 		}, 500)
 	}
 	
@@ -170,8 +136,8 @@
 	const tips = reactive({
 		list: []
 	})
-	const dictQuery = (words) => {
-		if (!words) {
+	const dictTipsQuery = (word) => {
+		if (!word) {
 			blockVisible.value = blockVisibleConfig.history
 			return
 		}
@@ -179,27 +145,31 @@
 			{word: 'look', desc: 'v. 看；寻找；与……外表相似；看似，显得；注意；'},
 			{word: 'loose', desc: 'adj.未固定牢的，松动的；零散...'},
 		]
-		console.log('==开始查询==', words)
-		setTimeout(async () => {
-			blockVisible.value = blockVisibleConfig.tips
-			tips.list = mockdata
-			// const tipResult = await getTips(words)
-			// console.log('tipResult', tipResult)
-			console.log('tips', tips)
+		console.log('==开始查询==', word)
+		setTimeout(() => {
+			// tips.list = mockdata
+			getTips(word).then((res) => {
+				blockVisible.value = blockVisibleConfig.tips
+				console.log('==dictTipsQuery==', res)
+				if (res.words && res.words.length) {
+					tips.list = res.words
+				}
+			})
 		}, 200)
 	}
 	
 	/**
 	 * 单词搜索
 	 */
-	const search = (word) => {
-		setTimeout(async () => {
-			blockVisible.value = blockVisibleConfig.result
+	const search = (e) => {
+		setTimeout(() => {
+			const word = e.detail.value
 			console.log('单词搜索', word)
-			// tips.list = mockdata
-			// const tipResult = await getTips(words)
-			// console.log('tipResult', tipResult)
-			// console.log('tips', tips)
+			queryWord(word).then(res => {
+				blockVisible.value = blockVisibleConfig.result
+				console.log('==单词搜索结果==', res)
+				queryResult.list = res
+			})
 		}, 200)
 	}
 	
@@ -207,14 +177,11 @@
 	 * 历史记录搜索
 	 */
 	const searchByHistory = (word) => {
-		setTimeout(async () => {
+		queryWord(word).then(res => {
 			blockVisible.value = blockVisibleConfig.result
-			console.log('历史单词搜索', word)
-			// tips.list = mockdata
-			// const tipResult = await getTips(words)
-			// console.log('tipResult', tipResult)
-			// console.log('tips', tips)
-		}, 200)
+			console.log('==单词搜索结果==', res)
+			queryResult.list = res
+		})
 	}
 </script>
 

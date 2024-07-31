@@ -394,7 +394,7 @@ export const queryWord = (word) => {
  */
 export const queryWordHistory = (word) => {
 	return request({
-		url: `/dict/history/query`,
+		url: `/dict/search/logs/query`,
 		method: 'POST',
 		data: {
 			page: 1 //分页时使用，默认1为第1页
