@@ -23,8 +23,8 @@
 			</view>
 			<view class="search-result" v-else>
 				<view class='pronounce flex jc-sb'>
-					<view class="flex ai-c">美 <image @click="playAudio(queryResult[0].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
-					<view class="flex ai-c">英 <image @click="playAudio(queryResult[1].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
+					<view class="flex ai-c">美 <image @click="playAudio(queryResult.list.phonetics[0].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
+					<view class="flex ai-c">英 <image @click="playAudio(queryResult.list.phonetics[1].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
 					<view>搜藏</view>
 				</view>
 				<view class="translate">
@@ -174,12 +174,19 @@
 		})
 	}
 	
+	
+	/**
+	 * 音频播放
+	 */
+	const innerAudioContext = uni.createInnerAudioContext();
 	const playAudio = (url) => {
+		innerAudioContext.stop()
 		if (!url) {
 			console.log('发音播放失败：未获取播放地址')
 			return
 		}
-		
+		innerAudioContext.src = url
+		innerAudioContext.play()
 	}
 </script>
 
