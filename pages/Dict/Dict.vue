@@ -77,15 +77,6 @@
 		result: 3,
 	}
 	
-	// const queryHistory = [
-	// 	{word: 'click', desc: 'v.(在计算机屏幕上用鼠标)点击；豁然开朗；使咔嗒(或咔嚓)响；配合默契；被突然明白；（与某人）顷刻成为朋友'},
-	// 	{word: 'clock', desc: 'n.时钟；钟'},
-	// 	{word: 'good', desc: 'n.时钟；钟'},
-	// 	{word: 'much', desc: 'n.时钟；钟'},
-	// 	{word: 'positive', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
-	// 	{word: 'active', desc: 'adj.积极乐观的；完全的；良好的；正数的；建设性的；正电的；自信的；阳性的；拥护的；表示赞同的；有绝对把握；证据确凿的；朝着成功的'},
-	// ]
-	
 	// 搜索结果
 	const queryResult = reactive({
 		list: {}
@@ -146,31 +137,30 @@
 			{word: 'loose', desc: 'adj.未固定牢的，松动的；零散...'},
 		]
 		console.log('==开始查询==', word)
-		setTimeout(() => {
-			// tips.list = mockdata
-			getTips(word).then((res) => {
-				blockVisible.value = blockVisibleConfig.tips
-				console.log('==dictTipsQuery==', res)
-				if (res.words && res.words.length) {
-					tips.list = res.words
-				}
-			})
-		}, 200)
+		getTips(word).then((res) => {
+			blockVisible.value = blockVisibleConfig.tips
+			console.log('==dictTipsQuery==', res)
+			if (res.words && res.words.length) {
+				tips.list = res.words
+			}
+		})
 	}
 	
 	/**
 	 * 单词搜索
 	 */
 	const search = (e) => {
-		setTimeout(() => {
-			const word = e.detail.value
-			console.log('单词搜索', word)
-			queryWord(word).then(res => {
-				blockVisible.value = blockVisibleConfig.result
-				console.log('==单词搜索结果==', res)
-				queryResult.list = res
-			})
-		}, 200)
+		const word = e.detail.value
+		console.log('单词搜索', word)
+		if (inputTimer.value) {
+			clearTimeout(inputTimer.value)
+			inputTimer.value = 0
+		}
+		queryWord(word).then(res => {
+			blockVisible.value = blockVisibleConfig.result
+			console.log('==单词搜索结果==', res)
+			queryResult.list = res
+		})
 	}
 	
 	/**
