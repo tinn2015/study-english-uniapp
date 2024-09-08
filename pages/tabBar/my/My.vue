@@ -54,6 +54,10 @@
 					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
 					<view class="label">邀请奖励</view>
 				</view> -->
+				<view class="item flex ai-c" @click="routerToDictList">
+					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
+					<view class="label">我的单词本</view>
+				</view>
 				<view class="item">
 					<view class="flex ai-c">
 						<image src="http://api.itso123.com/image/en-test.png" mode="" class="icon"></image>
@@ -197,6 +201,11 @@
 					})
 				})
 			},
+			routerToDictList () {
+				uni.navigateTo({
+					url: '/packageDict/pages/DictList/DictList'
+				})
+			},
 			routerToMore () {
 				uni.navigateTo({
 					url: '/pages/CourseMore/CourseMore'
@@ -233,7 +242,8 @@
 
 <style lang="scss">
 	.my {
-		height: 100vh
+		height: 100vh;
+		overflow-x: hidden;
 	}
 	.status_bar {
 		height: 298rpx;
