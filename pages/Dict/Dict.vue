@@ -63,7 +63,7 @@
 		onUnload,
 		onShow,
 	} from '@dcloudio/uni-app';
-	import { getTips, queryWord, queryWordHistory, queryWordAddCollect, queryWordRemoveCollect } from '@/utils/request.js'
+	import { getTips, queryWord, queryWordHistory, queryWordAddCollect, queryWordRemoveCollect } from '@/utils/dict.js'
 	
 	// 显示模块控制
 	const blockVisible = ref(1);
