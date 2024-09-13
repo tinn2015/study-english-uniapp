@@ -135,6 +135,12 @@
 					"style": {
 						"navigationBarTitleText": "我的单词本"
 					}
+				},
+				{
+					"path": "pages/DictDetail/DictDetail",
+					"style": {
+						"navigationBarTitleText": "我的单词本"
+					}
 				}
 			]
 		}
