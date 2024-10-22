@@ -1,25 +1,34 @@
 <template>
 	<view class="dict-page flex fd-c">
 		<view class="search-box">
-			<input class="input" @input="getInput" @confirm="search" v-model="queryWordValue" type="text" search="查询">
+			<input class="input" @input="getInput" @confirm="search" v-model="queryWordValue" type="text" search="查询" placeholder="搜索课程和词汇">
 			<view class="search-clear-btn" @click="clearSearchValue">clear</view>
 		</view>
 		<view class="search-container">
 			<view class="tips-box" v-if="blockVisible === blockVisibleConfig.tips">
 				<view v-for="item in tips.list">
-					<view class="tip flex">
-						<view class="tip-word">{{item.word}}</view>
-						<view class="tip-desc">{{item.desc}}</view>
+					<view class="tip flex ai-c">
+						<view class="word">{{item.word}}</view>
+						<view class="desc">{{item.desc}}</view>
 					</view>
 				</view>
 			</view>
-			<view class="search-history" v-else-if="blockVisible === blockVisibleConfig.history">
-				<view class="flex fw-w">
-					<view class="history-item" @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
-						{{ item.word }}
+			<view class="search-history flex fd-c" v-else-if="blockVisible === blockVisibleConfig.history">
+				<!-- <view class="history-box">
+					<view @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
+						<view class="history-item flex ai-c">
+							<view class="word">{{item.word}}</view>
+							<view class="desc">{{item.desc}}</view>
+						</view>
+						<view @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
+							<view class="history-item flex ai-c">
+								<view class="word">{{item.word}}</view>
+								<view class="desc">{{item.desc}}</view>
+							</view>
+						</view>
 					</view>
 				</view>
-				<view class="clear-btn">清空搜索历史</view>
+				<view class="clear-btn">清空搜索历史</view> -->
 			</view>
 			<view class="search-result" v-else>
 				<view class='pronounce flex jc-sb'>
@@ -72,8 +81,13 @@
 	const queryWordValue = ref('')
 	
 	const blockVisibleConfig = {
+		/**
+		 * 历史记录
+		 */
 		history: 1,
+		// 提示
 		tips: 2,
+		// 查询结果
 		result: 3,
 	}
 	
@@ -194,20 +208,21 @@
 	.dict-page {
 		width: 100%;
 		height: 100vh;
-		padding: 40rpx;
+		padding: 0 32rpx;
 		box-sizing: border-box;
 	}
 	.search-box {
 		width: 100%;
-		border: 1px solid indianred;
 		margin: 0 auto;
-		height: 80rpx;
-		border-radius: 40rpx;
 		position: relative;
+		padding: 32rpx 0;
+		box-sizing: border-box;
 		.input {
-			padding: 0 40rpx;
-			height: 80rpx;
-			line-height: 80rpx;
+			padding: 0 32rpx;
+			height: 96rpx;
+			line-height: 96rpx;
+			border-radius: 52rpx;
+			background: #F3F4F6;
 		}
 		.search-clear-btn {
 			position: absolute;
@@ -218,8 +233,27 @@
 	}
 	.search-container {
 		height: 100%;
-		margin-top: 40rpx;
+		// margin-top: 40rpx;
 		position: relative;
+	}
+	.word {
+		font-family: PingFangSC, PingFang SC;
+		font-weight: 400;
+		font-size: 32rpx;
+		color: #58C898;
+		line-height: 48rpx;
+		text-align: left;
+		font-style: normal;
+	}
+	.desc {
+		margin-left: 34rpx;
+		font-family: PingFangSC, PingFang SC;
+		font-weight: 400;
+		font-size: 24rpx;
+		color: #999A9F;
+		line-height: 36rpx;
+		text-align: left;
+		font-style: normal;
 	}
 	.tips-box {
 		position: absolute;
@@ -230,23 +264,19 @@
 		height: 100%;
 		width: 100%;
 		.tip {
-			border-bottom: 1px solid #333333;
-			padding: 20rpx
-		}
-		.tip-word {
-			font-weight: 600;
-		}
-		.tip-desc {
-			margin-left: 40rpx;
+			border-bottom: 1px solid #E5E4E9;
+			padding: 0 20rpx;
+			height: 92rpx
 		}
 	}
 	.search-history {
+		.history-box {
+			border: 1px solid salmon
+		}
 		.history-item {
-			padding: 20rpx 40rpx;
-			margin-top: 20rpx;
-			background: #e6f4ff;
-			margin-right: 20rpx;
-			border-radius: 10rpx;
+			border-bottom: 1px solid #E5E4E9;
+			padding: 0 20rpx;
+			height: 92rpx
 		}
 		.clear-btn {
 			margin-top: 40rpx;
