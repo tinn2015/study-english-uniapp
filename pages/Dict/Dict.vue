@@ -13,22 +13,25 @@
 					</view>
 				</view>
 			</view>
-			<view class="search-history flex fd-c" v-else-if="blockVisible === blockVisibleConfig.history">
-				<!-- <view class="history-box">
+			<view class="search-history" v-else-if="blockVisible === blockVisibleConfig.history">
+				<scroll-view class="history-box" scroll-y="true">
 					<view @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
 						<view class="history-item flex ai-c">
 							<view class="word">{{item.word}}</view>
 							<view class="desc">{{item.desc}}</view>
 						</view>
-						<view @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
+						<!-- <view @click="searchByHistory(item.word)" v-for="item in queryHistory.list">
 							<view class="history-item flex ai-c">
 								<view class="word">{{item.word}}</view>
 								<view class="desc">{{item.desc}}</view>
 							</view>
-						</view>
+						</view> -->
 					</view>
+				</scroll-view>
+				<view class="clear-btn-box flex jc-c ai-c">
+					<view class="clear-btn flex jc-c ai-c">清空搜索历史</view>
 				</view>
-				<view class="clear-btn">清空搜索历史</view> -->
+				<!-- <view>进入单词本</view> -->
 			</view>
 			<view class="search-result" v-else>
 				<view class='pronounce flex jc-sb'>
@@ -232,9 +235,11 @@
 		}
 	}
 	.search-container {
-		height: 100%;
+		height: calc(100% - 164rpx);
 		// margin-top: 40rpx;
-		position: relative;
+		// position: relative;
+		border: 1px solid green;
+		
 	}
 	.word {
 		font-family: PingFangSC, PingFang SC;
@@ -270,18 +275,35 @@
 		}
 	}
 	.search-history {
+		height: 100%;
+		padding-bottom: 40rpx;
+		box-sizing: border-box;
 		.history-box {
-			border: 1px solid salmon
+			height: calc(100% - 80rpx)
 		}
 		.history-item {
 			border-bottom: 1px solid #E5E4E9;
 			padding: 0 20rpx;
 			height: 92rpx
 		}
+		.clear-btn-box {
+			padding: 20rpx 0;
+		}
 		.clear-btn {
-			margin-top: 40rpx;
-			padding: 20rpx;
-			text-align: center;
+			// width: 686rpx;
+			// height: 96rpx;
+			width: 264rpx;
+			min-height: 80rpx;
+			border-radius: 40rpx;
+			border: 2rpx solid #58C898;
+			font-family: PingFangSC, PingFang SC;
+			font-weight: 600;
+			font-size: 32rpx;
+			color: #BDBDBD;
+			line-height: 48rpx;
+			padding: 0 32rpx;
+			font-style: normal;
+			box-sizing: border-box;
 		}
 	}
 	.search-result {

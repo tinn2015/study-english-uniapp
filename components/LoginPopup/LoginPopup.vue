@@ -25,11 +25,11 @@
 					this.$nextTick(() => {
 						if (val) {
 								setTimeout(() => {
-									 uni.hideTabBar();
+									 // uni.hideTabBar();
 									this.$refs.loginPopup.open()
 								}, 200)
 						} else {
-							uni.showTabBar()
+							// uni.showTabBar()
 							this.$refs.loginPopup.close()
 						}
 					})
