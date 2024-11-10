@@ -27,17 +27,21 @@
 							</view>
 						</view> -->
 					</view>
+					<view class="clear-btn-box flex jc-c ai-c">
+						<view class="clear-btn flex jc-c ai-c">清空搜索历史</view>
+					</view>
 				</scroll-view>
-				<view class="clear-btn-box flex jc-c ai-c">
-					<view class="clear-btn flex jc-c ai-c">清空搜索历史</view>
+				<view class="word-list flex jc-c ai-c">
+					<view class="word-list-btn flex jc-c ai-c">进入单词本</view>
 				</view>
 				<!-- <view>进入单词本</view> -->
 			</view>
+			<!-- 搜索结果 -->
 			<view class="search-result" v-else>
 				<view class='pronounce flex jc-sb'>
 					<view class="flex ai-c">美 <image @click="playAudio(queryResult.list.phonetics[0].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
 					<view class="flex ai-c">英 <image @click="playAudio(queryResult.list.phonetics[1].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
-					<view>搜藏</view>
+					<!-- <view>搜藏</view> -->
 				</view>
 				<view class="translate">
 					<view v-for="item in queryResult.list.trans">
@@ -238,7 +242,7 @@
 		height: calc(100% - 164rpx);
 		// margin-top: 40rpx;
 		// position: relative;
-		border: 1px solid green;
+		// border: 1px solid green;
 		
 	}
 	.word {
@@ -261,13 +265,13 @@
 		font-style: normal;
 	}
 	.tips-box {
-		position: absolute;
-		top: 0;
-		left: 0;
-		z-index: 200;
-		// border: 1px solid red;
-		height: 100%;
-		width: 100%;
+		// position: absolute;
+		// top: 0;
+		// left: 0;
+		// z-index: 200;
+		// // border: 1px solid red;
+		// height: 100%;
+		// width: 100%;
 		.tip {
 			border-bottom: 1px solid #E5E4E9;
 			padding: 0 20rpx;
@@ -293,21 +297,39 @@
 			// width: 686rpx;
 			// height: 96rpx;
 			width: 264rpx;
-			min-height: 80rpx;
+			// min-height: 80rpx;
 			border-radius: 40rpx;
 			border: 2rpx solid #58C898;
 			font-family: PingFangSC, PingFang SC;
 			font-weight: 600;
-			font-size: 32rpx;
+			font-size: 26rpx;
 			color: #BDBDBD;
-			line-height: 48rpx;
-			padding: 0 32rpx;
+			line-height: 20rpx;
+			padding: 20rpx;
 			font-style: normal;
 			box-sizing: border-box;
+		}
+		.word-list {
+			padding: 16rpx 32rpx;
+			border-top: 1px solid #BDBDBD;
+			.word-list-btn {
+				background: linear-gradient( 90deg, #59C47F 0%, #6BE7B7 100%);
+				border-radius: 60rpx;
+				height: 96rpx;
+				width: 100%;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				font-size: 32rpx;
+				color: #FFFFFF;
+				line-height: 48rpx;
+				text-align: right;
+				font-style: normal;
+			}
 		}
 	}
 	.search-result {
 		// border: 1px solid blueviolet;
+		height: 100%;
 		.pronounce {
 			.speaker-icon {
 				width: 40rpx;
