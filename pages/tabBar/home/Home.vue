@@ -226,9 +226,9 @@ export default defineComponent({
 					console.log('err', err);
 				});
 		},
-		routeToCourse(lessonId) {
+		async routeToCourse(lessonId) {
 			const lessonStore = useLessonStore()
-			lessonStore.getFavoriteLesson(lessonId)
+			await lessonStore.getFavoriteLesson(lessonId)
 			uni.navigateTo({
 				url: '/pages/Course/Course'
 			});
