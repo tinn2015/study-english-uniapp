@@ -266,9 +266,9 @@ export default defineComponent({
 				url: '/pages/Chat/Chat'
 			});
 		},
-		routeToCourse(lessonId, mode) {
+		async routeToCourse(lessonId, mode) {
 			const lessonStore = useLessonStore()
-			lessonStore.getFavoriteLesson(lessonId)
+			await lessonStore.getFavoriteLesson(lessonId)
 			if (mode === 2) {
 				uni.navigateTo({
 					url: '/pages/chatCourse/chatCourse'
