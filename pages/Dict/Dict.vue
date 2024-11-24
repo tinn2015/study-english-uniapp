@@ -2,7 +2,9 @@
 	<view class="dict-page flex fd-c">
 		<view class="search-box">
 			<input class="input" @input="getInput" @confirm="search" v-model="queryWordValue" type="text" search="查询" placeholder="搜索课程和词汇">
-			<view class="search-clear-btn" @click="clearSearchValue">clear</view>
+			<view class="search-clear-btn" @click="clearSearchValue">
+				<image class="search-clear-img" src="../../static/images/dict/close.png" mode="aspectFill"></image>
+			</view>
 		</view>
 		<view class="search-container">
 			<view class="tips-box" v-if="blockVisible === blockVisibleConfig.tips">
@@ -34,18 +36,25 @@
 				<view class="word-list flex jc-c ai-c">
 					<view class="word-list-btn flex jc-c ai-c">进入单词本</view>
 				</view>
-				<!-- <view>进入单词本</view> -->
 			</view>
 			<!-- 搜索结果 -->
 			<view class="search-result" v-else>
-				<view class='pronounce flex jc-sb'>
-					<view class="flex ai-c">美 <image @click="playAudio(queryResult.list.phonetics[0].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
-					<view class="flex ai-c">英 <image @click="playAudio(queryResult.list.phonetics[1].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image></view>
-					<!-- <view>搜藏</view> -->
-				</view>
-				<view class="translate">
-					<view v-for="item in queryResult.list.trans">
-						{{item}}
+				<view class="word-desc">
+					<view class="word-desc-word">{{queryResult.list.word}}</view>
+					<view class='pronounce flex'>
+						<view class="flex ai-c">
+							<image @click="playAudio(queryResult.list.phonetics[0].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image>
+							<view class="pronounce-symbol">{{queryResult.list.phonetics[0].symbol}}</view>
+						</view>
+						<view class="flex ai-c ml32">
+							<image @click="playAudio(queryResult.list.phonetics[1].recUrl)" class="speaker-icon" src="../../static/images/dict/speaker.png" mode=""></image>
+							<view class="pronounce-symbol">{{queryResult.list.phonetics[0].symbol}}</view>
+						</view>
+					</view>
+					<view class="translate">
+						<view v-for="item in queryResult.list.trans">
+							{{item}}
+						</view>
 					</view>
 				</view>
 				<view class="phrases">
@@ -234,8 +243,14 @@
 		.search-clear-btn {
 			position: absolute;
 			right: 20rpx;
-			top: 20rpx;
+			top: 50rpx;
 			z-index: 20;
+			width: 60rpx;
+			height: 60rpx;
+			.search-clear-img {
+				width: 100%;
+				height: 100%
+			}
 		}
 	}
 	.search-container {
@@ -330,20 +345,51 @@
 	.search-result {
 		// border: 1px solid blueviolet;
 		height: 100%;
-		.pronounce {
-			.speaker-icon {
-				width: 40rpx;
-				height: 40rpx;
+		.word-desc {
+			padding-bottom: 40rpx;
+			border-bottom: 2rpx dashed #E5E4E9;
+			.word-desc-word {
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 600;
+				font-size: 52rpx;
+				color: #202127;
+				line-height: 74rpx;
+				font-style: normal;
+				margin-top: 24rpx;
 			}
-			padding: 20rpx 40rpx 40rpx;
-			border-bottom: 1px solid #dddddd;
-		}
-		.translate {
-			margin-top: 20rpx;
-			padding: 0 20rpx;
+			.pronounce {
+				margin-top: 22rpx;
+				.speaker-icon {
+					width: 60rpx;
+					height: 60rpx;
+				}
+				.pronounce-symbol {
+					font-family: PingFangSC, PingFang SC;
+					font-weight: 400;
+					font-size: 28rpx;
+					color: #999A9F;
+					line-height: 44rpx;
+					text-align: left;
+					font-style: normal;
+					margin-left: 16rpx;
+				}
+			}
+			.translate {
+				margin-top: 46rpx;
+				font-family: PingFangSC, PingFang SC;
+				font-weight: 400;
+				font-size: 28rpx;
+				color: #202127;
+				line-height: 44rpx;
+				text-align: left;
+				font-style: normal;
+			}
 		}
 		.phrases {
 			margin-top: 20rpx;
 		}
+	}
+	.ml32 {
+		margin-left: 32rpx;
 	}
 </style>
