@@ -128,7 +128,7 @@
 	],
 	"subPackages": [
 		{
-			"root": "packageDict",
+			"root": "/subPackages/packageDict",
 			"pages": [
 				{
 					"path": "pages/DictList/DictList",
@@ -138,6 +138,29 @@
 				},
 				{
 					"path": "pages/DictDetail/DictDetail",
+					"style": {
+						"navigationBarTitleText": "我的单词本"
+					}
+				}
+			]
+		},
+		{
+			"root": "/subPackages/WordBank",
+			"pages": [
+				{
+					"path": "wordBannkHome/wordBankHome",
+					"style": {
+						"navigationBarTitleText": "我的单词本"
+					}
+				},
+				{
+					"path": "wordBankDesc/wordBankDesc",
+					"style": {
+						"navigationBarTitleText": "我的单词本"
+					}
+				},
+				{
+					"path": "wordBankDetail/wordBankDetail",
 					"style": {
 						"navigationBarTitleText": "我的单词本"
 					}
