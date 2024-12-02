@@ -54,7 +54,7 @@
 					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
 					<view class="label">邀请奖励</view>
 				</view> -->
-				<view class="item flex ai-c" @click="routerToDictList">
+				<view class="item flex ai-c" @click="routerToWordBank">
 					<image src="http://api.itso123.com/image/reward.png" mode="" class="icon"></image>
 					<view class="label">我的单词本</view>
 				</view>
@@ -201,9 +201,9 @@
 					})
 				})
 			},
-			routerToDictList () {
+			routerToWordBank () {
 				uni.navigateTo({
-					url: '/packageDict/pages/DictList/DictList'
+					url: '/subPackages/WordBank/WordBankHome/WordBankHome'
 				})
 			},
 			routerToMore () {
