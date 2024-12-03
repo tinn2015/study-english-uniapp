@@ -3,7 +3,7 @@
 		<view class="search-box">
 			<input class="input" @input="getInput" @confirm="search" v-model="queryWordValue" type="text" search="查询" placeholder="搜索课程和词汇">
 			<view class="search-clear-btn" @click="clearSearchValue">
-				<image class="search-clear-img" src="../../static/images/dict/close.png" mode="aspectFill"></image>
+				<image v-show="queryWordValue.length" class="search-clear-img" src="../../static/images/dict/close.png" mode="aspectFill"></image>
 			</view>
 		</view>
 		<view class="search-container">

@@ -68,20 +68,6 @@ export const queryWordRemoveCollect = (word) => {
 }
 
 /**
- * 单词本列表查询
- */
-export const getDictList = async () => {
-	const result = await request({
-		url: '/lesson/favorite/query',
-		method: 'POST',
-		data: {
-			mode: [3] // 3: 单词本课程查询
-		}
-	})
-	return result
-}
-
-/**
  * 单词本详情查询
  */
 export const getDictDetail = async (id) => {
