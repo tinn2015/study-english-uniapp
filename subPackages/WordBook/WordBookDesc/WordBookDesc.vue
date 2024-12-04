@@ -24,18 +24,18 @@
 			</view>
 		</view>
 		
-		<view class="content">
+		<view class="content flex fd-c">
 			<view class="segment-tap">
 				<uni-segmented-control :current="currentTap" :values="tabs" active-color="#007AFF" style-type="text" @clickItem="tabClick"></uni-segmented-control>
 			</view>
 			<view class="segment-content">
-				<view v-show="currentTap === 0">
-					选项卡1的内容
+				<view class="h-full" v-show="currentTap === 0">
+					<WordView @update="updateList" :wordList="mockData.list"></WordView>
 				</view>
-				<view v-show="currentTap === 1">
+				<view class="h-full" v-show="currentTap === 1">
 					选项卡2的内容
 				</view>
-				<view v-show="currentTap === 2">
+				<view class="h-full" v-show="currentTap === 2">
 					选项卡3的内容
 				</view>
 			</view>
@@ -52,12 +52,136 @@
 		createApp,
 		onMounted,
 	} from 'vue';
+	import WordView from './components/WordView/Wordview'
 	
 	const currentTap = ref(0)
-	const tabs = reactive(['已学单词', '未学单词', '已牢单词'])
-	// const dictStore  = useDictStore()
 	
-	// const {dictDetail} = dictStore
+	const wordBookStore = useWordBookStore()
+	const tabs = reactive(['已学单词', '未学单词', '已牢单词'])
+	const learnedWordsTag = '已学单词' + (wordBookStore.wordBookDetail.learnedWords.length || '')
+	const learningWordsTag = '已学单词' + (wordBookStore.wordBookDetail.learningWords.length || '')
+	const pendingWordsTag = '已学单词' + (wordBookStore.wordBookDetail.pendingWordsNum.length || '')
+	
+	const mockData = reactive({
+		list: [
+	  {
+		"word": "example1",
+		"desc": "这是一段解释，A1，B2，C3",
+		"visible": true
+	  },
+	  {
+		"word": "example2",
+		"desc": "这是一段说明，D4，E5，F6",
+		"visible": true
+	  },
+	  {
+		"word": "example3",
+		"desc": "这是一段描述，G7，H8，I9",
+		"visible": true
+	  },
+	  {
+		"word": "example4",
+		"desc": "这是一段阐释，J10，K11，L12",
+		"visible": true
+	  },
+	  {
+		"word": "example5",
+		"desc": "这是一段讲解，M13，N14，O15这是一段讲解，M13，N14，O15这是一段讲解，M13，N14，O15这是一段讲解，M13，N14，O15这是一段讲解，M13，N14，O15"
+	  },
+	  {
+		"word": "example6",
+		"desc": "这是一段注解，P16，Q17，R18"
+	  },
+	  {
+		"word": "example7",
+		"desc": "这是一段阐述，S19，T20，U21"
+	  },
+	  {
+		"word": "example8",
+		"desc": "这是一段解说，V22，W23，X24"
+	  },
+	  {
+		"word": "example9",
+		"desc": "这是一段诠释，Y25，Z26，AA27"
+	  },
+	  {
+		"word": "example10",
+		"desc": "这是一段细说，AB28，AC29，AD30"
+	  },
+	  {
+	  		"word": "example1",
+	  		"desc": "这是一段解释，A1，B2，C3"
+	  },
+	  {
+	  		"word": "example2",
+	  		"desc": "这是一段说明，D4，E5，F6"
+	  },
+	  {
+	  		"word": "example3",
+	  		"desc": "这是一段描述，G7，H8，I9"
+	  },
+	  {
+	  		"word": "example4",
+	  		"desc": "这是一段阐释，J10，K11，L12"
+	  },
+	  {
+	  		"word": "example5",
+	  		"desc": "这是一段讲解，M13，N14，O15"
+	  },
+	  {
+	  		"word": "example6",
+	  		"desc": "这是一段注解，P16，Q17，R18"
+	  },
+	  {
+	  		"word": "example7",
+	  		"desc": "这是一段阐述，S19，T20，U21"
+	  },
+	  {
+	  		"word": "example8",
+	  		"desc": "这是一段解说，V22，W23，X24"
+	  },
+	  {
+	  		"word": "example9",
+	  		"desc": "这是一段诠释，Y25，Z26，AA27"
+	  },
+	  {
+	  		"word": "example10",
+	  		"desc": "这是一段细说，AB28，AC29，AD30"
+	  },
+	  {
+	  		"word": "example4",
+	  		"desc": "这是一段阐释，J10，K11，L12"
+	  },
+	  {
+	  		"word": "example5",
+	  		"desc": "这是一段讲解，M13，N14，O15"
+	  },
+	  {
+	  		"word": "example6",
+	  		"desc": "这是一段注解，P16，Q17，R18"
+	  },
+	  {
+	  		"word": "example7",
+	  		"desc": "这是一段阐述，S19，T20，U21"
+	  },
+	  {
+	  		"word": "example8",
+	  		"desc": "这是一段解说，V22，W23，X24"
+	  },
+	  {
+	  		"word": "example111",
+	  		"desc": "这是一段诠释，Y25，Z26，AA27"
+	  },
+	  {
+	  		"word": "example222",
+	  		"desc": "这是一段细说，AB28，AC29，AD30"
+	  }
+	]
+	})
+	
+	const updateList = (list) => {
+		mockData.list = list
+	}
 	
 	const tabClick = (e) => {
 		console.log('tabclick', e)
@@ -73,7 +197,6 @@
 	.word-book-desc {
 		width: 100%;
 		height: 100vh;
-		border: 1px solid palevioletred;
 		box-sizing: border-box;
 		background: #F2F2F2;
 	}
@@ -168,9 +291,13 @@
 		margin-top: 16rpx;
 		height: 100%;
 		background: #ffffff;
-		padding: 32rpx 32rpx 24rpx;
-		.segment-tap {
-			// height: 100rpx;
+		padding: 0 32rpx 24rpx;
+		overflow: hidden;
+		.segment-content {
+			flex: 1;
+			overflow: hidden;
+			height: 100%;
+			padding-top: 10rpx;
 		}
 	}
 </style>

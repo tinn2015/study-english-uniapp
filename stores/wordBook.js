@@ -6,7 +6,8 @@ import {ref} from 'vue'
 export const useWordBookStore = defineStore('wordBookStore', {
 	state: () => {
 		return { 
-			wordBooklist: {}
+			wordBooklist: {},
+			wordBookDetail: {}
 		};
 	},
 	// 也可以这样定义
@@ -21,6 +22,7 @@ export const useWordBookStore = defineStore('wordBookStore', {
 		getWordBook(id) {
 			getWordBook(id).then(res => {
 				console.log('==获取单词本详情==', res)
+				this.wordBookDetail = res
 			})
 		}
 	},

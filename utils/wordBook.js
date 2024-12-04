@@ -18,6 +18,8 @@ export const getWordBookList = async () => {
 
 /**
  * 获取单词本的详情
+ * 单词本查询，包含第一页单词
+ * 已学单词、未学单词、已牢记单词3个类目
  */
 export const getWordBook = async (id) => {
 	const result = await request({
@@ -28,12 +30,12 @@ export const getWordBook = async (id) => {
 }
 
 /**
- * 查询单词列表
+ * 指定类目单词分页查询
  * 已学单词、未学单词、已牢记单词3个类目
  */
-export const getWordList = async (id) => {
+export const getWordsByClass = async () => {
 	const result = await request({
-		url: `/dict/detail/${id}`,
+		url: '/dict/words/query',
 		method: 'POST',
 	})
 	return result
